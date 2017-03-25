@@ -58,6 +58,11 @@ public class Main extends Application {
 		ball.setImage("rsz_1basketball.png");
 		ball.SetxPosition((WINDOW_W)/2);
 		ball.SetyPosition((WINDOW_H)/2);
+		
+		Ball ball2 = new Ball();
+		ball2.setImage("rsz_1basketball.png");
+		ball2.SetxPosition((WINDOW_W)/3);
+		ball2.SetyPosition((WINDOW_H)/3);
 	
 		Timeline gameLoop = new Timeline();
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
@@ -65,19 +70,31 @@ public class Main extends Application {
 		//final long timeStart = System.currentTimeMillis();
 		
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event ->{
-			if(input.contains("LEFT")){
+			if(input.contains("A")){
 				if(ball.GetxPosition() >= 0){
 					ball.SetxPosition(ball.GetxPosition() - 5);
 				}
 			}
-			else if(input.contains("RIGHT")){
+			else if(input.contains("D")){
 				if(ball.GetxPosition() + 64 <= WINDOW_W){
 					ball.SetxPosition(ball.GetxPosition() + 5);
 				}
 			}
 			
+			if(input.contains("LEFT")){
+				if(ball2.GetxPosition() >= 0){
+					ball2.SetxPosition(ball2.GetxPosition() - 5);
+				}
+			}
+			else if(input.contains("RIGHT")){
+				if(ball2.GetxPosition() + 64 <= WINDOW_W){
+					ball2.SetxPosition(ball2.GetxPosition() + 5);
+				}
+			}
+			
 			gc.clearRect(0, 0, 1024, 768);
-			ball.render(gc);					
+			ball.render(gc);
+			ball2.render(gc);
 		});
 		
 		gameLoop.getKeyFrames().add(gameFrame);
