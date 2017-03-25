@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 
 import com.ttcj.components.Ball;
+import com.ttcj.components.Bat;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 
 public class Main extends Application {
@@ -63,6 +66,11 @@ public class Main extends Application {
 		ball.setImage("rsz_1basketball.png");
 		ball.SetxPosition((WINDOW_W)/2);
 		ball.SetyPosition((WINDOW_H)/2);
+				
+		Ball ball2 = new Ball();
+		ball2.setImage("angery.jpg");
+		ball2.SetxPosition((WINDOW_W)/3);
+		ball2.SetyPosition((WINDOW_H)/3);
 	
 		//TODO: write a comment
 		Timeline gameLoop = new Timeline();
@@ -84,11 +92,26 @@ public class Main extends Application {
 					ball.SetxPosition(ball.GetxPosition() + 5);
 				}
 			}		
+			
+			
+			if(input.contains("A")){
+				if(ball2.GetxPosition() >= 0){
+					ball2.SetxPosition(ball2.GetxPosition() - 5);
+				}
+			}
+			else if(input.contains("D")){
+				if(ball2.GetxPosition() + 64 <= WINDOW_W){
+					ball2.SetxPosition(ball2.GetxPosition() + 5);
+				}
+			}
+			
+			
 			//TODO: not sure how to describe this 
 			gc.clearRect(0, 0, 1024, 768);
 			
 			//draw the ball on canvas!
-			ball.render(gc);					
+			ball.render(gc);	
+			ball2.render(gc);
 		});
 		
 		gameLoop.getKeyFrames().add(gameFrame);
