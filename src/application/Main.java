@@ -60,7 +60,7 @@ public class Main extends Application {
 		ball.SetyPosition((WINDOW_H)/2);
 		
 		Ball ball2 = new Ball();
-		ball2.setImage("rsz_1basketball.png");
+		ball2.setImage("angery.jpg");
 		ball2.SetxPosition((WINDOW_W)/3);
 		ball2.SetyPosition((WINDOW_H)/3);
 	
