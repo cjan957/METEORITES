@@ -15,8 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 
 public class Main extends Application {
@@ -25,10 +23,8 @@ public class Main extends Application {
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 
-	
 	@Override
 	public void start(Stage gameStage) {
-		
 		gameStage.setTitle(GAMENAME);
 		
 		Group root = new Group(); //JavaFX scene root node 
@@ -67,11 +63,6 @@ public class Main extends Application {
 		ball.setImage("rsz_1basketball.png");
 		ball.SetxPosition((WINDOW_W)/2);
 		ball.SetyPosition((WINDOW_H)/2);
-		
-		Ball ball2 = new Ball();
-		ball2.setImage("angery.jpg");
-		ball2.SetxPosition((WINDOW_W)/3);
-		ball2.SetyPosition((WINDOW_H)/3);
 	
 		//TODO: write a comment
 		Timeline gameLoop = new Timeline();
@@ -80,42 +71,31 @@ public class Main extends Application {
 		//final long timeStart = System.currentTimeMillis();
 		
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event ->{ //60fps
-			if(input.contains("A")){
+			if(input.contains("LEFT")){
 				//check LHS boundary condition so that the paddle won't be able to
 				//go beyond the limit
 				if(ball.GetxPosition() >= 0){
 					ball.SetxPosition(ball.GetxPosition() - 5);
 				}
 			}
-			else if(input.contains("D")){
+			else if(input.contains("RIGHT")){
 				//check RHS boundary condition
 				if(ball.GetxPosition() + 64 <= WINDOW_W){
 					ball.SetxPosition(ball.GetxPosition() + 5);
 				}
 			}		
-			
-			if(input.contains("LEFT")){
-				if(ball2.GetxPosition() >= 0){
-					ball2.SetxPosition(ball2.GetxPosition() - 5);
-				}
-			}
-			else if(input.contains("RIGHT")){
-				if(ball2.GetxPosition() + 64 <= WINDOW_W){
-					ball2.SetxPosition(ball2.GetxPosition() + 5);
-				}
-			}
-			
 			//TODO: not sure how to describe this 
 			gc.clearRect(0, 0, 1024, 768);
-			ball.render(gc);
-			ball2.render(gc);
+			
+			//draw the ball on canvas!
+			ball.render(gc);					
 		});
 		
 		gameLoop.getKeyFrames().add(gameFrame);
 		gameLoop.play();
 		
 		gameStage.setResizable(false);
-		gameStage.show();
+		gameStage.show();		
 	}
 	
 	public static void main(String[] args) {
