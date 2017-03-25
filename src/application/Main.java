@@ -39,7 +39,7 @@ public class Main extends Application {
 		Canvas canvas = new Canvas(WINDOW_W,WINDOW_H);
 		root.getChildren().add(canvas); //add canvas to children of root (theScene)
 		
-		//ArrayList to store keystroke
+		//ArrayList to store keystrokes
 		ArrayList<String> input = new ArrayList<String>();
 		
 		//When a key press event occurs, store the key the player pressed
@@ -79,7 +79,7 @@ public class Main extends Application {
 		
 		//final long timeStart = System.currentTimeMillis();
 		
-		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event ->{
+		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event ->{ //60fps
 			if(input.contains("A")){
 				//check LHS boundary condition so that the paddle won't be able to
 				//go beyond the limit
@@ -92,8 +92,7 @@ public class Main extends Application {
 				if(ball.GetxPosition() + 64 <= WINDOW_W){
 					ball.SetxPosition(ball.GetxPosition() + 5);
 				}
-			}
-					
+			}		
 			
 			if(input.contains("LEFT")){
 				if(ball2.GetxPosition() >= 0){
