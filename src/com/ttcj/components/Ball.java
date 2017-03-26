@@ -12,19 +12,19 @@ public class Ball extends ObjectInfo{
 	}
 	*/
 	
-	private double GetDestroyPower(){
+	public double GetDestroyPower(){
 		return this.destroyPower;
 	}
 	
-	private void SetDestroyPower(double destroyPower){
+	public void SetDestroyPower(double destroyPower){
 		this.destroyPower = destroyPower; 
 	}
 	
-	private void SetBallRadius(int ballRadius){  
+	public void SetBallRadius(int ballRadius){  
 		this.ballRadius = ballRadius;
 	}
 		
-	private int GetBallRadius(){
+	public int GetBallRadius(){
 		return this.ballRadius;
 	}	
 	

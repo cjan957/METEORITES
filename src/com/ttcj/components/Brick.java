@@ -9,11 +9,11 @@ public class Brick extends ObjectInfo{
 	}
 	private brickStatus brickHealth;
 	
-	private void setBrickStatus(brickStatus brickHealth){
+	public void setBrickStatus(brickStatus brickHealth){
 		this.brickHealth = brickHealth;
 	}
 	
-	private brickStatus getBrickStatus(){
+	public brickStatus getBrickStatus(){
 		 return this.brickHealth;
 	}
 }
