@@ -72,10 +72,9 @@ public class Main extends Application {
 		ball.SetyPosition(0);
 				
 		Ball ball2 = new Ball();
-		ball2.setImage("angery.jpg");
+		ball2.setImage("rsz_1basketball.png");
 		ball2.SetxPosition(WINDOW_W/4);
 		ball2.SetyPosition(WINDOW_H-64);
-		
 	
 		//TODO: write a comment
 		Timeline gameLoop = new Timeline();
@@ -105,17 +104,23 @@ public class Main extends Application {
 				}
 			}		
 			
-			
 			if(input.contains("A")){
+				//check LHS boundary condition so that the paddle won't be able to
+				//go beyond the limit
 				if(ball2.GetxPosition() >= 0){
-					ball2.SetxPosition(ball2.GetxPosition() - 5);
+					angle2 += 0.05; 
+					ball2.SetxPosition(Math.cos(angle2)*(WINDOW_W/4));
+					ball2.SetyPosition(704 - Math.sin(angle2)*(WINDOW_H/4));
 				}
 			}
 			else if(input.contains("D")){
-				if(ball2.GetxPosition() + 32 <= WINDOW_W){
-					ball2.SetxPosition(ball2.GetxPosition() + 5);
+				//check bottom boundary condition
+				if(ball2.GetyPosition() < WINDOW_H-64){
+					angle2 -= 0.05; 
+					ball2.SetxPosition(Math.cos(angle2)*(WINDOW_W/4));
+					ball2.SetyPosition(704 - Math.sin(angle2)*(WINDOW_H/4));
 				}
-			}
+			}	
 			
 			
 			//TODO: not sure how to describe this 
