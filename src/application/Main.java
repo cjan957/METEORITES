@@ -38,7 +38,7 @@ public class Main extends Application {
 		Group root = new Group(); //JavaFX scene root node 
 		Scene theScene = new Scene(root); //create scene object with root parent
 		gameStage.setScene(theScene); //set Stage class's scene
-		
+		theScene.setFill(Color.BLACK);;
 		//Create canvas object with a specific size
 		Canvas canvas = new Canvas(WINDOW_W,WINDOW_H);
 		root.getChildren().add(canvas); //add canvas to children of root (theScene)
@@ -69,12 +69,12 @@ public class Main extends Application {
 		Ball ball = new Ball();
 		ball.setImage("rsz_1basketball.png");
 		ball.SetxPosition(WINDOW_W/4);
-		ball.SetyPosition(WINDOW_H-64);
+		ball.SetyPosition(0);
 				
 		Ball ball2 = new Ball();
 		ball2.setImage("angery.jpg");
-		ball2.SetxPosition((WINDOW_W)/3);
-		ball2.SetyPosition((WINDOW_H)/3);
+		ball2.SetxPosition(WINDOW_W/4);
+		ball2.SetyPosition(WINDOW_H-64);
 		
 	
 		//TODO: write a comment
@@ -101,7 +101,7 @@ public class Main extends Application {
 				if(ball.GetyPosition() >= 0){
 					angle1 -= 0.05; 
 					ball.SetxPosition(Math.cos(angle1)*(WINDOW_W/4));
-					ball.SetyPosition(Math.sin(angle1)*(WINDOW_W/4));
+					ball.SetyPosition(Math.sin(angle1)*(WINDOW_H/4));
 				}
 			}		
 			
