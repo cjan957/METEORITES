@@ -22,7 +22,9 @@ public class ObjectInfo {
 	protected double height;
 	
 	protected double velocityX;
-	protected double velocityY;	
+	protected double velocityY;
+	protected double speed;
+	protected int angle;
 	
 	ObjectInfo(){
 		
@@ -64,16 +66,17 @@ public class ObjectInfo {
 		return this.velocityX;
 	}
 	
-	public void SetVelocityX(double velocityX){
-		this.velocityX = velocityX;
+	public void SetVelocityX(int angle, int speed){
+		this.velocityX = (speed * Math.cos(Math.toRadians(angle)));		
+		this.speed = speed;
 	}
 	
 	public double GetVelocityY(){
 		return this.velocityY;
 	}
 	
-	public void SetVelocityY(double velocityY){
-		this.velocityY = velocityY;
+	public void SetVelocityY(int angle, int speed){
+		this.velocityY = (speed * Math.sin(Math.toRadians(angle)));		
 	}
 	
 	public boolean GetVisibilityStatus(){
@@ -104,4 +107,11 @@ public class ObjectInfo {
 		gc.drawImage(image, xPosition, yPosition);
 	}
 	
+	public double getSpeed(){
+		return this.speed;
+	}
+	
+	public int getAngle(){
+		return this.angle;
+	}
 }

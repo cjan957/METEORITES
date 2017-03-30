@@ -1,6 +1,7 @@
 package application;
 	
 import java.util.ArrayList;
+import java.util.Random;
 import java.lang.Math;
 
 import com.ttcj.components.Ball;
@@ -78,10 +79,13 @@ public class Main extends Application {
 		
 		//Create ball object
 		Ball ball = new Ball();
-		ball.setImage("rsz_1basketball.png");
+		ball.setImage("rsz_tt.png");
 		ball.SetxPosition(WINDOW_W / 2 - 32);
 		ball.SetyPosition(WINDOW_H / 2);
-		
+		Random randNum = new Random();
+		int angle = randNum.nextInt(360); //random a value for angle
+		ball.SetVelocityX(angle, 5);
+		ball.SetVelocityY(angle, 5);
 		
 	
 		//TODO: write a comment
@@ -94,18 +98,29 @@ public class Main extends Application {
 		//final long timeStart = System.currentTimeMillis();
 		
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event ->{ //60fps
+			ball.moveThatBall();
+			if(input.contains("S")){ //debugging only
+				if(ball.getSpeed() == 1){
+					ball.SetVelocityX(ball.getAngle(),5);
+					ball.SetVelocityY(ball.getAngle(),5);
+				}
+				else{
+					ball.SetVelocityX(ball.getAngle(), 1);
+					ball.SetVelocityY(ball.getAngle(), 1);
+				}
+			}
 			if(input.contains("LEFT")){
 				//check LHS boundary condition so that the paddle won't be able to
 				//go beyond the limit
 				if(bat.GetxPosition() >= 0){
-					angle1 += 0.05; 
+					angle1 += 0.05;
 					bat.SetxPosition(Math.cos(angle1)*(WINDOW_H/3));
 					bat.SetyPosition(Math.sin(angle1)*(WINDOW_H/3));
 				}
 			}
 			else if(input.contains("RIGHT")){
 				//check RHS boundary condition
-				if(bat.GetyPosition() >= 0){
+				if(bat.GetyPosition() > 0){
 					angle1 -= 0.05; 
 					bat.SetxPosition(Math.cos(angle1)*(WINDOW_H/3));
 					bat.SetyPosition(Math.sin(angle1)*(WINDOW_H/3));
