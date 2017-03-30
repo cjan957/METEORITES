@@ -79,7 +79,7 @@ public class Main extends Application {
 		
 		//Create ball object
 		Ball ball = new Ball();
-		ball.setImage("rsz_tt.png");
+		ball.setImage("rsz_1basketball.png");
 		ball.SetxPosition(WINDOW_W / 2 - 32);
 		ball.SetyPosition(WINDOW_H / 2);
 		Random randNum = new Random();
