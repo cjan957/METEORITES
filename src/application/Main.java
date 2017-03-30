@@ -40,7 +40,7 @@ public class Main extends Application {
 		gameStage.setScene(theScene); //set Stage class's scene
 		theScene.setFill(Color.BLACK);;
 		//Create canvas object with a specific size
-		Canvas canvas = new Canvas(WINDOW_W,WINDOW_H);
+		Canvas canvas = new Canvas(WINDOW_W, WINDOW_H);
 		root.getChildren().add(canvas); //add canvas to children of root (theScene)
 		//ArrayList to store keystrokes
 		ArrayList<String> input = new ArrayList<String>();
@@ -65,16 +65,24 @@ public class Main extends Application {
 		//commands by GraphicContext?????????
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		
+		//Create bat objects
+		Bat bat = new Bat();
+		bat.setImage("rsz_1basketball.png");
+		bat.SetxPosition(WINDOW_H/3);
+		bat.SetyPosition(0);
+				
+		Bat bat2 = new Bat();
+		bat2.setImage("rsz_1basketball.png");
+		bat2.SetxPosition(WINDOW_H/3);
+		bat2.SetyPosition(WINDOW_H-64);
+		
 		//Create ball object
 		Ball ball = new Ball();
 		ball.setImage("rsz_1basketball.png");
-		ball.SetxPosition(WINDOW_W/4);
-		ball.SetyPosition(0);
-				
-		Ball ball2 = new Ball();
-		ball2.setImage("rsz_1basketball.png");
-		ball2.SetxPosition(WINDOW_W/4);
-		ball2.SetyPosition(WINDOW_H-64);
+		ball.SetxPosition(WINDOW_W / 2 - 32);
+		ball.SetyPosition(WINDOW_H / 2);
+		
+		
 	
 		//TODO: write a comment
 		Timeline gameLoop = new Timeline();
@@ -89,36 +97,36 @@ public class Main extends Application {
 			if(input.contains("LEFT")){
 				//check LHS boundary condition so that the paddle won't be able to
 				//go beyond the limit
-				if(ball.GetxPosition() >= 0){
+				if(bat.GetxPosition() >= 0){
 					angle1 += 0.05; 
-					ball.SetxPosition(Math.cos(angle1)*(WINDOW_W/4));
-					ball.SetyPosition(Math.sin(angle1)*(WINDOW_H/4));
+					bat.SetxPosition(Math.cos(angle1)*(WINDOW_H/3));
+					bat.SetyPosition(Math.sin(angle1)*(WINDOW_H/3));
 				}
 			}
 			else if(input.contains("RIGHT")){
 				//check RHS boundary condition
-				if(ball.GetyPosition() >= 0){
+				if(bat.GetyPosition() >= 0){
 					angle1 -= 0.05; 
-					ball.SetxPosition(Math.cos(angle1)*(WINDOW_W/4));
-					ball.SetyPosition(Math.sin(angle1)*(WINDOW_H/4));
+					bat.SetxPosition(Math.cos(angle1)*(WINDOW_H/3));
+					bat.SetyPosition(Math.sin(angle1)*(WINDOW_H/3));
 				}
 			}		
 			
 			if(input.contains("A")){
 				//check LHS boundary condition so that the paddle won't be able to
 				//go beyond the limit
-				if(ball2.GetxPosition() >= 0){
+				if(bat2.GetxPosition() >= 0){
 					angle2 += 0.05; 
-					ball2.SetxPosition(Math.cos(angle2)*(WINDOW_W/4));
-					ball2.SetyPosition(704 - Math.sin(angle2)*(WINDOW_H/4));
+					bat2.SetxPosition(Math.cos(angle2)*(WINDOW_H/3));
+					bat2.SetyPosition(704 - Math.sin(angle2)*(WINDOW_H/3));
 				}
 			}
 			else if(input.contains("D")){
 				//check bottom boundary condition
-				if(ball2.GetyPosition() < WINDOW_H-64){
+				if(bat2.GetyPosition() < WINDOW_H-64){
 					angle2 -= 0.05; 
-					ball2.SetxPosition(Math.cos(angle2)*(WINDOW_W/4));
-					ball2.SetyPosition(704 - Math.sin(angle2)*(WINDOW_H/4));
+					bat2.SetxPosition(Math.cos(angle2)*(WINDOW_H/3));
+					bat2.SetyPosition(704 - Math.sin(angle2)*(WINDOW_H/3));
 				}
 			}	
 			
@@ -127,8 +135,9 @@ public class Main extends Application {
 			gc.clearRect(0, 0, 1024, 768);
 			
 			//draw the ball on canvas!
-			ball.render(gc);	
-			ball2.render(gc);
+			bat.render(gc);	
+			bat2.render(gc);
+			ball.render(gc);
 		});
 		
 		gameLoop.getKeyFrames().add(gameFrame);
