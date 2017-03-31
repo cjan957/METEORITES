@@ -1,10 +1,20 @@
 package com.ttcj.components;
 
-public class Bat extends ObjectInfo{
+import com.ttcj.testing.IPaddle;
+
+public class Bat extends ObjectInfo implements IPaddle{
 	
 	private boolean isAIBat;
 	private int batWidth;
 	private int batLength;
+	
+	public void setXPos(int x) {
+		this.SetxPosition(x);
+	}
+
+	public void setYPos(int y) {
+		this.SetyPosition(y);
+	}
 	
 	public void setAIBat(boolean AIBat){	
 		this.isAIBat = AIBat; 
@@ -29,4 +39,6 @@ public class Bat extends ObjectInfo{
 	public int getBatLength(){
 		return this.batLength;
 	}
+
+
 }

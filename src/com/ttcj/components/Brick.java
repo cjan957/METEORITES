@@ -1,8 +1,8 @@
 package com.ttcj.components;
 
-import javafx.scene.shape.*;
+import com.ttcj.testing.IWall;
 
-public class Brick extends ObjectInfo{
+public class Brick extends ObjectInfo implements IWall{
 	
 	private enum brickStatus{   //or maybe "brickHealth"
 		STANDING, DAMAGED, DESTROYED  //more health levels or nah?
@@ -15,5 +15,17 @@ public class Brick extends ObjectInfo{
 	
 	public brickStatus getBrickStatus(){
 		 return this.brickHealth;
+	}
+
+	public void setXPos(int x) {
+		this.SetxPosition(x);
+	}
+
+	public void setYPos(int y) {
+		this.SetyPosition(y);
+	}
+
+	public boolean isDestroyed() {
+		return false;
 	}
 }

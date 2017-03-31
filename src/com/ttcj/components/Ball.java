@@ -1,11 +1,14 @@
 package com.ttcj.components;
+import com.ttcj.testing.IBall;
 
-import javafx.scene.canvas.GraphicsContext;
-
-public class Ball extends ObjectInfo{
+public class Ball extends ObjectInfo implements IBall{
 	
 	private double destroyPower;
 	private int ballRadius;
+	
+	private int xVelocity;
+	private int yVelocity;
+	
 	
 	/*
 	Ball(double xPos, double yPos){
@@ -13,6 +16,39 @@ public class Ball extends ObjectInfo{
 		yPosition = yPos;
 	}
 	*/
+	
+	//following the testing interface
+	public void setXPos(int x){
+		this.SetxPosition(x);
+	}
+	
+	public void setYPos(int y){
+		this.SetyPosition(y);
+	}
+	
+	public int getXPos(){
+		return this.GetxPosition();
+	}
+	
+	public int getYPos(){
+		return this.GetyPosition();
+	}
+	
+	public void setXVelocity(int dX){
+		this.xVelocity = dX;
+	}
+	
+	public void setYVelocity(int dY){
+		this.yVelocity = dY;
+	}
+	
+	public int getXVelocity(){
+		return this.getXVelocity();
+	}
+	
+	public int getYVelocity(){
+		return this.getYVelocity();
+	}
 	
 	public double GetDestroyPower(){
 		return this.destroyPower;
@@ -31,22 +67,22 @@ public class Ball extends ObjectInfo{
 	}
 	
 	public void moveThatBall(){
-		xPosition += velocityX;
-		yPosition += velocityY;
+		xPosition += xVelocity;
+		yPosition += yVelocity;
 		if(xPosition < (0)){
-			velocityX = -velocityX; 
+			xVelocity = -xVelocity; 
 			xPosition = 0 ;
 		}
 		else if(xPosition > (1024-64)){
-			velocityX = -velocityX;
+			xVelocity = -xVelocity;
 			xPosition = (1024-64);
 		}
 		if(yPosition < (0)){
-			velocityY = -velocityY;
+			yVelocity = -yVelocity;
 			yPosition = 0;
 		}
 		else if(yPosition > (768-64)){
-			velocityY = -velocityY;
+			yVelocity = -yVelocity;
 			yPosition = 768-64;
 		}
 	}

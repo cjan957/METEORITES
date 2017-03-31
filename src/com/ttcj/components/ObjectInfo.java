@@ -13,23 +13,16 @@ public class ObjectInfo {
 	
 	protected Image image;
 	
-	protected double xPosition;
-	protected double yPosition;
+	protected int xPosition;
+	protected int yPosition;
 	
-	protected double size;
-	protected boolean visible;
+	protected int size;
 	protected double width;
 	protected double height;
-	
-	protected double velocityX;
-	protected double velocityY;
-	protected double speed;
-	protected int angle;
-	
+		
 	ObjectInfo(){
 		
 	}
-	
 	
 	public void setImage(String filename){
 		Image image = new Image(filename);
@@ -38,49 +31,28 @@ public class ObjectInfo {
 		height = image.getHeight();
 	}
 	
-	public double GetxPosition(){
+	public int GetxPosition(){
 		return this.xPosition;
 	}
 	
-	public void SetxPosition(double xPos){
+	public void SetxPosition(int xPos){
 		this.xPosition = xPos;
 	}
 	
-	public double GetyPosition(){
+	public int GetyPosition(){
 		return this.yPosition;
 	}
 	
-	public void SetyPosition(double yPos){
+	public void SetyPosition(int yPos){
 		this.yPosition = yPos;
 	}
 	
-	public double GetSize(){
+	public int GetSize(){
 		return this.size;
 	}
 	
-	public void SetSize(double size){
+	public void SetSize(int size){
 		this.size = size;
-	}
-	
-	public double GetVelocityX(){
-		return this.velocityX;
-	}
-	
-	public void SetVelocityX(int angle, int speed){
-		this.velocityX = (speed * Math.cos(Math.toRadians(angle)));		
-		this.speed = speed;
-	}
-	
-	public double GetVelocityY(){
-		return this.velocityY;
-	}
-	
-	public void SetVelocityY(int angle, int speed){
-		this.velocityY = (speed * Math.sin(Math.toRadians(angle)));		
-	}
-	
-	public boolean GetVisibilityStatus(){
-		return this.visible;
 	}
 	
 	public void SetWidth(double width){
@@ -99,19 +71,8 @@ public class ObjectInfo {
 		return this.height;
 	}
 	
-	public void SetVisibilityStatus(boolean visibility){
-		this.visible = visibility;
-	}
-	
 	public void render(GraphicsContext gc){
 		gc.drawImage(image, xPosition, yPosition);
 	}
-	
-	public double getSpeed(){
-		return this.speed;
-	}
-	
-	public int getAngle(){
-		return this.angle;
-	}
+
 }
