@@ -43,11 +43,11 @@ public class Ball extends ObjectInfo implements IBall{
 	}
 	
 	public int getXVelocity(){
-		return this.getXVelocity();
+		return this.xVelocity;
 	}
 	
 	public int getYVelocity(){
-		return this.getYVelocity();
+		return this.yVelocity;
 	}
 	
 	public double GetDestroyPower(){
