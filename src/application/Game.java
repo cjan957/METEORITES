@@ -5,6 +5,7 @@ import java.util.Random;
 import java.lang.Math;
 
 import com.ttcj.components.Ball;
+import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
 import com.ttcj.testing.IGame;
 
@@ -28,6 +29,8 @@ public class Game extends Application implements IGame{
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
+	private Base player1Base;
+	private Base player2Base;
 	
 	private ArrayList<String> input = new ArrayList<String>();
 	
@@ -37,10 +40,13 @@ public class Game extends Application implements IGame{
 	private static double angle1  = 0.0;
 	private static double angle2  = 0.0;
 	
-//	Game(Ball ball, Bat bat){
-//		this.ball = ball;
-//		this.bat = bat;
-//	}
+	
+	public void setUp(Ball ball, Bat bat, Base player1Base, Base player2Base){
+		this.ball = ball;
+		this.bat = bat;
+		this.player1Base = player1Base;
+		this.player2Base = player2Base;
+	}
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -104,7 +110,6 @@ public class Game extends Application implements IGame{
 	public void tick() {
 		ball.moveThatBall();
 		
-		
 		if(input.contains("LEFT")){
 			//check LHS boundary condition so that the paddle won't be able to
 			//go beyond the limit
@@ -131,6 +136,7 @@ public class Game extends Application implements IGame{
 			}
 		}		
 		
+		
 		if(input.contains("A")){
 			//check LHS boundary condition so that the paddle won't be able to
 			//go beyond the limit
@@ -149,6 +155,7 @@ public class Game extends Application implements IGame{
 			}
 		}	
 		
+		
 	}
 
 	public void gameInit(){
@@ -157,11 +164,13 @@ public class Game extends Application implements IGame{
 		bat.setImage("rsz_1basketball.png");
 		bat.SetxPosition(WINDOW_H/3);
 		bat.SetyPosition(0);
-						
+			
+		
 		bat2 = new Bat();
 		bat2.setImage("rsz_1basketball.png");
 		bat2.SetxPosition(WINDOW_H/3);
 		bat2.SetyPosition(WINDOW_H-64);
+		
 				
 		ball = new Ball();
 		ball.setImage("rsz_1basketball.png");
