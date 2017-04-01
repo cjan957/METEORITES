@@ -24,13 +24,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Game extends Application implements IGame{
+public class Game extends Application{
 	
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
-	private Base player1Base;
-	private Base player2Base;
+
 	
 	private ArrayList<String> input = new ArrayList<String>();
 	
@@ -40,13 +39,6 @@ public class Game extends Application implements IGame{
 	private static double angle1  = 0.0;
 	private static double angle2  = 0.0;
 	
-	
-	public void setUp(Ball ball, Bat bat, Base player1Base, Base player2Base){
-		this.ball = ball;
-		this.bat = bat;
-		this.player1Base = player1Base;
-		this.player2Base = player2Base;
-	}
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -153,9 +145,7 @@ public class Game extends Application implements IGame{
 				bat2.setXPos((int)(Math.cos(angle2)*(WINDOW_H/3)));
 				bat2.setYPos((int)(704 - Math.sin(angle2)*(WINDOW_H/3)));
 			}
-		}	
-		
-		
+		}		
 	}
 
 	public void gameInit(){
@@ -165,13 +155,11 @@ public class Game extends Application implements IGame{
 		bat.SetxPosition(WINDOW_H/3);
 		bat.SetyPosition(0);
 			
-		
 		bat2 = new Bat();
 		bat2.setImage("rsz_1basketball.png");
 		bat2.SetxPosition(WINDOW_H/3);
 		bat2.SetyPosition(WINDOW_H-64);
-		
-				
+					
 		ball = new Ball();
 		ball.setImage("rsz_1basketball.png");
 		ball.SetxPosition(WINDOW_W / 2 - 32);
