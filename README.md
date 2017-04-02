@@ -60,6 +60,8 @@
 * In the 'Project Explorer', open warlords > src > com.ttcj.testing
 * Right click the package com.ttcj.testing > Run As > JUnit Test
 
+* Note: We have created a separate package for testing purposes as we already implemented several classes before the testing interface was released. We did this to prevent any conflicts and with our existing classes and code.  
+
 ## 5.0 Who can I talk to? ##
 
 * Please feel free to contact us if you have any questions regarding our game / README, thanks.
