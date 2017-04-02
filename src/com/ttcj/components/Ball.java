@@ -24,6 +24,7 @@ public class Ball extends ObjectInfo implements IBall {
 	 */
 
 	//Get and Set Ball position on the screen by using co-ordinates
+	//Some methods are added here to make the class consistent with IBall interface
 	public void setXPos(int x) {
 		this.SetxPosition(x);
 	}
@@ -56,19 +57,19 @@ public class Ball extends ObjectInfo implements IBall {
 		return this.yVelocity;
 	}
 
-	public double GetDestroyPower() {
+	public double getDestroyPower() {
 		return this.destroyPower;
 	}
 
-	public void SetDestroyPower(double destroyPower) {
+	public void setDestroyPower(double destroyPower) {
 		this.destroyPower = destroyPower;
 	}
 
-	public void SetBallRadius(int ballRadius) {
+	public void setBallRadius(int ballRadius) {
 		this.ballRadius = ballRadius;
 	}
 
-	public int GetBallRadius() {
+	public int getBallRadius() {
 		return this.ballRadius;
 	}
 
