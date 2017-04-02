@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -57,7 +58,14 @@ public class View {
 		Rectangle testBrick = new Rectangle(500,500,30,10);
 		testBrick.setFill(Color.WHITE);
 		
-		root.getChildren().addAll(planetTL, planetTR , planetBL, planetBR);  //add planets to canvas
+//		Circle circle = new Circle(50);
+//		Image asteroid = new Image("b30000.png");
+//		circle.setFill(new ImagePattern(asteroid));
+////		circle.setFill(Color.WHITE);
+//		circle.setCenterX(400);
+//		circle.setCenterY(500);
+		
+		root.getChildren().addAll(planetTL, planetTR , planetBL, planetBR /*circle*/);  //add planets to canvas
 		
 		Canvas canvas = new Canvas(WINDOW_W, WINDOW_H);
 		root.getChildren().add(canvas); //add canvas to children of root (theScene)
