@@ -70,7 +70,13 @@
 * Chanokpol Janveerawat
 * cjan957@aucklanduni.ac.nz
 
-## 6.0 Credits ##
+## 6.0 MVC Diagram ##
+
+* The MVC diagram is found in the root directory, warlords > mvc_prototype.pdf
+* The Player Class is not yet implemented in the Model Section. 
+
+
+## 7.0 Credits ##
 
 * In-game background image - Free to use
 * http://more-sky.com/WDF-326448.html
