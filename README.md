@@ -3,7 +3,7 @@
 ### What is this repository for? ###
 
 * Quick summary
-	This README includes instructions > on how to set-up and get the prototype 
+	This README includes instructions on how to set-up and get the prototype 
 	version of our game running.
 	 
 * Version
