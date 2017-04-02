@@ -5,7 +5,9 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
@@ -26,7 +28,10 @@ public class View {
 		Group root = new Group(); //JavaFX scene root node 
 		Scene theScene = new Scene(root); //create scene object with root parent
 		gameStage.setScene(theScene); //set Stage class's scene
-		theScene.setFill(Color.BLACK);
+//		theScene.setFill(Color.BLACK);
+		
+		Image background = new Image("stars_space.jpg");
+		theScene.setFill(new ImagePattern(background));
 		
 		//Circle(double centerX, double centerY, double radius, Paint fill)
 		//Rectangle(double x, double y, double width, double height)
