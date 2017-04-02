@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class View {
@@ -52,7 +51,7 @@ public class View {
 		// double startAngle, double length)
 
 		
-		//TODO: KEISON PLEASE COMMENT
+		//Setup planet shapes to each corner - will represent the 'warlords'
 		Arc planetTL = new Arc(0, 0, 100, 100, 270, 90); // planets
 		planetTL.setFill(Color.BLUE);
 		planetTL.setType(ArcType.ROUND);
@@ -69,18 +68,18 @@ public class View {
 		planetBR.setFill(Color.RED);
 		planetBR.setType(ArcType.ROUND);
 
-		Rectangle testBrick = new Rectangle(500, 500, 30, 10);
-		testBrick.setFill(Color.WHITE);
+		// Rectangle testBrick = new Rectangle(500, 500, 30, 10);
+		// testBrick.setFill(Color.WHITE);
 
 		// Circle circle = new Circle(50);
 		// Image asteroid = new Image("b30000.png");
 		// circle.setFill(new ImagePattern(asteroid));
-		//// circle.setFill(Color.WHITE);
+		// circle.setFill(Color.WHITE);
 		// circle.setCenterX(400);
 		// circle.setCenterY(500);
 
 		//Add planets to the scene
-		root.getChildren().addAll(planetTL, planetTR, planetBL, planetBR /* circle */); 
+		root.getChildren().addAll(planetTL, planetTR, planetBL, planetBR); 
 		
 		//Create a new canvas and add it as a child of root  
 		Canvas canvas = new Canvas(WINDOW_W, WINDOW_H);

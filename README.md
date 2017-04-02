@@ -2,12 +2,15 @@
 
 ## What is this repository for? ##
 
+* This README is best viewed online to take advantage of the markdown formatting
+
 * This README includes instructions on how to set-up and get the prototype 
 	version of METEORITES running.
 	 
 * Version: Alpha
 
 ## How do I get set up? ##
+
 * System Requirements
 > In order to get METEORITES to run properly, please have the following installed on your system:
 > Latest Java JDK 8
@@ -44,6 +47,7 @@
 > Player 2 (Top-left) can control their bat with the [LEFT] and [RIGHT] arrow keys.
 
 ## How do I run JUnit tests? ##
+
 * Follow the section "Setting up METEORITES in Eclipse" before coming to this section
 * Make sure you have JUnit set up to use, if you're unsure, follow this:
 > Right click the project in 'Project Explorer'
@@ -66,9 +70,10 @@
 > cjan957@aucklanduni.ac.nz
 
 ## Credits ##
-* In-game background image
+
+* In-game background image - Free to use
 > http://more-sky.com/WDF-326448.html
 
-* Asteroid Sprite
+* Asteroid Sprite - Used under CC License
 > Credit to Author: 'phaelax'
 > http://opengameart.org/content/asteroids

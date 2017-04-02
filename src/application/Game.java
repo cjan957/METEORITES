@@ -118,18 +118,20 @@ public class Game extends Application {
 			}
 		}
 
-		//TODO: Please comment KEison
-		if ((ball.getXPos() <= bat.GetxPosition() + 32) // bat1
+		// Ball - Bat collision algorithm
+		// bat1 - ball
+		if ((ball.getXPos() <= bat.GetxPosition() + 32) 		//check if ball collides with bat
 				&& (ball.getXPos() >= bat.GetxPosition() - 32) && (ball.getYPos() <= bat.GetyPosition() + 32)
 				&& (ball.getYPos() >= bat.GetyPosition() - 32)) {
-			ball.setXVelocity(-ball.getXVelocity());
+			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
 			ball.setYVelocity(ball.getYVelocity());
 		}
 
-		if ((ball.getXPos() <= bat2.GetxPosition() + 32) // bat2
+		// bat2 - ball
+		if ((ball.getXPos() <= bat2.GetxPosition() + 32) 		//check if ball collides with bat
 				&& (ball.getXPos() >= bat2.GetxPosition() - 32) && (ball.getYPos() <= bat2.GetyPosition() + 32)
 				&& (ball.getYPos() >= bat2.GetyPosition() - 32)) {
-			ball.setXVelocity(-ball.getXVelocity());
+			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
 			ball.setYVelocity(ball.getYVelocity());
 		}
 	}
