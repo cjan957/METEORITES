@@ -32,7 +32,7 @@
   in this version.
   
 * Player 1 can control their bat with the [A] and [D] keys.
-* Plater 2 can control their bat with the [LEFT] and [RIGHT] arrow keys.
+* Player 2 can control their bat with the [LEFT] and [RIGHT] arrow keys.
 
 ### Who do I talk to? ###
 
