@@ -77,6 +77,7 @@ public class Game extends Application {
 
 	}
 
+	//Tick, run the game by 1 frame		
 	public void tick() {
 		//Move the ball once, checking necessary conditions.
 		ball.moveThatBall();
