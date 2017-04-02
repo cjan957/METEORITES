@@ -38,7 +38,7 @@
 
 Please feel free to contact us if you have any questions about our game / README.
 
-Keison Tang
+* Keison Tang
 > ktan928@aucklanduni.ac.nz
 
 C.J
