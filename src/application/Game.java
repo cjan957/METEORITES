@@ -1,5 +1,6 @@
 package application;
 	
+//codeSplit
 import java.util.ArrayList;
 import java.util.Random;
 import java.lang.Math;
@@ -32,7 +33,6 @@ public class Game extends Application{
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
-	
 	
 	private ArrayList<String> input = new ArrayList<String>();
 	
