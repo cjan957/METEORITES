@@ -30,6 +30,8 @@ import javafx.scene.shape.Rectangle;
 
 public class Game extends Application{
 	
+	private View view;
+	
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
@@ -43,90 +45,32 @@ public class Game extends Application{
 	private static double angle2  = 0.0;
 	
 
-	
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
 	@Override
 	public void start(Stage gameStage) {
-		
-		gameStage.setTitle(GAMENAME);		
-		Group root = new Group(); //JavaFX scene root node 
-		Scene theScene = new Scene(root); //create scene object with root parent
-		gameStage.setScene(theScene); //set Stage class's scene
-		theScene.setFill(Color.BLACK);
-		
-		//Circle(double centerX, double centerY, double radius, Paint fill)
-		//Rectangle(double x, double y, double width, double height)
-		//Arc(double centerX, double centerY, double radiusX, double radiusY, double startAngle, double length)
-		
-		Arc planetTL = new Arc(0,0,100,100,270,90);   //planets 
-		planetTL.setFill(Color.BLUE);
-		planetTL.setType(ArcType.ROUND);
-		
-		Arc planetTR = new Arc(1024,0,100,100,180,90);
-		planetTR.setFill(Color.GREEN);
-		planetTR.setType(ArcType.ROUND);
-		
-		
-		Arc planetBL = new Arc(0,768,100,100,0,90);
-		planetBL.setFill(Color.YELLOW);
-		planetBL.setType(ArcType.ROUND);
-		
-		Arc planetBR = new Arc(1024,768,100,100,90,90);
-		planetBR.setFill(Color.RED);
-		planetBR.setType(ArcType.ROUND);
-		
-		Rectangle testBrick = new Rectangle(500,500,30,10);
-		testBrick.setFill(Color.WHITE);
-		
-		root.getChildren().addAll(planetTL, planetTR , planetBL, planetBR);  //add planets to canvas
-			
-		//Create canvas object with a specific size
-		Canvas canvas = new Canvas(WINDOW_W, WINDOW_H);
-		root.getChildren().add(canvas); //add canvas to children of root (theScene)
-						
-		//When a key press event occurs, store the key the player pressed
-		//into input array
-		theScene.setOnKeyPressed(event->{
-			String code = event.getCode().toString();
-			if(!input.contains(code)){
-				input.add(code);
-			}	
-		});
-		
-		//Remove keystroke from array when key is released
-		theScene.setOnKeyReleased(event->{
-			String code = event.getCode().toString();
-			input.remove(code);
-		});
-		
-		
-		//TODO: Verify this comment
-		//Create gc object so that we can draw on the created canvas using
-		//commands by GraphicContext?????????
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+
+		View view = new View();
+		view.viewSetup(gameStage);
 		
 		gameInit();
-				
-		//final long timeStart = System.currentTimeMillis();
+			
 		Timeline gameLoop = new Timeline();
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event ->{ //60fps
+			input = view.accessUserInput();
 			tick();			
-			gc.clearRect(0, 0, 1024, 768);		
-			bat.render(gc);	
-			bat2.render(gc);
-			ball.render(gc);
+			view.canvasGC().clearRect(0, 0, 1024, 768);		
+			bat.render(view.canvasGC());	
+			bat2.render(view.canvasGC());
+			ball.render(view.canvasGC());
 		});
 		
 		gameLoop.getKeyFrames().add(gameFrame);
 		gameLoop.play();
 		
-		gameStage.setResizable(false);
-		gameStage.sizeToScene();
-		gameStage.show();		
 	}
 	
 	public void tick() {
@@ -173,33 +117,8 @@ public class Game extends Application{
 				bat2.setXPos((int)(Math.cos(angle2)*(WINDOW_H/3)));
 				bat2.setYPos((int)(704 - Math.sin(angle2)*(WINDOW_H/3)));
 			}
-		}	
-//		
-//		if((ball.getXPos() <= bat.GetxPosition() + 64)   //bat1 hit rhs
-//				&& (ball.getXPos() >= bat.GetxPosition() + 32)
-//				&& (ball.getYPos() <= bat.GetyPosition() + 64)
-//				&& (ball.getYPos() >= bat.GetyPosition() + 0)){
-//				ball.setXVelocity(-ball.getXVelocity());
-//				ball.setYVelocity(ball.getYVelocity());
-//		}		if((ball.getXPos() <= bat.GetxPosition() + 64)   //bat1 hit top
-//				&& (ball.getXPos() >= bat.GetxPosition() + 0)
-//				&& (ball.getYPos() <= bat.GetyPosition() + 32)
-//				&& (ball.getYPos() >= bat.GetyPosition() + 0)){
-//				ball.setXVelocity(ball.getXVelocity());
-//				ball.setYVelocity(-ball.getYVelocity());
-//		}		if((ball.getXPos() <= bat.GetxPosition() + 32)   //bat1 hit lhs 
-//				&& (ball.getXPos() >= bat.GetxPosition() + 0)
-//				&& (ball.getYPos() <= bat.GetyPosition() + 64)
-//				&& (ball.getYPos() >= bat.GetyPosition() + 0)){
-//				ball.setXVelocity(-ball.getXVelocity());
-//				ball.setYVelocity(ball.getYVelocity());
-//		}		if((ball.getXPos() <= bat.GetxPosition() + 64)   //bat1 hit bottom
-//				&& (ball.getXPos() >= bat.GetxPosition() + 0)
-//				&& (ball.getYPos() <= bat.GetyPosition() + 64)
-//				&& (ball.getYPos() >= bat.GetyPosition() + 32)){
-//				ball.setXVelocity(ball.getXVelocity());
-//				ball.setYVelocity(-ball.getYVelocity());
-//		}
+		}		
+
 		
 		if((ball.getXPos() <= bat.GetxPosition() + 32)   //bat1
 				&& (ball.getXPos() >= bat.GetxPosition() - 32)
