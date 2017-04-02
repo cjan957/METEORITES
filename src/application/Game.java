@@ -2,36 +2,20 @@ package application;
 	
 //codeSplit
 import java.util.ArrayList;
-import java.util.Random;
 import java.lang.Math;
 
 import com.ttcj.components.Ball;
-import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
-import com.ttcj.testing.IGame;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+
 
 public class Game extends Application{
-	
-	private View view;
-	
+		
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
@@ -143,7 +127,7 @@ public class Game extends Application{
 	
 
 	public void gameInit(){
-		//Create bat objects // CHANGE TO CONSTRUCTOR!
+		//Create bat objects //TODO: CHANGE TO CONSTRUCTOR!
 		bat = new Bat();
 		bat.setImage("rsz_1basketball.png");
 		bat.SetxPosition(WINDOW_H/3);
