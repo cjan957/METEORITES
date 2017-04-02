@@ -48,12 +48,21 @@
 
 ## How do I run JUnit tests? ##
 
+<<<<<<< HEAD
 * Follow the section "Setting up METEORITES in Eclipse" before coming to this section
 * Make sure you have JUnit set up to use, if you're unsure, follow this:
 > Right click the project in 'Project Explorer'
 > Navigate to Properties > Java Build Path > 'Libraries' tab
 > If JUnit is under the list of libraries then you are fine to proceed
 > If not: Add Library > JUnit > Next > library version JUnit 4 > Finish
+=======
+* For this version, we only have two players on the bottom two corners of the
+  playing area. AI is in the process of being implemented, so it is not included
+  in this version.
+  
+* Player 1 can control their bat with the [A] and [D] keys.
+* Player 2 can control their bat with the [LEFT] and [RIGHT] arrow keys.
+>>>>>>> refs/heads/master
 
 * To run the JUnit tests
 > In the 'Project Explorer', open warlords > src > com.ttcj.testing
@@ -63,6 +72,7 @@
 
 * Please feel free to contact us if you have any questions regarding our game / README, thanks.
 
+<<<<<<< HEAD
 * Keison Tang
 > ktan928@aucklanduni.ac.nz
 
@@ -77,3 +87,7 @@
 * Asteroid Sprite - Used under CC License
 > Credit to Author: 'phaelax'
 > http://opengameart.org/content/asteroids
+=======
+C.J
+cjan957@aucklanduni.ac.nz
+>>>>>>> refs/heads/master
