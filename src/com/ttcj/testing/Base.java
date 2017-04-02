@@ -1,39 +1,45 @@
+/*
+ * For more info on this class, please refer to the actual game base model/class.
+ */
+
 package com.ttcj.testing;
+
 import com.ttcj.testing.IWarlord;
 
-public class Base implements IWarlord{
-	
+public class Base implements IWarlord {
+
 	private int xPosition;
 	private int yPosition;
-	
-	private boolean isDead = false;		//true for dead, false for alive
-	private boolean isWinner = false;	//true for winner, false for loser/ undetermined
-	
-	public void setIsDead(boolean Dead){
+
+	private boolean isDead = false; // true for dead, false for alive
+	private boolean isWinner = false; // true for winner, false for loser/
+										// undetermined
+
+	public void setIsDead(boolean Dead) {
 		this.isDead = Dead;
 	}
-	
-	public boolean isDead(){
+
+	public boolean isDead() {
 		return this.isDead;
 	}
-	
-	public void setIsWinner(boolean Winner){
+
+	public void setIsWinner(boolean Winner) {
 		this.isWinner = Winner;
 	}
-	
+
 	public void setXPos(int x) {
-		this.xPosition = x;	
+		this.xPosition = x;
 	}
 
 	public void setYPos(int y) {
-		this.yPosition = y;	
+		this.yPosition = y;
 	}
-	
-	public int getXPos(){
+
+	public int getXPos() {
 		return this.xPosition;
 	}
-	
-	public int getYPos(){
+
+	public int getYPos() {
 		return this.yPosition;
 	}
 
