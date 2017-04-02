@@ -23,6 +23,7 @@ public class Ball extends ObjectInfo implements IBall {
 	 * Ball(double xPos, double yPos){ xPosition = xPos; yPosition = yPos; }
 	 */
 
+	//Get and Set Ball position on the screen by using co-ordinates
 	public void setXPos(int x) {
 		this.SetxPosition(x);
 	}

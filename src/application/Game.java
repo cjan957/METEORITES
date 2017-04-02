@@ -78,7 +78,7 @@ public class Game extends Application {
 	}
 
 	public void tick() {
-		//Move the ball once, checking neccesary conditions.
+		//Move the ball once, checking necessary conditions.
 		ball.moveThatBall();
 		
 		//Check user input and move the paddle accordingly
