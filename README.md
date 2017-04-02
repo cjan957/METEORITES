@@ -39,7 +39,7 @@
 Please feel free to contact us if you have any questions about our game / README.
 
 Keison Tang
-ktan928@aucklanduni.ac.nz
+> ktan928@aucklanduni.ac.nz
 
 C.J
 cjan957@aucklanduni.ac.nz
