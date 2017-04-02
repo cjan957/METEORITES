@@ -32,7 +32,7 @@
   in this version.
   
 * Player 1 can control their bat with the [A] and [D] keys.
-* Plater 2 can control their bat with the [LEFT] and [RIGHT] arrow keys.
+* Player 2 can control their bat with the [LEFT] and [RIGHT] arrow keys.
 
 ### Who do I talk to? ###
 
@@ -43,3 +43,10 @@ ktan928@aucklanduni.ac.nz
 
 C.J
 cjan957@aucklanduni.ac.nz
+
+### Credits ###
+* Background image http://more-sky.com/WDF-326448.html
+
+* Asteroid Sprite
+Credit to Author: 'phaelax'
+http://opengameart.org/content/asteroids
