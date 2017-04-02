@@ -15,14 +15,14 @@ public class View {
 	
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
-	
-	private GraphicsContext gc;
-	
+	private static final String GAMENAME = "Meteorites";
+
+	private GraphicsContext gc;	
 	private ArrayList<String> input = new ArrayList<String>();
 
 	public void viewSetup(Stage gameStage){
 		
-		gameStage.setTitle("XXX");		
+		gameStage.setTitle(GAMENAME);		
 		Group root = new Group(); //JavaFX scene root node 
 		Scene theScene = new Scene(root); //create scene object with root parent
 		gameStage.setScene(theScene); //set Stage class's scene

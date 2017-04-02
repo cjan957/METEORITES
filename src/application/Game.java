@@ -38,7 +38,6 @@ public class Game extends Application{
 	
 	private ArrayList<String> input = new ArrayList<String>();
 	
-	private static final String GAMENAME = "Warlords";
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	private static double angle1  = 0.0;
