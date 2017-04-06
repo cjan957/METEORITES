@@ -26,7 +26,9 @@ public class Game extends Application {
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
-	private BrickManager brickList;
+	private BrickManager topLHSBrick;
+	private BrickManager bottomLHSBrick;
+	
 
 	//This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -72,11 +74,11 @@ public class Game extends Application {
 			bat.render(view.canvasGC());
 			bat2.render(view.canvasGC());
 			ball.render(view.canvasGC());
-//			for(brickList ){
-//				//if(brickList.accessBrickArray().){
-//					brickList.accessBrickArray().
-//				//}
-//			}
+			
+			for(Brick brick : topLHSBrick.accessBrickArray()){
+				brick.render(view.canvasGC());
+			}
+			
 		});
 
 		//Play and Repeat the graphic rendering
@@ -143,6 +145,16 @@ public class Game extends Application {
 			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
 			ball.setYVelocity(ball.getYVelocity());
 		}
+		
+		wallCollisionCheck();
+		
+	}
+	
+	public void wallCollisionCheck(){
+		while(topLHSBrick.accessBrickList().hasNext()){
+			Brick brick = topLHSBrick.accessBrickList().next();
+			//if(ball) //ask for wall rectangle area then see if they intersect
+		}
 	}
 
 	public void gameInit() {
@@ -158,6 +170,7 @@ public class Game extends Application {
 		bat2.setImage("rsz_1paddle2.png");
 		bat2.SetxPosition(WINDOW_H / 3);
 		bat2.SetyPosition(WINDOW_H - 64);
+		
 
 		ball = new Ball();
 		ball.setImage("b10008.png");
@@ -166,15 +179,33 @@ public class Game extends Application {
 		ball.setXVelocity(5);
 		ball.setYVelocity(5);
 		
-		brickList = new BrickManager();
-		
-		for(int i = 0; i < 10; i++){
+		topLHSBrick = new BrickManager();
+		bottomLHSBrick = new BrickManager();
+
+		for(int i = 0; i < 180; i+=20){
 			Brick brick = new Brick();
-			brick.setImage("bat.png");
-			brick.SetxPosition((int)(1000 * Math.random()));
-			brick.SetyPosition((int)(700 * Math.random()));
-			brickList.addBrick(brick);
+			brick.setImage("rsz_1rsz_brick.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(150);
+			topLHSBrick.addBrick(brick);
 		}
+		
+		for(int j = 0; j < 150; j+=20){
+			Brick brick = new Brick();
+			brick.setImage("rsz_1rsz_brick.png");
+			brick.SetxPosition(160);
+			brick.SetyPosition(j);
+			topLHSBrick.addBrick(brick);
+		}
+
+
+//			angle += 0.16;
+//			Brick brick = new Brick();
+//			brick.setImage("rsz_1rsz_brick.png");
+//			//(Math.cos(angle1) * (WINDOW_H / 3)
+//			brick.SetxPosition((int)((Math.cos(angle) * (WINDOW_H / 5))));
+//			brick.SetyPosition((int)((Math.sin(angle) * (WINDOW_H / 4))));
+//			brickList.addBrick(brick);
 	}
 
 	public boolean isFinished() {

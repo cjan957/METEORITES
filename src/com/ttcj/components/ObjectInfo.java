@@ -8,6 +8,7 @@
 
 package com.ttcj.components;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -71,6 +72,10 @@ public class ObjectInfo {
 
 	public double GetHeight() {
 		return this.height;
+	}
+	
+	public Rectangle2D getBoundary(){
+		return new Rectangle2D(xPosition,yPosition,width,height);
 	}
 
 	//Render the object on a canvas as specify by graphicContent 
