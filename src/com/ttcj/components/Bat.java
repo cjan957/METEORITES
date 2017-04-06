@@ -9,19 +9,12 @@ package com.ttcj.components;
 
 import com.ttcj.testing.IPaddle;
 
-public class Bat extends ObjectInfo implements IPaddle {
+public class Bat extends ObjectInfo {
 
 	private boolean isAIBat;
 	private int batWidth;
 	private int batLength;
 
-	public void setXPos(int x) {
-		this.SetxPosition(x);
-	}
-
-	public void setYPos(int y) {
-		this.SetyPosition(y);
-	}
 
 	//Specify whether a bat is controlled by AI
 	public void setAIBat(boolean AIBat) {

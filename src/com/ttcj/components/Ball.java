@@ -11,7 +11,7 @@ package com.ttcj.components;
 
 import com.ttcj.testing.IBall;
 
-public class Ball extends ObjectInfo implements IBall {
+public class Ball extends ObjectInfo{
 
 	private double destroyPower;
 	private int ballRadius;
@@ -23,23 +23,6 @@ public class Ball extends ObjectInfo implements IBall {
 	 * Ball(double xPos, double yPos){ xPosition = xPos; yPosition = yPos; }
 	 */
 
-	//Get and Set Ball position on the screen by using co-ordinates
-	//Some methods are added here to make the class consistent with IBall interface
-	public void setXPos(int x) {
-		this.SetxPosition(x);
-	}
-
-	public void setYPos(int y) {
-		this.SetyPosition(y);
-	}
-
-	public int getXPos() {
-		return this.GetxPosition();
-	}
-
-	public int getYPos() {
-		return this.GetyPosition();
-	}
 
 	public void setXVelocity(int dX) {
 		this.xVelocity = dX;

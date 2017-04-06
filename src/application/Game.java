@@ -11,6 +11,8 @@ import java.lang.Math;
 
 import com.ttcj.components.Ball;
 import com.ttcj.components.Bat;
+import com.ttcj.components.Brick;
+import com.ttcj.components.BrickManager;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,6 +26,7 @@ public class Game extends Application {
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
+	private BrickManager brickList;
 
 	//This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -69,6 +72,11 @@ public class Game extends Application {
 			bat.render(view.canvasGC());
 			bat2.render(view.canvasGC());
 			ball.render(view.canvasGC());
+//			for(brickList ){
+//				//if(brickList.accessBrickArray().){
+//					brickList.accessBrickArray().
+//				//}
+//			}
 		});
 
 		//Play and Repeat the graphic rendering
@@ -90,15 +98,15 @@ public class Game extends Application {
 				//Increase angle so the paddle/bat can move in circular path as 
 				//defined by the maths function
 				angle1 += 0.05;
-				bat.setXPos((int) (Math.cos(angle1) * (WINDOW_H / 3)));
-				bat.setYPos((int) (Math.sin(angle1) * (WINDOW_H / 3)));
+				bat.SetxPosition((int) (Math.cos(angle1) * (WINDOW_H / 3)));
+				bat.SetyPosition((int) (Math.sin(angle1) * (WINDOW_H / 3)));
 			}
 		} else if (input.contains("RIGHT")) {
 			// check RHS boundary condition
 			if (bat.GetyPosition() > 0) {
 				angle1 -= 0.05;
-				bat.setXPos((int) (Math.cos(angle1) * (WINDOW_H / 3)));
-				bat.setYPos((int) (Math.sin(angle1) * (WINDOW_H / 3)));
+				bat.SetxPosition((int) (Math.cos(angle1) * (WINDOW_H / 3)));
+				bat.SetyPosition((int) (Math.sin(angle1) * (WINDOW_H / 3)));
 			}
 		}
 
@@ -107,31 +115,31 @@ public class Game extends Application {
 			// go beyond the limit
 			if (bat2.GetxPosition() >= 0) {
 				angle2 += 0.05;
-				bat2.setXPos((int) (Math.cos(angle2) * (WINDOW_H / 3)));
-				bat2.setYPos((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
+				bat2.SetxPosition((int) (Math.cos(angle2) * (WINDOW_H / 3)));
+				bat2.SetyPosition((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
 			}
 		} else if (input.contains("D")) {
 			// check bottom boundary condition
 			if (bat2.GetyPosition() < WINDOW_H - 64) {
 				angle2 -= 0.05;
-				bat2.setXPos((int) (Math.cos(angle2) * (WINDOW_H / 3)));
-				bat2.setYPos((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
+				bat2.SetxPosition((int) (Math.cos(angle2) * (WINDOW_H / 3)));
+				bat2.SetyPosition((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
 			}
 		}
 
 		// Ball - Bat collision algorithm
 		// bat1 - ball
-		if ((ball.getXPos() <= bat.GetxPosition() + 32) 		//check if ball collides with bat
-				&& (ball.getXPos() >= bat.GetxPosition() - 32) && (ball.getYPos() <= bat.GetyPosition() + 32)
-				&& (ball.getYPos() >= bat.GetyPosition() - 32)) {
+		if ((ball.GetxPosition() <= bat.GetxPosition() + 32) 		//check if ball collides with bat
+				&& (ball.GetxPosition() >= bat.GetxPosition() - 32) && (ball.GetyPosition() <= bat.GetyPosition() + 32)
+				&& (ball.GetyPosition() >= bat.GetyPosition() - 32)) {
 			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
 			ball.setYVelocity(ball.getYVelocity());
 		}
 
 		// bat2 - ball
-		if ((ball.getXPos() <= bat2.GetxPosition() + 32) 		//check if ball collides with bat
-				&& (ball.getXPos() >= bat2.GetxPosition() - 32) && (ball.getYPos() <= bat2.GetyPosition() + 32)
-				&& (ball.getYPos() >= bat2.GetyPosition() - 32)) {
+		if ((ball.GetxPosition() <= bat2.GetxPosition() + 32) 		//check if ball collides with bat
+				&& (ball.GetxPosition() >= bat2.GetxPosition() - 32) && (ball.GetyPosition() <= bat2.GetyPosition() + 32)
+				&& (ball.GetyPosition() >= bat2.GetyPosition() - 32)) {
 			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
 			ball.setYVelocity(ball.getYVelocity());
 		}
@@ -157,6 +165,16 @@ public class Game extends Application {
 		ball.SetyPosition(WINDOW_H / 2);
 		ball.setXVelocity(5);
 		ball.setYVelocity(5);
+		
+		brickList = new BrickManager();
+		
+		for(int i = 0; i < 10; i++){
+			Brick brick = new Brick();
+			brick.setImage("bat.png");
+			brick.SetxPosition((int)(1000 * Math.random()));
+			brick.SetyPosition((int)(700 * Math.random()));
+			brickList.addBrick(brick);
+		}
 	}
 
 	public boolean isFinished() {
