@@ -4,9 +4,7 @@ import java.util.Iterator;
 
 public class BrickManager {
 	private ArrayList<Brick> brickList = new ArrayList<Brick>();
-	private Iterator<Brick> brickListIter;
 	private int numberOfBrick = 0;
-	
 	
 	public void addBrick(Brick brick){
 		this.brickList.add(brick);
@@ -15,14 +13,6 @@ public class BrickManager {
 	
 	public void removeBrick(int position){
 		
-	}
-
-	public void makeIterator(){
-		brickListIter = this.brickList.iterator();
-	}
-		
-	public Iterator<Brick> accessBrickList(){
-		return this.brickListIter;
 	}
 	
 	public ArrayList<Brick> accessBrickArray(){

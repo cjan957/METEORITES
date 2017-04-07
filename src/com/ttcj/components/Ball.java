@@ -11,32 +11,33 @@ package com.ttcj.components;
 
 import com.ttcj.testing.IBall;
 
+import javafx.geometry.Rectangle2D;
+
 public class Ball extends ObjectInfo{
 
 	private double destroyPower;
 	private int ballRadius;
 
-	private int xVelocity;
-	private int yVelocity;
+	private float xVelocity;
+	private float yVelocity;
+	
+	private boolean travelingRight;
+	private boolean travelingUp;
+	
 
-	/*
-	 * Ball(double xPos, double yPos){ xPosition = xPos; yPosition = yPos; }
-	 */
-
-
-	public void setXVelocity(int dX) {
+	public void setXVelocity(float dX) {
 		this.xVelocity = dX;
 	}
 
-	public void setYVelocity(int dY) {
+	public void setYVelocity(float dY) {
 		this.yVelocity = dY;
 	}
 
-	public int getXVelocity() {
+	public float getXVelocity() {
 		return this.xVelocity;
 	}
 
-	public int getYVelocity() {
+	public float getYVelocity() {
 		return this.yVelocity;
 	}
 
@@ -86,7 +87,49 @@ public class Ball extends ObjectInfo{
 		} else if (yPosition > (768 - 64)) {
 			yVelocity = -yVelocity;
 			yPosition = 768 - 64;
+		}	
+		
+		setBallTravelingDirection();
+	}
+	
+
+	public void setBallTravelingDirection(){
+		if(xVelocity < 0 && yVelocity < 0){
+			travelingRight = false;
+			travelingUp = true;
+		}
+		else if(xVelocity > 0 && yVelocity < 0){
+			travelingRight = true;
+			travelingUp = true;
+		}
+		else if(xVelocity < 0 && yVelocity > 0){
+			travelingRight = false;
+			travelingUp = false;
+		}
+		else if(xVelocity > 0 && yVelocity >0){
+			travelingRight = true;
+			travelingUp = false;
+		}
+		else{
+			System.out.println("Velocity Error detected!");
 		}
 	}
+	
+	public boolean getIfTravelRight(){
+		return travelingRight;
+	}
+	
+	public boolean getIfTravelUp(){
+		return travelingUp;
+	}
+		
+	public Rectangle2D getBoundary(){
+		return new Rectangle2D(xPosition+16,yPosition+16,width,height);
+	}
+	
+	public boolean objectsIntersect(Brick obj){
+		return obj.getBoundary().intersects(this.getBoundary());
+	}
+	
 
 }

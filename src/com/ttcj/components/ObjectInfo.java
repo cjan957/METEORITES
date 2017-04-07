@@ -16,8 +16,8 @@ public class ObjectInfo {
 
 	protected Image image;
 
-	protected int xPosition;
-	protected int yPosition;
+	protected float xPosition;
+	protected float yPosition;
 
 	protected int size;
 	protected double width;
@@ -34,19 +34,19 @@ public class ObjectInfo {
 		height = image.getHeight();
 	}
 
-	public int GetxPosition() {
+	public float GetxPosition() {
 		return this.xPosition;
 	}
 
-	public void SetxPosition(int xPos) {
+	public void SetxPosition(float xPos) {
 		this.xPosition = xPos;
 	}
 
-	public int GetyPosition() {
+	public float GetyPosition() {
 		return this.yPosition;
 	}
 
-	public void SetyPosition(int yPos) {
+	public void SetyPosition(float yPos) {
 		this.yPosition = yPos;
 	}
 
@@ -72,10 +72,6 @@ public class ObjectInfo {
 
 	public double GetHeight() {
 		return this.height;
-	}
-	
-	public Rectangle2D getBoundary(){
-		return new Rectangle2D(xPosition,yPosition,width,height);
 	}
 
 	//Render the object on a canvas as specify by graphicContent 

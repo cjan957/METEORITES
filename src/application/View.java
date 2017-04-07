@@ -42,8 +42,8 @@ public class View {
 		gameStage.setScene(theScene); 
 
 		//Apply Background image to the scene
-		Image background = new Image("stars_space.jpg");
-		theScene.setFill(new ImagePattern(background));
+		//Image background = new Image("stars_space.jpg");
+		//theScene.setFill(new ImagePattern(background));
 
 		// Circle(double centerX, double centerY, double radius, Paint fill)
 		// Rectangle(double x, double y, double width, double height)
