@@ -14,6 +14,7 @@ import java.lang.Math;
 import com.sun.javafx.geom.Rectangle;
 import com.sun.prism.paint.Color;
 import com.ttcj.components.Ball;
+import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
 import com.ttcj.components.Brick;
 import com.ttcj.components.BrickManager;
@@ -35,6 +36,12 @@ public class Game extends Application {
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
+	
+	private Base topLHSBase;
+	private Base bottomLHSBase;
+	private Base topRHSBase;
+	private Base bottomRHSBase;
+	
 	private BrickManager topLHSBrick;
 	private BrickManager bottomLHSBrick;
 	private BrickManager  topRHSBrick;
@@ -72,9 +79,9 @@ public class Game extends Application {
 		gameStage.setTitle("Meteorites");
 		
 		Button button = new Button("Launch Game");
-		Button button2 = new Button("Luanch Game 2");
+		Button button2 = new Button("Exit");
 		button.setOnAction(e -> startGame1());
-		button2.setOnAction(e-> System.out.println("nothing here"));
+		button2.setOnAction(e-> System.exit(0));
 		
 		VBox listOfOptions = new VBox(10);
 		listOfOptions.getChildren().addAll(button,button2);
@@ -140,6 +147,18 @@ public class Game extends Application {
 				brick.render(view.canvasGC());
 			}
 			
+			if(!topLHSBase.isDead()){
+				topLHSBase.render(view.canvasGC());
+			}
+			if(!topRHSBase.isDead()){
+				topRHSBase.render(view.canvasGC());
+			}
+			if(!bottomRHSBase.isDead()){
+				bottomRHSBase.render(view.canvasGC());
+			}
+			if(!bottomLHSBase.isDead()){
+				bottomLHSBase.render(view.canvasGC());
+			}		
 		});
 
 		//Play and Repeat the graphic rendering
@@ -155,6 +174,7 @@ public class Game extends Application {
 		ball.moveThatBall();
 		paddleCollisionCheck();	
 		wallCollisionCheck();
+		baseCollisionCheck();
 	
 		//Check user input and move the paddle accordingly
 		if (input.contains("LEFT")) {
@@ -204,11 +224,28 @@ public class Game extends Application {
 	}
 		
 	public void paddleCollisionCheck(){
-		if(ball.objectsIntersectBallAndPaddle(bat)){
+		if(ball.objectsIntersectBallAndPaddle(bat) || ball.objectsIntersectBallAndPaddle(bat2)){
 			ball.setXVelocity(-ball.getXVelocity());
 		}
-		else if(ball.objectsIntersectBallAndPaddle(bat2)){
-			ball.setXVelocity(-ball.getXVelocity());
+	}
+	
+	
+	public void baseCollisionCheck(){
+		if(ball.objectsIntersectBallAndBase(topLHSBase)){
+			topLHSBase.setIsDead(true);
+			System.out.println("Blue");
+		}
+		else if(ball.objectsIntersectBallAndBase(topRHSBase)){
+			topRHSBase.setIsDead(true);
+			System.out.println("Green ");
+		}
+		else if(ball.objectsIntersectBallAndBase(bottomRHSBase)){
+			bottomRHSBase.setIsDead(true);
+			System.out.println("Red");
+		}
+		else if(ball.objectsIntersectBallAndBase(bottomLHSBase)){
+			bottomLHSBase.setIsDead(true);
+			System.out.println("Yellow");
 		}
 	}
 	
@@ -259,11 +296,22 @@ public class Game extends Application {
 		bat2 = new Bat("paddle_32.png",WINDOW_H / 3,WINDOW_H - 32);
 		ball = new Ball("b10008.png",WINDOW_W / 2 - 32,WINDOW_H / 2,32,32);
 		
-		topLHSBrickInit();	
+		baseInit();
+		
+		topLHSBrickInit();		
 		bottomLHSBrickInit();
 		topRHSBrickInit();
 		bottomRHSBrickInit();
 		deflect = new Deflect();
+	}
+	
+	public void baseInit(){
+		//Base (Img link, xPos, yPos, width, height)
+		topLHSBase = new Base("planet1_64.png",0,0,64,64); 
+		topRHSBase = new Base("planet2_64.png",WINDOW_W - 64, 0, 64, 64);
+		bottomRHSBase = new Base("planet3_64.png",WINDOW_W - 64, WINDOW_H - 64, 64,64);
+		bottomLHSBase = new Base("planet4_64.png",0,WINDOW_H - 64,64,64); 
+
 	}
 	
 	
