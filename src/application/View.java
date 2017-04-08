@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 
 public class View {
 
+	
+	boolean pause;
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	private static final String GAMENAME = "Meteorites";
@@ -91,6 +93,18 @@ public class View {
 			//Convert the keycode to string so we can handle it easily
 			String code = event.getCode().toString();
 			
+			if(code == "P"){
+				if(!pause){
+					pause = true;
+				} else {
+					pause = false;
+				}
+			}
+			
+			if(code == "ESCAPE"){
+				System.exit(0);
+			}
+			
 			//Check if the key is already in the array, if not add that key to the array
 			if (!input.contains(code)) {
 				input.add(code);
@@ -114,6 +128,10 @@ public class View {
 		gameStage.show();
 	}
 
+	public boolean isPause(){
+		return pause;
+	}
+	
 	//Make GraphicsContext on the canvas created in this View class available
 	//to Controller (Game) Class.
 	public GraphicsContext canvasGC() {

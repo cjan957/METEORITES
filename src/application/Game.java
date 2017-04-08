@@ -60,7 +60,13 @@ public class Game extends Application {
 			input = view.accessUserInput();
 			
 			//'Tick', run the game by 1 frame.
+			
+			if (!view.isPause()){
 			tick();
+			System.out.println("tick once");
+			}
+			
+			
 			
 			//Render each object on canvas using GraphicContext (gc) set up
 			//from the View class. Clear canvas with transparent color after
