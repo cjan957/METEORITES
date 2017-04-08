@@ -59,14 +59,11 @@ public class Game extends Application {
 			//Obtain user key pressed from the view class
 			input = view.accessUserInput();
 			
-			//'Tick', run the game by 1 frame.
-			
+			//Game proceeds if not paused
 			if (!view.isPause()){
-			tick();
-			System.out.println("tick once");
+			//'Tick', run the game by 1 frame
+			tick();		
 			}
-			
-			
 			
 			//Render each object on canvas using GraphicContext (gc) set up
 			//from the View class. Clear canvas with transparent color after

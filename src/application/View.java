@@ -20,11 +20,11 @@ import javafx.stage.Stage;
 
 public class View {
 
-	
-	boolean pause;
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	private static final String GAMENAME = "Meteorites";
+	
+	private boolean isPaused; //Game is paused or running
 
 	private GraphicsContext gc;
 	private ArrayList<String> input = new ArrayList<String>();
@@ -93,14 +93,18 @@ public class View {
 			//Convert the keycode to string so we can handle it easily
 			String code = event.getCode().toString();
 			
+			
+			//Pause game if P is pressed
 			if(code == "P"){
-				if(!pause){
-					pause = true;
+				if(!isPaused){
+					isPaused = true;
 				} else {
-					pause = false;
+					isPaused = false;
 				}
 			}
 			
+			//Exit game if ESC is pressed 
+			//TODO: supposed to return to main menu instead of exit program
 			if(code == "ESCAPE"){
 				System.exit(0);
 			}
@@ -129,7 +133,7 @@ public class View {
 	}
 
 	public boolean isPause(){
-		return pause;
+		return this.isPaused;
 	}
 	
 	//Make GraphicsContext on the canvas created in this View class available
