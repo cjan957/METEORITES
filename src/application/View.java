@@ -47,12 +47,7 @@ public class View {
 		Image background = new Image("stars_space.jpg");
 		theScene.setFill(new ImagePattern(background));
 
-		// Circle(double centerX, double centerY, double radius, Paint fill)
-		// Rectangle(double x, double y, double width, double height)
-		// Arc(double centerX, double centerY, double radiusX, double radiusY,
-		// double startAngle, double length)
 
-		
 		//Setup planet shapes to each corner - will represent the 'warlords'
 		Arc planetTL = new Arc(0, 0, 100, 100, 270, 90); // planets
 		planetTL.setFill(Color.BLUE);

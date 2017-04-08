@@ -6,21 +6,18 @@
 */
 
 package com.ttcj.components;
+import javafx.geometry.Rectangle2D;
 
-import com.ttcj.testing.IPaddle;
-
-public class Bat extends ObjectInfo implements IPaddle {
+public class Bat extends ObjectInfo {
 
 	private boolean isAIBat;
 	private int batWidth;
 	private int batLength;
-
-	public void setXPos(int x) {
-		this.SetxPosition(x);
-	}
-
-	public void setYPos(int y) {
-		this.SetyPosition(y);
+	
+	public Bat(String img, int xPos, int yPos){
+		this.setImage(img);
+		this.SetxPosition(xPos);
+		this.SetyPosition(yPos);
 	}
 
 	//Specify whether a bat is controlled by AI
@@ -48,6 +45,10 @@ public class Bat extends ObjectInfo implements IPaddle {
 
 	public int getBatLength() {
 		return this.batLength;
+	}
+	
+	public Rectangle2D getBoundary(){
+		return new Rectangle2D(xPosition,yPosition,width+8,height);
 	}
 
 }

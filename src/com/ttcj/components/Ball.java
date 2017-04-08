@@ -8,52 +8,60 @@
 */			
 
 package com.ttcj.components;
+import java.util.Random;
 
-import com.ttcj.testing.IBall;
+import javafx.geometry.Rectangle2D;
 
-public class Ball extends ObjectInfo implements IBall {
+public class Ball extends ObjectInfo{
 
 	private double destroyPower;
 	private int ballRadius;
 
-	private int xVelocity;
-	private int yVelocity;
-
-	/*
-	 * Ball(double xPos, double yPos){ xPosition = xPos; yPosition = yPos; }
-	 */
-
-	//Get and Set Ball position on the screen by using co-ordinates
-	//Some methods are added here to make the class consistent with IBall interface
-	public void setXPos(int x) {
-		this.SetxPosition(x);
+	private float xVelocity;
+	private float yVelocity;
+	
+	private boolean travelingRight;
+	private boolean travelingUp;
+	
+	public Ball(String img, int xPos, int yPos, int width, int height){
+		
+		//Set the ball up with necessary properties
+		this.setImage(img);
+		this.SetxPosition(xPos);
+		this.SetyPosition(yPos);
+		
+		Random rand = new Random();
+		int n = rand.nextInt(4) + 1;
+		
+		//Random the velocity 
+		switch(n){
+			case 1: this.setXVelocity(5); this.setYVelocity(5);
+					break;
+			case 2: this.setXVelocity(-5); this.setYVelocity(-5);
+					break;
+			case 3: this.setXVelocity(5); this.setYVelocity(-5);
+					break;
+			case 4: this.setXVelocity(-5); this.setYVelocity(5);
+					break;	
+		}
+		this.SetWidth(width);
+		this.SetHeight(height);
 	}
+	
 
-	public void setYPos(int y) {
-		this.SetyPosition(y);
-	}
-
-	public int getXPos() {
-		return this.GetxPosition();
-	}
-
-	public int getYPos() {
-		return this.GetyPosition();
-	}
-
-	public void setXVelocity(int dX) {
+	public void setXVelocity(float dX) {
 		this.xVelocity = dX;
 	}
 
-	public void setYVelocity(int dY) {
+	public void setYVelocity(float dY) {
 		this.yVelocity = dY;
 	}
 
-	public int getXVelocity() {
+	public float getXVelocity() {
 		return this.xVelocity;
 	}
 
-	public int getYVelocity() {
+	public float getYVelocity() {
 		return this.yVelocity;
 	}
 
@@ -103,7 +111,56 @@ public class Ball extends ObjectInfo implements IBall {
 		} else if (yPosition > (768 - 64)) {
 			yVelocity = -yVelocity;
 			yPosition = 768 - 64;
+		}	
+		
+		setBallTravelingDirection();
+	}
+	
+
+	public void setBallTravelingDirection(){
+		if(xVelocity < 0 && yVelocity < 0){
+			travelingRight = false;
+			travelingUp = true;
+		}
+		else if(xVelocity > 0 && yVelocity < 0){
+			travelingRight = true;
+			travelingUp = true;
+		}
+		else if(xVelocity < 0 && yVelocity > 0){
+			travelingRight = false;
+			travelingUp = false;
+		}
+		else if(xVelocity > 0 && yVelocity >0){
+			travelingRight = true;
+			travelingUp = false;
+		}
+		else{
+			System.out.println("Velocity Error detected!");
 		}
 	}
+	
+	public boolean getIfTravelRight(){
+		return travelingRight;
+	}
+	
+	public boolean getIfTravelUp(){
+		return travelingUp;
+	}
+	
+	
+	public Rectangle2D getBoundary(){
+		return new Rectangle2D(xPosition+16,yPosition+16,width,height);
+	}
+	
+	public boolean objectsIntersect(Brick obj){
+		return obj.getBoundary().intersects(this.getBoundary());
+	}
+	
+	public boolean objectsIntersectBallAndPaddle(Bat obj){
+		return obj.getBoundary().intersects(this.getBoundary());
+	}
+	
+	
+	
 
 }

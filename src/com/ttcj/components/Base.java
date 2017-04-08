@@ -10,7 +10,7 @@ package com.ttcj.components;
 
 import com.ttcj.testing.IWarlord;
 
-public class Base extends ObjectInfo implements IWarlord {
+public class Base extends ObjectInfo {
 
 	private boolean isDead; // true for dead, false for alive
 	private boolean isWinner; // true for winner, false for loser/ undetermined
@@ -32,17 +32,6 @@ public class Base extends ObjectInfo implements IWarlord {
 
 	}
 
-	@Override
-	public void setXPos(int x) {
-		this.SetxPosition(x);
-	}
-
-	@Override
-	public void setYPos(int y) {
-		this.SetyPosition(y);
-	}
-
-	@Override
 	public boolean hasWon() {
 		//Not yet implemented
 		return false;

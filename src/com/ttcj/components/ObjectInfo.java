@@ -7,7 +7,6 @@
  */
 
 package com.ttcj.components;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -15,8 +14,8 @@ public class ObjectInfo {
 
 	protected Image image;
 
-	protected int xPosition;
-	protected int yPosition;
+	protected float xPosition;
+	protected float yPosition;
 
 	protected int size;
 	protected double width;
@@ -33,19 +32,19 @@ public class ObjectInfo {
 		height = image.getHeight();
 	}
 
-	public int GetxPosition() {
+	public float GetxPosition() {
 		return this.xPosition;
 	}
 
-	public void SetxPosition(int xPos) {
+	public void SetxPosition(float xPos) {
 		this.xPosition = xPos;
 	}
 
-	public int GetyPosition() {
+	public float GetyPosition() {
 		return this.yPosition;
 	}
 
-	public void SetyPosition(int yPos) {
+	public void SetyPosition(float yPos) {
 		this.yPosition = yPos;
 	}
 
@@ -78,5 +77,6 @@ public class ObjectInfo {
 	public void render(GraphicsContext gc) {
 		gc.drawImage(image, xPosition, yPosition);
 	}
+
 
 }

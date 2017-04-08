@@ -37,20 +37,5 @@ public class Powerup extends ObjectInfo {
 		return this.puModifier;
 	}
 	
-	public void setXPos(int x) {
-		this.SetxPosition(x);
-	}
-
-	public void setYPos(int y) {
-		this.SetyPosition(y);
-	}
-
-	public int getXPos() {
-		return this.GetxPosition();
-	}
-
-	public int getYPos() {
-		return this.GetyPosition();
-	}
 
 }
