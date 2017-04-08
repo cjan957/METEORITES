@@ -8,11 +8,9 @@
 */			
 
 package com.ttcj.components;
-
-import com.ttcj.testing.IBall;
+import java.util.Random;
 
 import javafx.geometry.Rectangle2D;
-import javafx.scene.shape.Arc;
 
 public class Ball extends ObjectInfo{
 
@@ -24,6 +22,31 @@ public class Ball extends ObjectInfo{
 	
 	private boolean travelingRight;
 	private boolean travelingUp;
+	
+	public Ball(String img, int xPos, int yPos, int width, int height){
+		
+		//Set the ball up with necessary properties
+		this.setImage(img);
+		this.SetxPosition(xPos);
+		this.SetyPosition(yPos);
+		
+		Random rand = new Random();
+		int n = rand.nextInt(4) + 1;
+		
+		//Random the velocity 
+		switch(n){
+			case 1: this.setXVelocity(5); this.setYVelocity(5);
+					break;
+			case 2: this.setXVelocity(-5); this.setYVelocity(-5);
+					break;
+			case 3: this.setXVelocity(5); this.setYVelocity(-5);
+					break;
+			case 4: this.setXVelocity(-5); this.setYVelocity(5);
+					break;	
+		}
+		this.SetWidth(width);
+		this.SetHeight(height);
+	}
 	
 
 	public void setXVelocity(float dX) {

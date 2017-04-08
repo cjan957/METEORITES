@@ -6,6 +6,8 @@ public class BrickManager {
 	private ArrayList<Brick> brickList = new ArrayList<Brick>();
 	private int numberOfBrick = 0;
 	
+
+	
 	public void addBrick(Brick brick){
 		this.brickList.add(brick);
 		numberOfBrick =+ 1;

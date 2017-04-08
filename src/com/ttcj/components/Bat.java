@@ -6,9 +6,6 @@
 */
 
 package com.ttcj.components;
-
-import com.ttcj.testing.IPaddle;
-
 import javafx.geometry.Rectangle2D;
 
 public class Bat extends ObjectInfo {
@@ -16,7 +13,12 @@ public class Bat extends ObjectInfo {
 	private boolean isAIBat;
 	private int batWidth;
 	private int batLength;
-
+	
+	public Bat(String img, int xPos, int yPos){
+		this.setImage(img);
+		this.SetxPosition(xPos);
+		this.SetyPosition(yPos);
+	}
 
 	//Specify whether a bat is controlled by AI
 	public void setAIBat(boolean AIBat) {

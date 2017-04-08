@@ -8,6 +8,7 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.lang.Math;
 
 import com.sun.javafx.geom.Rectangle;
@@ -35,9 +36,9 @@ public class Game extends Application {
 	private BrickManager  topRHSBrick;
 	private BrickManager bottomRHSBrick;
 	
-	private int tempBallDirection_RIGHT;
-	private int tempBallDirection_UP;
+	private Deflect deflect;
 	
+
 	
 	//This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -89,20 +90,20 @@ public class Game extends Application {
 			ball.render(view.canvasGC());
 			
 			for(Brick brick : topLHSBrick.accessBrickArray()){
-				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				//view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 			for(Brick brick : bottomLHSBrick.accessBrickArray()){
-				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				//view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 			for(Brick brick : topRHSBrick.accessBrickArray()){
-				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				//view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 			
 			for(Brick brick : bottomRHSBrick.accessBrickArray()){
-				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				//view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 			
@@ -120,6 +121,8 @@ public class Game extends Application {
 		
 		//Move the ball once, checking necessary conditions.
 		ball.moveThatBall();
+		paddleCollisionCheck();	
+		wallCollisionCheck();
 	
 		//Check user input and move the paddle accordingly
 		if (input.contains("LEFT")) {
@@ -167,8 +170,7 @@ public class Game extends Application {
 			ball.setYVelocity((float)(ball.getYVelocity() * 1.1));
 		}
 		
-		paddleCollisionCheck();	
-		wallCollisionCheck();
+		
 		
 	}
 		
@@ -191,8 +193,7 @@ public class Game extends Application {
 		while(topRHSBrickList.hasNext()){
 			Brick brick = topRHSBrickList.next();
 			if(ball.objectsIntersect(brick)){
-				//System.out.println("HIT! arr:" +brick.getArrangement());		
-				ballDeflect(brick.getArrangement());
+				deflect.deflectTheBall(ball,brick.getArrangement());
 				topRHSBrickList.remove();
 	
 			}
@@ -200,132 +201,40 @@ public class Game extends Application {
 		while(topLHSbrickList.hasNext()){
 			Brick brick = topLHSbrickList.next();
 			if(ball.objectsIntersect(brick)){
-				ballDeflect(brick.getArrangement());
+				deflect.deflectTheBall(ball,brick.getArrangement());
 				topLHSbrickList.remove();
-
 			}
 		}
 		while(bottomLHSbrickList.hasNext()){
 			Brick brick = bottomLHSbrickList.next();
 			if(ball.objectsIntersect(brick)){
-				ballDeflect(brick.getArrangement());
+				deflect.deflectTheBall(ball,brick.getArrangement());
 				bottomLHSbrickList.remove();
-
 			}
 		}
 		while(bottomRHSBrickList.hasNext()){
 			Brick brick = bottomRHSBrickList.next();
 			if(ball.objectsIntersect(brick)){
-				ballDeflect(brick.getArrangement());
+				deflect.deflectTheBall(ball,brick.getArrangement());
 				bottomRHSBrickList.remove();
 			}
-		}
-		tempBallDirection_RIGHT = 99;
-		tempBallDirection_UP = 99;	
+		}		
+		deflect.setTempDir(99, 99);
 	}
-	
-	public void ballDeflect(int brickArrangement){ //0 for horizontal, 1 for vertical
-		//deflect the ball based on its direction before it hits an object
-		
-		if(!ball.getIfTravelRight() && ball.getIfTravelUp()){  // 0,1
-			if(tempBallDirection_RIGHT == 0 && tempBallDirection_UP == 1){
-				//Check if the ball still travels in the same direction
-				//This is checked to prevent no velocity change when the ball hits two bricks at once
-				//ie) When ball hits two walls, its velocity is reverse twice -(-V) resulting in the 
-				//original velocity (V)
-			}
-			else{
-				//Check the brick arrangement (deflect the ball differently depending on how wall is arranged.
-				if(brickArrangement == 0){ 
-					ball.setYVelocity(-ball.getYVelocity());
-				}
-				else{
-					ball.setXVelocity(-ball.getXVelocity());
-				}		
-					tempBallDirection_RIGHT = 0;
-					tempBallDirection_UP = 1;
-			}
-		}
-		else if(ball.getIfTravelRight() && ball.getIfTravelUp()){ // 1,1
-			if(tempBallDirection_RIGHT == 1 && tempBallDirection_UP == 1){
-				
-			}
-			else{
-				if(brickArrangement == 0){
-					ball.setYVelocity(-ball.getYVelocity());
-				}
-				else{
-					ball.setXVelocity(-ball.getXVelocity());
-				}
-				tempBallDirection_RIGHT = 1;
-				tempBallDirection_RIGHT = 1;
-			}
-		}
-		else if(!ball.getIfTravelRight() && !ball.getIfTravelUp()){ // 0,0
-			if(tempBallDirection_RIGHT == 0 && tempBallDirection_UP == 0){
-				
-			}
-			else{
-				if(brickArrangement == 0){			
-					ball.setYVelocity(-ball.getYVelocity());
-				}
-				else{
-					ball.setXVelocity(-ball.getXVelocity());
-				}
-				tempBallDirection_RIGHT = 0;
-				tempBallDirection_UP = 0;
-		}
-		}
-		else if(ball.getIfTravelRight() && !ball.getIfTravelUp()){ // 1,0
-			if(tempBallDirection_RIGHT == 1 && tempBallDirection_UP == 0){
 
-			}
-			else{
-				if(brickArrangement == 0){
-					ball.setYVelocity(-ball.getYVelocity());
-
-				}
-				else{
-					ball.setXVelocity(-ball.getXVelocity());
-				}
-				tempBallDirection_RIGHT = 1;
-				tempBallDirection_UP = 0;
-			}
-		}
-		else{
-			ball.setXVelocity(-ball.getXVelocity());
-			ball.setYVelocity(-ball.getYVelocity());
-		}
-		
-	}
 
 	public void gameInit() {
-		
 		//Create objects needed for the game play
 		//with necessary properties. 
-		bat = new Bat();
-		bat.setImage("paddle_32.png");
-		bat.SetxPosition(WINDOW_H / 3);
-		bat.SetyPosition(0);
-
-		bat2 = new Bat();
-		bat2.setImage("paddle_32.png");
-		bat2.SetxPosition(WINDOW_H / 3);
-		bat2.SetyPosition(WINDOW_H - 32);
-		
-		ball = new Ball();
-		ball.setImage("b10008.png");
-		ball.SetxPosition(WINDOW_W / 2 - 32);
-		ball.SetyPosition(WINDOW_H / 2);
-		ball.setXVelocity(5);
-		ball.setYVelocity(5);
-		ball.SetWidth(32);
-		ball.SetHeight(32);
+		bat = new Bat("paddle_32.png",WINDOW_H / 3,0);
+		bat2 = new Bat("paddle_32.png",WINDOW_H / 3,WINDOW_H - 32);
+		ball = new Ball("b10008.png",WINDOW_W / 2 - 32,WINDOW_H / 2,32,32);
 		
 		topLHSBrickInit();	
 		bottomLHSBrickInit();
 		topRHSBrickInit();
 		bottomRHSBrickInit();
+		deflect = new Deflect();
 	}
 	
 	
@@ -333,46 +242,22 @@ public class Game extends Application {
 		bottomRHSBrick = new BrickManager();
 		
 		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks Inner
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(WINDOW_H - 140 - 32); //768-140-32
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i,WINDOW_H - 140 - 32, 32, 32,0);
 			bottomRHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 728; j > 568; j-=(33)){ //Vertical Bricks Inner
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(844); //844 from left
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(WINDOW_W - 180, j, 32, 32, 1);
 			bottomRHSBrick.addBrick(brick);
 		}
 		
-		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks Outer
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(WINDOW_H - 140 - 64); 
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks Outer	
+			Brick brick = new Brick(i, WINDOW_H - 140 - 64,32,32,0);
 			bottomRHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 728; j > 568; j-=33){ //Vertical Bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(812); //180 from left
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(WINDOW_W - 180 - 32,j,32,32,1);
 			bottomRHSBrick.addBrick(brick);
 		}
 		
@@ -383,47 +268,23 @@ public class Game extends Application {
 		
 		//INNER
 		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(180); //140 from top
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i,180,32,32,0);
 			topRHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(844); //844 from left
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(WINDOW_W-180,j,32,32,1);
 			topRHSBrick.addBrick(brick);
 		}
 		
 		//OUTER WALL
 		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(148); //140 from top
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i,148,32,32,0);
 			topRHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(812); //180 from left
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(WINDOW_W-180-32,j,32,32,1);
 			topRHSBrick.addBrick(brick);
 		}
 	}
@@ -432,47 +293,24 @@ public class Game extends Application {
 		bottomLHSBrick = new BrickManager();
 		
 		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(WINDOW_H - 140 - 32); //768-140-32
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i, WINDOW_H - 140 - 32,32,32,0);
 			bottomLHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 728; j > 568; j-=(33)){ //Vertical Bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(180);
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(180,j,32,32,1);
 			bottomLHSBrick.addBrick(brick);
 		}
 		
 		//Outer Wall
 		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(WINDOW_H - 140 - 32 - 32); //768-140-32
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i,WINDOW_H - 140 - 32 - 32,32,32,0);
 			bottomLHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 728; j > 568; j-=(33)){ //Vertical Bricks
-			Brick brick = new Brick();
+			Brick brick = new Brick(148,j,32,32,1);
 			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(148);
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
 			bottomLHSBrick.addBrick(brick);
 		}	
 	}
@@ -482,47 +320,23 @@ public class Game extends Application {
 
 		//TLHS
 		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(180); //140 from top
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i,180,32,32,0);
 			topLHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(180); //180 from left
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(180,j,32,32,1);
 			topLHSBrick.addBrick(brick);
 		}
 		
 		//INNER WALL
 		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(i);
-			brick.SetyPosition(148); //140 from top
-			brick.SetWidth(32);
-			brick.SetHeight(32);
-			brick.setArrangement(0);
+			Brick brick = new Brick(i,148,32,32,0);
 			topLHSBrick.addBrick(brick);
 		}
 		
 		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
-			Brick brick = new Brick();
-			brick.setImage("iceblock_32.png");
-			brick.SetxPosition(148); //180 from left
-			brick.SetyPosition(j);
-			brick.SetHeight(32);
-			brick.SetWidth(32);
-			brick.setArrangement(1);
+			Brick brick = new Brick(148,j,32,32,1);
 			topLHSBrick.addBrick(brick);
 		}
 	}

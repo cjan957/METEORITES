@@ -20,6 +20,15 @@ public class Brick extends ObjectInfo{
 	private int brickArrangement; 
 
 	private brickStatus brickHealth;
+	
+	public Brick(int xPos, int yPos, int width, int height, int arrangement){
+		this.setImage("iceblock_32.png");
+		this.SetxPosition(xPos);
+		this.SetyPosition(yPos); 
+		this.SetWidth(width);
+		this.SetHeight(height);
+		this.setArrangement(arrangement);
+	}
 
 	public void setBrickStatus(brickStatus brickHealth) {
 		this.brickHealth = brickHealth;
