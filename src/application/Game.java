@@ -22,6 +22,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -37,8 +41,9 @@ public class Game extends Application {
 	private BrickManager bottomRHSBrick;
 	
 	private Deflect deflect;
-	
-
+	private View view;
+	private Scene mainMenuScene;
+	private Stage gameWindow;
 	
 	//This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -53,15 +58,43 @@ public class Game extends Application {
 		//Launch javafx application / run start method
 		launch(args);
 	}
-
+	
+	
 	@Override
 	public void start(Stage gameStage) {
-
+		gameWindow = gameStage;
+		
 		//Create view object. gameStage will be set up with Canvas applied.
 		//Please jump to View class for more info.
-		View view = new View();
-		view.viewSetup(gameStage);
+		view = new View();
+		
+		//Add Title to JavaFX top level container (Stage)
+		gameStage.setTitle("Meteorites");
+		
+		Button button = new Button("Launch Game");
+		Button button2 = new Button("Luanch Game 2");
+		button.setOnAction(e -> startGame1());
+		button2.setOnAction(e-> System.out.println("nothing here"));
+		
+		VBox listOfOptions = new VBox(10);
+		listOfOptions.getChildren().addAll(button,button2);
+		
+		mainMenuScene = new Scene(listOfOptions,1024,768);
+		
+		gameStage.setScene(mainMenuScene);
 
+		//Apply conditions to the stage
+		gameStage.setResizable(false);
+		gameStage.sizeToScene();
+		
+		//Show the stage on the screen
+		gameStage.show();
+	}
+
+	
+	public void startGame1(){
+		//Setup gameView
+		view.setupGameView(gameWindow);
 		//Invoking gameInit method
 		gameInit();
 
@@ -75,7 +108,7 @@ public class Game extends Application {
 			input = view.accessUserInput();
 			
 			//'Tick', run the game by 1 frame.
-			tick();
+			tick(); //<-------------GAME TICK!
 			
 			//Render each object on canvas using GraphicContext (gc) set up
 			//from the View class. Clear canvas with transparent color after
@@ -111,13 +144,12 @@ public class Game extends Application {
 
 		//Play and Repeat the graphic rendering
 		gameLoop.getKeyFrames().add(gameFrame);
-		gameLoop.play();
-
+		gameLoop.play();	
 	}
+	
 
 	//Tick, run the game by 1 frame		
 	public void tick() {
-		//System.out.println("Tic toc");
 		
 		//Move the ball once, checking necessary conditions.
 		ball.moveThatBall();
@@ -168,10 +200,7 @@ public class Game extends Application {
 		else if(input.contains("UP")){ //go faster!
 			ball.setXVelocity((float)(ball.getXVelocity() * 1.1));
 			ball.setYVelocity((float)(ball.getYVelocity() * 1.1));
-		}
-		
-		
-		
+		}	
 	}
 		
 	public void paddleCollisionCheck(){
