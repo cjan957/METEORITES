@@ -160,6 +160,10 @@ public class Ball extends ObjectInfo{
 		return obj.getBoundary().intersects(this.getBoundary());
 	}
 	
+	public boolean objectsIntersectBallAndBase(Base obj){
+		return obj.getBoundary().intersects(this.getBoundary());
+	}
+	
 	
 	
 

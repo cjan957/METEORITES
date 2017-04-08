@@ -11,7 +11,9 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
@@ -20,6 +22,13 @@ import javafx.stage.Stage;
 
 public class View {
 
+	//private Stage window;
+	private Scene mainMenuScene;
+	private Scene gamePlayScene;
+	private Group root;
+	
+	private int gameMode = 0;
+	
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	private static final String GAMENAME = "Meteorites";
@@ -29,23 +38,13 @@ public class View {
 	private GraphicsContext gc;
 	private ArrayList<String> input = new ArrayList<String>();
 
-	public void viewSetup(Stage gameStage) {
-
-		//Add Title to JavaFX top level container (Stage)
-		gameStage.setTitle(GAMENAME);
+	
+	public void setupGameView(Stage window){
 		
-		//Create a new JavaFX scene root node (group)
-		Group root = new Group(); 
-		
-		//Create scene object with root parent		
-		Scene theScene = new Scene(root); 
-		
-		//Set Stage scene
-		gameStage.setScene(theScene); 
-
-		//Apply Background image to the scene
+		root = new Group();
+		gamePlayScene = new Scene(root); 
 		Image background = new Image("stars_space.jpg");
-		theScene.setFill(new ImagePattern(background));
+		gamePlayScene.setFill(new ImagePattern(background));
 
 
 		//Setup planet shapes to each corner - will represent the 'warlords'
@@ -65,16 +64,6 @@ public class View {
 		planetBR.setFill(Color.RED);
 		planetBR.setType(ArcType.ROUND);
 
-		// Rectangle testBrick = new Rectangle(500, 500, 30, 10);
-		// testBrick.setFill(Color.WHITE);
-
-		// Circle circle = new Circle(50);
-		// Image asteroid = new Image("b30000.png");
-		// circle.setFill(new ImagePattern(asteroid));
-		// circle.setFill(Color.WHITE);
-		// circle.setCenterX(400);
-		// circle.setCenterY(500);
-
 		//Add planets to the scene
 		root.getChildren().addAll(planetTL, planetTR, planetBL, planetBR); 
 		
@@ -83,7 +72,7 @@ public class View {
 		root.getChildren().add(canvas); 
 
 		//Handle user input, do something when an event occurs (a key is pressed) 
-		theScene.setOnKeyPressed(event -> {
+		gamePlayScene.setOnKeyPressed(event -> {
 			
 			//Convert the keycode to string so we can handle it easily
 			String code = event.getCode().toString();
@@ -111,20 +100,19 @@ public class View {
 		});
 
 		// Remove keystroke from array when key is released
-		theScene.setOnKeyReleased(event -> {
+		gamePlayScene.setOnKeyReleased(event -> {
 			String code = event.getCode().toString();
 			input.remove(code);
 		});
 
 		//Issue a draw call on the canvas
 		gc = canvas.getGraphicsContext2D();
-
-		//Apply conditions to the stage
-		gameStage.setResizable(false);
-		gameStage.sizeToScene();
 		
-		//Show the stage on the screen
-		gameStage.show();
+		window.setScene(gamePlayScene);
+	}
+		
+	public int getGameMode(){
+		return gameMode;
 	}
 
 	public boolean isPause(){
