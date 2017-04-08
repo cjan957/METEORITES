@@ -11,9 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
@@ -23,7 +21,6 @@ import javafx.stage.Stage;
 public class View {
 
 	//private Stage window;
-	private Scene mainMenuScene;
 	private Scene gamePlayScene;
 	private Group root;
 	
@@ -31,7 +28,6 @@ public class View {
 	
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
-	private static final String GAMENAME = "Meteorites";
 	
 	private boolean isPaused; //Game is paused or running
 

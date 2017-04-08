@@ -8,11 +8,8 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 import java.lang.Math;
 
-import com.sun.javafx.geom.Rectangle;
-import com.sun.prism.paint.Color;
 import com.ttcj.components.Ball;
 import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
@@ -22,10 +19,8 @@ import com.ttcj.components.BrickManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -56,6 +51,7 @@ public class Game extends Application {
 	private ArrayList<String> input = new ArrayList<String>();
 
 	// Defining constants
+	private static final String GAMENAME = "Meteorites";
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	private static double angle1 = 0.0;
@@ -75,7 +71,7 @@ public class Game extends Application {
 		view = new View();
 
 		// Add Title to JavaFX top level container (Stage)
-		gameStage.setTitle("Meteorites");
+		gameStage.setTitle(GAMENAME);
 
 		Button button = new Button("Launch Game");
 		Button button2 = new Button("Exit");
@@ -125,11 +121,6 @@ public class Game extends Application {
 			// each frame
 			view.canvasGC().clearRect(0, 0, 1024, 768);
 			
-				
-			//Render each object on canvas using GraphicContext (gc) set up
-			//from the View class. Clear canvas with transparent color after
-			//each frame
-			view.canvasGC().clearRect(0, 0, 1024, 768);
 			if(!topLHSBase.isDead()){
 				bat.render(view.canvasGC());
 			}
@@ -137,11 +128,6 @@ public class Game extends Application {
 				bat2.render(view.canvasGC());
 			}
 
-			// Rectangle2D rec = new
-			// Rectangle2D((double)ball.GetxPosition(),(double)ball.GetyPosition(),ball.GetWidth(),ball.GetHeight());
-			// view.canvasGC().setFill(Color.BLUE);
-			// view.canvasGC().fillRect(ball.GetxPosition()+16,
-			// ball.GetyPosition()+16, ball.GetWidth(), ball.GetHeight());
 			ball.render(view.canvasGC());
 
 			for (Brick brick : topLHSBrick.accessBrickArray()) {
@@ -150,19 +136,13 @@ public class Game extends Application {
 				brick.render(view.canvasGC());
 			}
 			for (Brick brick : bottomLHSBrick.accessBrickArray()) {
-				// view.canvasGC().fillRect(brick.GetxPosition(),
-				// brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 			for (Brick brick : topRHSBrick.accessBrickArray()) {
-				// view.canvasGC().fillRect(brick.GetxPosition(),
-				// brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 
 			for (Brick brick : bottomRHSBrick.accessBrickArray()) {
-				// view.canvasGC().fillRect(brick.GetxPosition(),
-				// brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 

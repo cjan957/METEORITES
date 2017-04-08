@@ -1,6 +1,5 @@
 package com.ttcj.components;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class BrickManager {
 	private ArrayList<Brick> brickList = new ArrayList<Brick>();
