@@ -7,18 +7,21 @@ public class BrickManager {
 	private int numberOfBrick = 0;
 	
 
-	
 	public void addBrick(Brick brick){
 		this.brickList.add(brick);
-		numberOfBrick =+ 1;
+		numberOfBrick++;
 	}
 	
-	public void removeBrick(int position){
-		
+	public void removeBrick(){
+		numberOfBrick--;
 	}
 	
 	public ArrayList<Brick> accessBrickArray(){
 		return this.brickList;
+	}
+	
+	public int getNumberOfBrick(){
+		return numberOfBrick;
 	}
 	
 	//add getter for number of bricks

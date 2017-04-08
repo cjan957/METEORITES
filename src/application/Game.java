@@ -281,7 +281,8 @@ public class Game extends Application {
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				topRHSBrickList.remove();
-
+				topRHSBrick.removeBrick();
+				System.out.println("1 Brick destroyed, " + topRHSBrick.getNumberOfBrick() + " left: (TopRHS)");
 			}
 		}
 		while (topLHSbrickList.hasNext()) {
@@ -289,6 +290,9 @@ public class Game extends Application {
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				topLHSbrickList.remove();
+				topLHSBrick.removeBrick();
+				System.out.println("1 Brick destroyed, " + topLHSBrick.getNumberOfBrick() + " left: (TopLHS)");
+
 			}
 		}
 		while (bottomLHSbrickList.hasNext()) {
@@ -296,6 +300,9 @@ public class Game extends Application {
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				bottomLHSbrickList.remove();
+				bottomLHSBrick.removeBrick();
+				System.out.println("1 Brick destroyed, " + bottomLHSBrick.getNumberOfBrick() + " left: (BottomLHS)");
+
 			}
 		}
 		while (bottomRHSBrickList.hasNext()) {
@@ -303,6 +310,9 @@ public class Game extends Application {
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				bottomRHSBrickList.remove();
+				bottomRHSBrick.removeBrick();
+				System.out.println("1 Brick destroyed, " + bottomRHSBrick.getNumberOfBrick() + " left: (BottomRHS)");
+
 			}
 		}
 		deflect.setTempDir(99, 99);
@@ -329,13 +339,12 @@ public class Game extends Application {
 		topRHSBase = new Base("planet2_64.png", WINDOW_W - 64, 0, 64, 64);
 		bottomRHSBase = new Base("planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
 		bottomLHSBase = new Base("planet4_64.png", 0, WINDOW_H - 64, 64, 64);
-
 	}
 
 	public void bottomRHSBrickInit() {
 		bottomRHSBrick = new BrickManager();
 
-		for (int i = 1024; i > 826; i -= 33) { // Horizontal bricks Inner
+		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks Inner
 			Brick brick = new Brick(i, WINDOW_H - 140 - 32, 32, 32, 0);
 			bottomRHSBrick.addBrick(brick);
 		}
@@ -345,7 +354,7 @@ public class Game extends Application {
 			bottomRHSBrick.addBrick(brick);
 		}
 
-		for (int i = 1024; i > 826; i -= 33) { // Horizontal bricks Outer
+		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks Outer
 			Brick brick = new Brick(i, WINDOW_H - 140 - 64, 32, 32, 0);
 			bottomRHSBrick.addBrick(brick);
 		}
@@ -361,7 +370,7 @@ public class Game extends Application {
 		topRHSBrick = new BrickManager();
 
 		// INNER
-		for (int i = 1024; i > 826; i -= 33) { // Horizontal bricks
+		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks
 			Brick brick = new Brick(i, 180, 32, 32, 0);
 			topRHSBrick.addBrick(brick);
 		}
@@ -372,7 +381,7 @@ public class Game extends Application {
 		}
 
 		// OUTER WALL
-		for (int i = 1024; i > 826; i -= 33) { // Horizontal bricks
+		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks
 			Brick brick = new Brick(i, 148, 32, 32, 0);
 			topRHSBrick.addBrick(brick);
 		}
@@ -413,7 +422,7 @@ public class Game extends Application {
 		topLHSBrick = new BrickManager();
 
 		// TLHS
-		for (int i = 0; i < 140; i += 33) { // Horizontal bricks
+		for (int i = 0; i < 140; i += 33) { // Horizontal bricks 5 Bricks 0,33,66,99,132
 			Brick brick = new Brick(i, 180, 32, 32, 0);
 			topLHSBrick.addBrick(brick);
 		}
