@@ -6,7 +6,6 @@
 */
 
 package com.ttcj.components;
-
 import javafx.geometry.Rectangle2D;
 
 public class Brick extends ObjectInfo{

@@ -9,6 +9,8 @@ package com.ttcj.components;
 
 import com.ttcj.testing.IPaddle;
 
+import javafx.geometry.Rectangle2D;
+
 public class Bat extends ObjectInfo {
 
 	private boolean isAIBat;
@@ -41,6 +43,10 @@ public class Bat extends ObjectInfo {
 
 	public int getBatLength() {
 		return this.batLength;
+	}
+	
+	public Rectangle2D getBoundary(){
+		return new Rectangle2D(xPosition,yPosition,width+8,height);
 	}
 
 }

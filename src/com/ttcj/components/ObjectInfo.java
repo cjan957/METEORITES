@@ -80,4 +80,5 @@ public class ObjectInfo {
 		gc.drawImage(image, xPosition, yPosition);
 	}
 
+
 }

@@ -32,8 +32,13 @@ public class Game extends Application {
 	private Bat bat2;
 	private BrickManager topLHSBrick;
 	private BrickManager bottomLHSBrick;
+	private BrickManager  topRHSBrick;
+	private BrickManager bottomRHSBrick;
 	
-
+	private int tempBallDirection_RIGHT;
+	private int tempBallDirection_UP;
+	
+	
 	//This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
 
@@ -80,11 +85,24 @@ public class Game extends Application {
 			
 			//Rectangle2D rec = new Rectangle2D((double)ball.GetxPosition(),(double)ball.GetyPosition(),ball.GetWidth(),ball.GetHeight());
 			//view.canvasGC().setFill(Color.BLUE);
-			view.canvasGC().fillRect(ball.GetxPosition()+16, ball.GetyPosition()+16, ball.GetWidth(), ball.GetHeight());
+			//view.canvasGC().fillRect(ball.GetxPosition()+16, ball.GetyPosition()+16, ball.GetWidth(), ball.GetHeight());
 			ball.render(view.canvasGC());
 			
 			for(Brick brick : topLHSBrick.accessBrickArray()){
-				view.canvasGC().fillRect(brick.GetxPosition()+1, brick.GetyPosition()+1, brick.GetWidth(), brick.GetHeight());
+				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				brick.render(view.canvasGC());
+			}
+			for(Brick brick : bottomLHSBrick.accessBrickArray()){
+				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				brick.render(view.canvasGC());
+			}
+			for(Brick brick : topRHSBrick.accessBrickArray()){
+				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+				brick.render(view.canvasGC());
+			}
+			
+			for(Brick brick : bottomRHSBrick.accessBrickArray()){
+				view.canvasGC().fillRect(brick.GetxPosition(), brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 				brick.render(view.canvasGC());
 			}
 			
@@ -102,13 +120,12 @@ public class Game extends Application {
 		
 		//Move the ball once, checking necessary conditions.
 		ball.moveThatBall();
-		wallCollisionCheck();
 	
 		//Check user input and move the paddle accordingly
 		if (input.contains("LEFT")) {
 			// check LHS boundary condition so that the paddle won't be able to
 			// go beyond the limit
-			if (bat.GetxPosition() >= 0) {
+			if (bat.GetxPosition() >= 6) {
 				//Increase angle so the paddle/bat can move in circular path as 
 				//defined by the maths function
 				angle1 += 0.05;
@@ -127,14 +144,14 @@ public class Game extends Application {
 		if (input.contains("A")) {
 			// check LHS boundary condition so that the paddle won't be able to
 			// go beyond the limit
-			if (bat2.GetxPosition() >= 0) {
+			if (bat2.GetxPosition() >= 6) {
 				angle2 += 0.05;
 				bat2.SetxPosition((int) (Math.cos(angle2) * (WINDOW_H / 3)));
 				bat2.SetyPosition((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
 			}
 		} else if (input.contains("D")) {
 			// check bottom boundary condition
-			if (bat2.GetyPosition() < WINDOW_H - 64) {
+			if (bat2.GetyPosition() < WINDOW_H - 39) {
 				angle2 -= 0.05;
 				bat2.SetxPosition((int) (Math.cos(angle2) * (WINDOW_H / 3)));
 				bat2.SetyPosition((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
@@ -144,107 +161,138 @@ public class Game extends Application {
 		if(input.contains("DOWN")){ //slow down
 			ball.setXVelocity(((float)(ball.getXVelocity() / 1.2)));
 			ball.setYVelocity(((float)(ball.getYVelocity() / 1.2)));
-			System.out.println("S hit");
-			System.out.println("Xvelo: "+ ball.getXVelocity());
-			System.out.println("Yvelo: "+ ball.getYVelocity());
 		}
 		else if(input.contains("UP")){ //go faster!
 			ball.setXVelocity((float)(ball.getXVelocity() * 1.1));
 			ball.setYVelocity((float)(ball.getYVelocity() * 1.1));
-			System.out.println("F hit");
-			System.out.println("Xvelo: "+ ball.getXVelocity());
-			System.out.println("Yvelo: "+ ball.getYVelocity());
-		}
-
-		// Ball - Bat collision algorithm
-		// bat1 - ball
-		if ((ball.GetxPosition() <= bat.GetxPosition() + 32) 		//check if ball collides with bat
-				&& (ball.GetxPosition() >= bat.GetxPosition() - 32) && (ball.GetyPosition() <= bat.GetyPosition() + 32)
-				&& (ball.GetyPosition() >= bat.GetyPosition() - 32)) {
-			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
-			ball.setYVelocity(ball.getYVelocity());
-		}
-
-		// bat2 - ball
-		if ((ball.GetxPosition() <= bat2.GetxPosition() + 32) 		//check if ball collides with bat
-				&& (ball.GetxPosition() >= bat2.GetxPosition() - 32) && (ball.GetyPosition() <= bat2.GetyPosition() + 32)
-				&& (ball.GetyPosition() >= bat2.GetyPosition() - 32)) {
-			ball.setXVelocity(-ball.getXVelocity());		//reflect ball by reversing velocity
-			ball.setYVelocity(ball.getYVelocity());
 		}
 		
+		paddleCollisionCheck();	
+		wallCollisionCheck();
 		
 	}
+		
+	public void paddleCollisionCheck(){
+		if(ball.objectsIntersectBallAndPaddle(bat)){
+			ball.setXVelocity(-ball.getXVelocity());
+		}
+		else if(ball.objectsIntersectBallAndPaddle(bat2)){
+			ball.setXVelocity(-ball.getXVelocity());
+		}
+	}
 	
-	public void wallCollisionCheck(){
+	public void wallCollisionCheck(){	
 		Iterator<Brick> topLHSbrickList = topLHSBrick.accessBrickArray().iterator();
-		while(topLHSbrickList.hasNext()){
-			//System.out.println("Checking");
-			Brick brick = topLHSbrickList.next();
+		Iterator<Brick> bottomLHSbrickList = bottomLHSBrick.accessBrickArray().iterator();
+		Iterator<Brick> topRHSBrickList = topRHSBrick.accessBrickArray().iterator();
+		Iterator<Brick> bottomRHSBrickList = bottomRHSBrick.accessBrickArray().iterator();
+
+		
+		while(topRHSBrickList.hasNext()){
+			Brick brick = topRHSBrickList.next();
 			if(ball.objectsIntersect(brick)){
-				//System.out.println("hit!");
-				topLHSbrickList.remove();
+				//System.out.println("HIT! arr:" +brick.getArrangement());		
 				ballDeflect(brick.getArrangement());
+				topRHSBrickList.remove();
+	
 			}
 		}
+		while(topLHSbrickList.hasNext()){
+			Brick brick = topLHSbrickList.next();
+			if(ball.objectsIntersect(brick)){
+				ballDeflect(brick.getArrangement());
+				topLHSbrickList.remove();
+
+			}
+		}
+		while(bottomLHSbrickList.hasNext()){
+			Brick brick = bottomLHSbrickList.next();
+			if(ball.objectsIntersect(brick)){
+				ballDeflect(brick.getArrangement());
+				bottomLHSbrickList.remove();
+
+			}
+		}
+		while(bottomRHSBrickList.hasNext()){
+			Brick brick = bottomRHSBrickList.next();
+			if(ball.objectsIntersect(brick)){
+				ballDeflect(brick.getArrangement());
+				bottomRHSBrickList.remove();
+			}
+		}
+		tempBallDirection_RIGHT = 99;
+		tempBallDirection_UP = 99;	
 	}
 	
 	public void ballDeflect(int brickArrangement){ //0 for horizontal, 1 for vertical
 		//deflect the ball based on its direction before it hits an object
 		
-		
-		
 		if(!ball.getIfTravelRight() && ball.getIfTravelUp()){  // 0,1
-			//ball.setXVelocity(-ball.getXVelocity());
-			System.out.println("DEF1");
-			if(brickArrangement == 0){
-				ball.setYVelocity(-ball.getYVelocity());
+			if(tempBallDirection_RIGHT == 0 && tempBallDirection_UP == 1){
+				//Check if the ball still travels in the same direction
+				//This is checked to prevent no velocity change when the ball hits two bricks at once
+				//ie) When ball hits two walls, its velocity is reverse twice -(-V) resulting in the 
+				//original velocity (V)
 			}
 			else{
-				ball.setXVelocity(-ball.getXVelocity());
+				//Check the brick arrangement (deflect the ball differently depending on how wall is arranged.
+				if(brickArrangement == 0){ 
+					ball.setYVelocity(-ball.getYVelocity());
+				}
+				else{
+					ball.setXVelocity(-ball.getXVelocity());
+				}		
+					tempBallDirection_RIGHT = 0;
+					tempBallDirection_UP = 1;
 			}
 		}
 		else if(ball.getIfTravelRight() && ball.getIfTravelUp()){ // 1,1
-			//ball.setXVelocity(-ball.getXVelocity());
-			System.out.println("DEF2");
-
-
-			if(brickArrangement == 0){
-				ball.setYVelocity(-ball.getYVelocity());
+			if(tempBallDirection_RIGHT == 1 && tempBallDirection_UP == 1){
+				
 			}
 			else{
-				ball.setXVelocity(-ball.getXVelocity());
+				if(brickArrangement == 0){
+					ball.setYVelocity(-ball.getYVelocity());
+				}
+				else{
+					ball.setXVelocity(-ball.getXVelocity());
+				}
+				tempBallDirection_RIGHT = 1;
+				tempBallDirection_RIGHT = 1;
 			}
 		}
 		else if(!ball.getIfTravelRight() && !ball.getIfTravelUp()){ // 0,0
-			//ball.setXVelocity(-ball.getXVelocity());
-			System.out.println("DEF3");
-
-
-			if(brickArrangement == 0){
-				ball.setYVelocity(-ball.getYVelocity());
+			if(tempBallDirection_RIGHT == 0 && tempBallDirection_UP == 0){
+				
 			}
 			else{
-				ball.setXVelocity(-ball.getXVelocity());
-			}
+				if(brickArrangement == 0){			
+					ball.setYVelocity(-ball.getYVelocity());
+				}
+				else{
+					ball.setXVelocity(-ball.getXVelocity());
+				}
+				tempBallDirection_RIGHT = 0;
+				tempBallDirection_UP = 0;
+		}
 		}
 		else if(ball.getIfTravelRight() && !ball.getIfTravelUp()){ // 1,0
-//			System.out.println(ball.getXVelocity());
-//			ball.setXVelocity(-ball.getXVelocity());
-			System.out.println("DEF4");
-//			System.out.println(ball.getXVelocity());
+			if(tempBallDirection_RIGHT == 1 && tempBallDirection_UP == 0){
 
-
-			if(brickArrangement == 0){
-				ball.setYVelocity(-ball.getYVelocity());
 			}
 			else{
-				ball.setXVelocity(-ball.getXVelocity());
+				if(brickArrangement == 0){
+					ball.setYVelocity(-ball.getYVelocity());
+
+				}
+				else{
+					ball.setXVelocity(-ball.getXVelocity());
+				}
+				tempBallDirection_RIGHT = 1;
+				tempBallDirection_UP = 0;
 			}
 		}
 		else{
-			System.out.println("DEF5");
-
 			ball.setXVelocity(-ball.getXVelocity());
 			ball.setYVelocity(-ball.getYVelocity());
 		}
@@ -256,16 +304,15 @@ public class Game extends Application {
 		//Create objects needed for the game play
 		//with necessary properties. 
 		bat = new Bat();
-		bat.setImage("rsz_1paddle2.png");
+		bat.setImage("paddle_32.png");
 		bat.SetxPosition(WINDOW_H / 3);
 		bat.SetyPosition(0);
 
 		bat2 = new Bat();
-		bat2.setImage("rsz_1paddle2.png");
+		bat2.setImage("paddle_32.png");
 		bat2.SetxPosition(WINDOW_H / 3);
-		bat2.SetyPosition(WINDOW_H - 64);
+		bat2.SetyPosition(WINDOW_H - 32);
 		
-
 		ball = new Ball();
 		ball.setImage("b10008.png");
 		ball.SetxPosition(WINDOW_W / 2 - 32);
@@ -275,24 +322,203 @@ public class Game extends Application {
 		ball.SetWidth(32);
 		ball.SetHeight(32);
 		
-		topLHSBrick = new BrickManager();
-		bottomLHSBrick = new BrickManager();
-
-		for(int i = 0; i < 180; i+=20){ //Horizontal bricks
+		topLHSBrickInit();	
+		bottomLHSBrickInit();
+		topRHSBrickInit();
+		bottomRHSBrickInit();
+	}
+	
+	
+	public void bottomRHSBrickInit(){
+		bottomRHSBrick = new BrickManager();
+		
+		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks Inner
 			Brick brick = new Brick();
-			brick.setImage("rsz_1rsz_brick.png");
+			brick.setImage("iceblock_32.png");
 			brick.SetxPosition(i);
-			brick.SetyPosition(140);
+			brick.SetyPosition(WINDOW_H - 140 - 32); //768-140-32
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			bottomRHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 728; j > 568; j-=(33)){ //Vertical Bricks Inner
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(844); //844 from left
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			bottomRHSBrick.addBrick(brick);
+		}
+		
+		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks Outer
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(WINDOW_H - 140 - 64); 
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			bottomRHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 728; j > 568; j-=33){ //Vertical Bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(812); //180 from left
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			bottomRHSBrick.addBrick(brick);
+		}
+		
+	}
+	
+	public void topRHSBrickInit(){
+		topRHSBrick = new BrickManager();
+		
+		//INNER
+		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(180); //140 from top
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			topRHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(844); //844 from left
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			topRHSBrick.addBrick(brick);
+		}
+		
+		//OUTER WALL
+		for(int i = 1024; i > 826; i-=33){ //Horizontal bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(148); //140 from top
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			topRHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(812); //180 from left
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			topRHSBrick.addBrick(brick);
+		}
+	}
+
+	public void bottomLHSBrickInit(){
+		bottomLHSBrick = new BrickManager();
+		
+		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(WINDOW_H - 140 - 32); //768-140-32
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			bottomLHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 728; j > 568; j-=(33)){ //Vertical Bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(180);
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			bottomLHSBrick.addBrick(brick);
+		}
+		
+		//Outer Wall
+		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(WINDOW_H - 140 - 32 - 32); //768-140-32
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			bottomLHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 728; j > 568; j-=(33)){ //Vertical Bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(148);
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			bottomLHSBrick.addBrick(brick);
+		}	
+	}
+	
+	public void topLHSBrickInit(){
+		topLHSBrick = new BrickManager();
+
+		//TLHS
+		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(180); //140 from top
 			brick.SetWidth(32);
 			brick.SetHeight(32);
 			brick.setArrangement(0);
 			topLHSBrick.addBrick(brick);
 		}
 		
-		for(int j = 0; j < 140; j+=20){ //Vertical Bricks
+		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
 			Brick brick = new Brick();
-			brick.setImage("rsz_1rsz_brick.png");
-			brick.SetxPosition(180);
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(180); //180 from left
+			brick.SetyPosition(j);
+			brick.SetHeight(32);
+			brick.SetWidth(32);
+			brick.setArrangement(1);
+			topLHSBrick.addBrick(brick);
+		}
+		
+		//INNER WALL
+		for(int i = 0; i < 140; i+=33){ //Horizontal bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(i);
+			brick.SetyPosition(148); //140 from top
+			brick.SetWidth(32);
+			brick.SetHeight(32);
+			brick.setArrangement(0);
+			topLHSBrick.addBrick(brick);
+		}
+		
+		for(int j = 0; j < 140; j+=33){ //Vertical Bricks
+			Brick brick = new Brick();
+			brick.setImage("iceblock_32.png");
+			brick.SetxPosition(148); //180 from left
 			brick.SetyPosition(j);
 			brick.SetHeight(32);
 			brick.SetWidth(32);

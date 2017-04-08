@@ -12,6 +12,7 @@ package com.ttcj.components;
 import com.ttcj.testing.IBall;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Arc;
 
 public class Ball extends ObjectInfo{
 
@@ -122,7 +123,8 @@ public class Ball extends ObjectInfo{
 	public boolean getIfTravelUp(){
 		return travelingUp;
 	}
-		
+	
+	
 	public Rectangle2D getBoundary(){
 		return new Rectangle2D(xPosition+16,yPosition+16,width,height);
 	}
@@ -130,6 +132,12 @@ public class Ball extends ObjectInfo{
 	public boolean objectsIntersect(Brick obj){
 		return obj.getBoundary().intersects(this.getBoundary());
 	}
+	
+	public boolean objectsIntersectBallAndPaddle(Bat obj){
+		return obj.getBoundary().intersects(this.getBoundary());
+	}
+	
+	
 	
 
 }
