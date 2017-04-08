@@ -121,8 +121,13 @@ public class Game extends Application {
 			// from the View class. Clear canvas with transparent color after
 			// each frame
 			view.canvasGC().clearRect(0, 0, 1024, 768);
+			
+			if(!topLHSBase.isDead()){
 			bat.render(view.canvasGC());
+			}
+			if(!bottomLHSBase.isDead()){
 			bat2.render(view.canvasGC());
+			}
 
 			// Rectangle2D rec = new
 			// Rectangle2D((double)ball.GetxPosition(),(double)ball.GetyPosition(),ball.GetWidth(),ball.GetHeight());
@@ -227,8 +232,8 @@ public class Game extends Application {
 
 		// DEBUG ONLY
 		if (input.contains("DOWN")) { // slow down
-			ball.setXVelocity(((float) (ball.getXVelocity() / 1.2)));
-			ball.setYVelocity(((float) (ball.getYVelocity() / 1.2)));
+			ball.setXVelocity(((float) (ball.getXVelocity() / 1.1)));
+			ball.setYVelocity(((float) (ball.getYVelocity() / 1.1)));
 		} else if (input.contains("UP")) { // go faster!
 			ball.setXVelocity((float) (ball.getXVelocity() * 1.1));
 			ball.setYVelocity((float) (ball.getYVelocity() * 1.1));
@@ -236,10 +241,15 @@ public class Game extends Application {
 	}
 
 	public void paddleCollisionCheck() {
-
-		// TODO: Vertical Collision!
-		if (ball.objectsIntersectBallAndPaddle(bat) || ball.objectsIntersectBallAndPaddle(bat2)) {
-			ball.setXVelocity(-ball.getXVelocity());
+		if(!topLHSBase.isDead()){
+			if(ball.objectsIntersectBallAndPaddle(bat)){
+				ball.setXVelocity(-ball.getXVelocity());
+			}
+		}
+		if(!bottomLHSBase.isDead()){
+			if(ball.objectsIntersectBallAndPaddle(bat2)){
+				ball.setXVelocity(-ball.getXVelocity());
+			}
 		}
 	}
 
@@ -306,7 +316,6 @@ public class Game extends Application {
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
 
 		baseInit();
-
 		topLHSBrickInit();
 		bottomLHSBrickInit();
 		topRHSBrickInit();
