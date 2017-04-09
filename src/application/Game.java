@@ -9,12 +9,14 @@ package application;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Math;
+import java.nio.file.Files;
 
 import com.ttcj.components.Ball;
 import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
 import com.ttcj.components.Brick;
 import com.ttcj.components.BrickManager;
+import com.ttcj.components.Sound;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,14 +26,18 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import javafx.scene.media.MediaPlayer; 
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class Game extends Application {
-		
-	//QUICK DEBUGGING OPTIONS
+
+	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
 
 	// Instantiate game objects
@@ -55,7 +61,7 @@ public class Game extends Application {
 	private Deflect deflect;
 	private View view;
 	private Scene mainMenuScene;
-	private Stage gameWindow;	
+	private Stage gameWindow;
 
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -102,117 +108,107 @@ public class Game extends Application {
 		// Show the stage on the screen
 		gameStage.show();
 	}
-	
-	public void startCountDowntimeUp(){
+
+	public void startCountDowntimeUp() {
 		timer3sec.setTimeOut(true);
 		timer3sec.setVisibility(false);
 		timer120sec.setVisibility(true);
 	}
-	
-	public void checkActualTimeRemaining(){
-		if(timer120sec.getTime() == 0){
+
+	public void checkActualTimeRemaining() {
+		if (timer120sec.getTime() == 0) {
 			timeOutFindWinner();
-		}
-		else{
+		} else {
 			timeLeftFindWinner();
 		}
 	}
-	
-	public void timeLeftFindWinner(){
-		
-		if(!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+
+	public void timeLeftFindWinner() {
+
+		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			topLHSBase.setIsWinner(true);
-	    	System.out.println("Winner: "+ topLHSBase.getBaseName());
+			System.out.println("Winner: " + topLHSBase.getBaseName());
 			view.forcePause();
 
-		}
-		else if(topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			topRHSBase.setIsWinner(true);
-	    	System.out.println("Winner: "+ topRHSBase.getBaseName());
+			System.out.println("Winner: " + topRHSBase.getBaseName());
 			view.forcePause();
 
-
-		}
-		else if(topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			bottomLHSBase.setIsWinner(true);
-	    	System.out.println("Winner: "+ bottomLHSBase.getBaseName());
+			System.out.println("Winner: " + bottomLHSBase.getBaseName());
 			view.forcePause();
 
-
-		}
-		else if(topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
+		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
 			bottomRHSBase.setIsWinner(true);
-	    	System.out.println("Winner: "+ bottomRHSBase.getBaseName());
+			System.out.println("Winner: " + bottomRHSBase.getBaseName());
 			view.forcePause();
 
 		}
 	}
-	
-	
-	public void timeOutFindWinner(){
-		
+
+	public void timeOutFindWinner() {
+
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		ArrayList<Base> baseList = new ArrayList<Base>();
-		
+
 		scoreList.add(this.topLHSBrick.getNumberOfBrick());
 		scoreList.add(this.topRHSBrick.getNumberOfBrick());
 		scoreList.add(this.bottomLHSBrick.getNumberOfBrick());
 		scoreList.add(this.bottomRHSBrick.getNumberOfBrick());
-		
+
 		baseList.add(this.topLHSBase);
 		baseList.add(this.topRHSBase);
 		baseList.add(this.bottomLHSBase);
 		baseList.add(this.bottomRHSBase);
-		
-		
-	    int temp = 0;
-	    Base tempName;
-	    
-	    for (int i = 0; i < 4; i++) {
-	        for (int j = 1; j < (4 - i); j++) {
-	            if (scoreList.get(j-1) < scoreList.get(j)) {
-	                temp = scoreList.get(j-1);
-	                scoreList.set(j-1, scoreList.get(j));
-	                scoreList.set(j, temp);
-	                
-	                tempName = baseList.get(j-1);
-	                baseList.set(j-1, baseList.get(j));
-	                baseList.set(j, tempName);             
-	            }
-	        }
-	    }
-	    
-	    System.out.println(scoreList);
-	    System.out.println(baseList);
-	    
-	    baseList.get(0).setIsWinner(true);
-    	System.out.println("Winner: "+ baseList.get(0).getBaseName());
 
-	    
-	    if(scoreList.get(1) == scoreList.get(0)){
-	    	baseList.get(1).setIsWinner(true);
-	    	System.out.println("Winner: "+ baseList.get(1).getBaseName());
-	    }
-	    if(scoreList.get(2) == scoreList.get(0)){
-	    	baseList.get(2).setIsWinner(true);
-	    	System.out.println("Winner: "+ baseList.get(2).getBaseName());
+		int temp = 0;
+		Base tempName;
 
-	    }
-	    if(scoreList.get(3) == scoreList.get(0)){
-	    	baseList.get(3).setIsWinner(true);
-	    	System.out.println("Winner: "+ baseList.get(3).getBaseName());
+		for (int i = 0; i < 4; i++) {
+			for (int j = 1; j < (4 - i); j++) {
+				if (scoreList.get(j - 1) < scoreList.get(j)) {
+					temp = scoreList.get(j - 1);
+					scoreList.set(j - 1, scoreList.get(j));
+					scoreList.set(j, temp);
 
-	    }
-	    
-	    view.forcePause();
-	    
+					tempName = baseList.get(j - 1);
+					baseList.set(j - 1, baseList.get(j));
+					baseList.set(j, tempName);
+				}
+			}
+		}
+
+		System.out.println(scoreList);
+		System.out.println(baseList);
+
+		baseList.get(0).setIsWinner(true);
+		System.out.println("Winner: " + baseList.get(0).getBaseName());
+
+		if (scoreList.get(1) == scoreList.get(0)) {
+			baseList.get(1).setIsWinner(true);
+			System.out.println("Winner: " + baseList.get(1).getBaseName());
+		}
+		if (scoreList.get(2) == scoreList.get(0)) {
+			baseList.get(2).setIsWinner(true);
+			System.out.println("Winner: " + baseList.get(2).getBaseName());
+
+		}
+		if (scoreList.get(3) == scoreList.get(0)) {
+			baseList.get(3).setIsWinner(true);
+			System.out.println("Winner: " + baseList.get(3).getBaseName());
+
+		}
+
+		view.forcePause();
+
 	}
-	
-	
-	public void startMasterTimer(){	
-		//counting by one second, 120 times (2 mins)
-		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout ->{
-			if(!view.isPause()){
+
+	public void startMasterTimer() {
+		// counting by one second, 120 times (2 mins)
+		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
+			if (!view.isPause()) {
 				timer120sec.countDown();
 				checkActualTimeRemaining();
 			}
@@ -220,31 +216,30 @@ public class Game extends Application {
 		renderTimer.setCycleCount(Timeline.INDEFINITE);
 		renderTimer.play();
 	}
-	
-	public void startGame1() {		
+
+	public void startGame1() {
 		// Setup gameView
 		view.setupGameView(gameWindow);
 		// Invoking gameInit method
 		gameInit();
-		
+
 		timer3sec = new Timer(3, true);
 		timer120sec = new Timer(120, false);
-		
-		//Counting down from 3 to 0, decrement the timer for 1 sec every one second.
-		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout-> {
+
+		// Counting down from 3 to 0, decrement the timer for 1 sec every one
+		// second.
+		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
 			timer3sec.countDown();
-		}
-		));
-		renderKeyFrame.setCycleCount(3); //repeat 1 sec for 3 times
+		}));
+		renderKeyFrame.setCycleCount(3); // repeat 1 sec for 3 times
 		renderKeyFrame.play();
-		
-		//Call timeUp method, after 3 seconds time is up
-		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> { 
+
+		// Call timeUp method, after 3 seconds time is up
+		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> {
 			startCountDowntimeUp();
 			startMasterTimer();
 		}));
 		countDown.play();
-		
 
 		// Create timeline object called 'gameLoop' that will repeat
 		// indefinitely
@@ -254,35 +249,35 @@ public class Game extends Application {
 		// Setup so that the game Refresh/Repeat every 0.016 second (equals to
 		// approximately 60fps)
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event -> {
-							
+
 			// Obtain user key pressed from the view class
 			input = view.accessUserInput();
 
-			//Game proceeds if not paused
-			if (!view.isPause() && timer3sec.isTimeOut()){
+			// Game proceeds if not paused
+			if (!view.isPause() && timer3sec.isTimeOut()) {
 				countDown.stop();
-				tick();		
-			}	
-			
+				tick();
+			}
+
 			// Render each object on canvas using GraphicContext (gc) set up
 			// from the View class. Clear canvas with transparent color after
 			// each frame
-			view.canvasGC().clearRect(0, 0, 1024, 768);		
-			
-			
-			//Check if the 3-2-1 countdown has finished, if yes then don't bother trying to render the text
-			if(timer3sec.getVisibility()){ 
+			view.canvasGC().clearRect(0, 0, 1024, 768);
+
+			// Check if the 3-2-1 countdown has finished, if yes then don't
+			// bother trying to render the text
+			if (timer3sec.getVisibility()) {
 				timer3sec.renderCountDownTimer(view.canvasGC());
 			}
-			
-			if(timer120sec.getVisibility()){
+
+			if (timer120sec.getVisibility()) {
 				timer120sec.renderMasterTimer(view.canvasGC());
 			}
-			
-			if(!topLHSBase.isDead()){
+
+			if (!topLHSBase.isDead()) {
 				bat.render(view.canvasGC());
 			}
-			if(!bottomLHSBase.isDead()){
+			if (!bottomLHSBase.isDead()) {
 				bat2.render(view.canvasGC());
 			}
 
@@ -377,7 +372,7 @@ public class Game extends Application {
 		}
 
 		// TODO: DEBUG ONLY, remove when deliver
-		if(inGameBallSpeedAdjust){
+		if (inGameBallSpeedAdjust) {
 			if (input.contains("DOWN")) { // slow down
 				ball.setXVelocity(((float) (ball.getXVelocity() / 1.1)));
 				ball.setYVelocity(((float) (ball.getYVelocity() / 1.1)));
@@ -386,22 +381,22 @@ public class Game extends Application {
 				ball.setYVelocity((float) (ball.getYVelocity() * 1.1));
 			}
 		}
-		
-		if(input.contains("PAGE_DOWN")){
+
+		if (input.contains("PAGE_DOWN")) {
 			this.setTimeRemainingToFive();
 		}
 	}
 
 	public void paddleCollisionCheck() {
-		
-		if(!topLHSBase.isDead()){
-			if(ball.objectsIntersectBallAndPaddle(bat)){
+
+		if (!topLHSBase.isDead()) {
+			if (ball.objectsIntersectBallAndPaddle(bat)) {
 				ball.setXVelocity(-ball.getXVelocity());
 				playPaddleDeflectSound();
 			}
 		}
-		if(!bottomLHSBase.isDead()){
-			if(ball.objectsIntersectBallAndPaddle(bat2)){
+		if (!bottomLHSBase.isDead()) {
+			if (ball.objectsIntersectBallAndPaddle(bat2)) {
 				ball.setXVelocity(-ball.getXVelocity());
 				playPaddleDeflectSound();
 			}
@@ -409,30 +404,30 @@ public class Game extends Application {
 	}
 
 	public void baseCollisionCheck() {
-		if(!topLHSBase.isDead()){
+		if (!topLHSBase.isDead()) {
 			if (ball.objectsIntersectBallAndBase(topLHSBase)) {
 				topLHSBase.setIsDead(true);
 				playBaseHitSound();
 				System.out.println("Blue");
 			}
 		}
-		if(!topRHSBase.isDead()){ 
+		if (!topRHSBase.isDead()) {
 			if (ball.objectsIntersectBallAndBase(topRHSBase)) {
 				topRHSBase.setIsDead(true);
 				playBaseHitSound();
 				System.out.println("Green ");
 			}
-		} 
-	
-		if(!bottomRHSBase.isDead()){
+		}
+
+		if (!bottomRHSBase.isDead()) {
 			if (ball.objectsIntersectBallAndBase(bottomRHSBase)) {
 				bottomRHSBase.setIsDead(true);
 				playBaseHitSound();
 				System.out.println("Red");
 			}
 		}
-		
-		if(!bottomLHSBase.isDead()){
+
+		if (!bottomLHSBase.isDead()) {
 			if (ball.objectsIntersectBallAndBase(bottomLHSBase)) {
 				bottomLHSBase.setIsDead(true);
 				playBaseHitSound();
@@ -440,7 +435,7 @@ public class Game extends Application {
 			}
 		}
 	}
-		
+
 	public void wallCollisionCheck() {
 
 		Iterator<Brick> topLHSbrickList = topLHSBrick.accessBrickArray().iterator();
@@ -510,10 +505,10 @@ public class Game extends Application {
 	}
 
 	public void baseInit() {
-		topLHSBase = new Base("TopLHS","planet1_64.png", 0, 0, 64, 64);
-		topRHSBase = new Base("TopRHS","planet2_64.png", WINDOW_W - 64, 0, 64, 64);
-		bottomRHSBase = new Base("BottomRHS","planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
-		bottomLHSBase = new Base("BottomLHS","planet4_64.png", 0, WINDOW_H - 64, 64, 64);
+		topLHSBase = new Base("TopLHS", "planet1_64.png", 0, 0, 64, 64);
+		topRHSBase = new Base("TopRHS", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
+		bottomRHSBase = new Base("BottomRHS", "planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
+		bottomLHSBase = new Base("BottomLHS", "planet4_64.png", 0, WINDOW_H - 64, 64, 64);
 	}
 
 	public void bottomRHSBrickInit() {
@@ -597,7 +592,8 @@ public class Game extends Application {
 		topLHSBrick = new BrickManager();
 
 		// TLHS
-		for (int i = 0; i < 140; i += 33) { // Horizontal bricks 5 Bricks 0,33,66,99,132
+		for (int i = 0; i < 140; i += 33) { // Horizontal bricks 5 Bricks
+											// 0,33,66,99,132
 			Brick brick = new Brick(i, 180, 32, 32, 0);
 			topLHSBrick.addBrick(brick);
 		}
@@ -626,28 +622,17 @@ public class Game extends Application {
 	public void setTimeRemainingToFive() {
 		timer120sec.setTime(5);
 	}
-	
-	private void playPaddleDeflectSound(){
-		String paddleDeflectSound = "Sounds/paddleDeflect.wav";	//Locations of sounds
-		Media sound = new Media(new File(paddleDeflectSound).toURI().toString());
-		MediaPlayer deflectSound = new MediaPlayer(sound);
-		deflectSound.play();
+
+	private void playPaddleDeflectSound() {
+		new Sound("Sounds/paddleDeflect.wav");
 	}
-	
-	private void playWallHitSound(){
-		String wallHitSound = "Sounds/wallHit.wav";
-		Media sound = new Media(new File(wallHitSound).toURI().toString());
-		MediaPlayer hitSound = new MediaPlayer(sound);
-		hitSound.play();
-		
+
+	private void playWallHitSound() {
+		new Sound("Sounds/wallHit.wav");
 	}
-	
-	private void playBaseHitSound(){
-		String baseHitSound = "Sounds/baseHit.wav";
-		Media sound = new Media(new File(baseHitSound).toURI().toString());
-		MediaPlayer baseHit = new MediaPlayer(sound);
-		baseHit.play();
+
+	private void playBaseHitSound() {
+		new Sound("Sounds/baseHit.wav");
 	}
-	
-	
+
 }
