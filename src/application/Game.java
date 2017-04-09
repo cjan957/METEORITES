@@ -285,26 +285,39 @@ public class Game extends Application {
 	}
 
 	public void baseCollisionCheck() {
+		if(!topLHSBase.isDead()){
+			if (ball.objectsIntersectBallAndBase(topLHSBase)) {
+				topLHSBase.setIsDead(true);
+				playBaseHitSound();
+				System.out.println("Blue");
+			}
+		}
+		if(!topRHSBase.isDead()){ 
+			if (ball.objectsIntersectBallAndBase(topRHSBase)) {
+				topRHSBase.setIsDead(true);
+				playBaseHitSound();
+				System.out.println("Green ");
+			}
+		} 
+	
+		if(!bottomRHSBase.isDead()){
+			if (ball.objectsIntersectBallAndBase(bottomRHSBase)) {
+				bottomRHSBase.setIsDead(true);
+				playBaseHitSound();
+				System.out.println("Red");
+			}
+		}
 		
-		if (ball.objectsIntersectBallAndBase(topLHSBase)) {
-			topLHSBase.setIsDead(true);
-			playBaseHitSound();
-			System.out.println("Blue");
-		} else if (ball.objectsIntersectBallAndBase(topRHSBase)) {
-			topRHSBase.setIsDead(true);
-			playBaseHitSound();
-			System.out.println("Green ");
-		} else if (ball.objectsIntersectBallAndBase(bottomRHSBase)) {
-			bottomRHSBase.setIsDead(true);
-			playBaseHitSound();
-			System.out.println("Red");
-		} else if (ball.objectsIntersectBallAndBase(bottomLHSBase)) {
-			bottomLHSBase.setIsDead(true);
-			playBaseHitSound();
-			System.out.println("Yellow");
+		if(!bottomLHSBase.isDead()){
+			if (ball.objectsIntersectBallAndBase(bottomLHSBase)) {
+				bottomLHSBase.setIsDead(true);
+				playBaseHitSound();
+				System.out.println("Yellow");
+			}
 		}
 	}
-
+	
+	
 	public void wallCollisionCheck() {
 
 		Iterator<Brick> topLHSbrickList = topLHSBrick.accessBrickArray().iterator();
