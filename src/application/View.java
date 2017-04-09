@@ -17,11 +17,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class View {
 
+	//QUICK DEBUGGING OPTIONS
+	private boolean enableBackground = true;
+
+	
 	//private Stage window;
 	private Scene gamePlayScene;
 	private Group root;
@@ -43,10 +49,13 @@ public class View {
 	public void setupGameView(Stage window){
 		
 		root = new Group();
-		gamePlayScene = new Scene(root); 
-		Image background = new Image("stars_space.jpg");
-		gamePlayScene.setFill(new ImagePattern(background));
-
+		gamePlayScene = new Scene(root);
+		
+		//TODO: Remove this if statement when deliver
+		if(enableBackground){
+			Image background = new Image("stars_space.jpg");
+			gamePlayScene.setFill(new ImagePattern(background));
+		}
 
 		//Setup planet shapes to each corner - will represent the 'warlords'
 		Arc planetTL = new Arc(0, 0, 100, 100, 270, 90); // planets
@@ -112,12 +121,7 @@ public class View {
 		window.setScene(gamePlayScene);
 	}
 	
-	
-	public void renderCountDownTimer(){
-		Image image = new Image("planet1_64.png");
-		gc.drawImage(image, 50, 50);	
-		gc.clearRect(0, 0, 1024, 768);
-	}
+
 		
 	public int getGameMode(){
 		return gameMode;

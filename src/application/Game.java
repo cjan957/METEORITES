@@ -26,12 +26,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Game extends Application {
-	
-	
-	private Timer timer;
-	
+		
+	//QUICK DEBUGGING OPTIONS
+	private boolean inGameBallSpeedAdjust = false;
 
 	// Instantiate game objects
+	private Timer timer;
+
 	private Ball ball;
 	private Bat bat;
 	private Bat bat2;
@@ -100,6 +101,7 @@ public class Game extends Application {
 	public void timeUp(){
 		timer.setTimeOut(true);	
 	}
+	
 
 	public void startGame1() {
 		
@@ -110,15 +112,15 @@ public class Game extends Application {
 		
 		timer = new Timer();
 		timer.setTime(3);
+		
+		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout-> {
+			timer.countDown();
+		}
+		));
+		renderKeyFrame.setCycleCount(3);
+		renderKeyFrame.play();
+		
 	
-		Timeline renderCountdown = new Timeline(new KeyFrame(Duration.seconds(0.016), event ->{
-			view.renderCountDownTimer();
-		}));
-		renderCountdown.setCycleCount(5000);
-		renderCountdown.play();
-		
-		
-		
 		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> timeUp()));
 		countDown.play();
 		
@@ -138,6 +140,7 @@ public class Game extends Application {
 
 			//Game proceeds if not paused
 			if (!view.isPause() && timer.isTimeOut()){
+				countDown.stop();
 				tick();		
 			}
 			
@@ -146,6 +149,11 @@ public class Game extends Application {
 			// from the View class. Clear canvas with transparent color after
 			// each frame
 			view.canvasGC().clearRect(0, 0, 1024, 768);
+			
+			//Check if the 3-2-1 countdown has finished, if yes then don't bother trying to render the text
+			if(!timer.isTimeOut()){ 
+				timer.renderCountDownTimer(view.canvasGC());
+			}
 			
 			if(!topLHSBase.isDead()){
 				bat.render(view.canvasGC());
@@ -244,13 +252,15 @@ public class Game extends Application {
 			}
 		}
 
-		// DEBUG ONLY
-		if (input.contains("DOWN")) { // slow down
-			ball.setXVelocity(((float) (ball.getXVelocity() / 1.1)));
-			ball.setYVelocity(((float) (ball.getYVelocity() / 1.1)));
-		} else if (input.contains("UP")) { // go faster!
-			ball.setXVelocity((float) (ball.getXVelocity() * 1.1));
-			ball.setYVelocity((float) (ball.getYVelocity() * 1.1));
+		// TODO: DEBUG ONLY, remove when deliver
+		if(inGameBallSpeedAdjust){
+			if (input.contains("DOWN")) { // slow down
+				ball.setXVelocity(((float) (ball.getXVelocity() / 1.1)));
+				ball.setYVelocity(((float) (ball.getYVelocity() / 1.1)));
+			} else if (input.contains("UP")) { // go faster!
+				ball.setXVelocity((float) (ball.getXVelocity() * 1.1));
+				ball.setYVelocity((float) (ball.getYVelocity() * 1.1));
+			}
 		}
 	}
 
