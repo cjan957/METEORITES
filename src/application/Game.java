@@ -111,19 +111,105 @@ public class Game extends Application {
 	
 	public void checkActualTimeRemaining(){
 		if(timer120sec.getTime() == 0){
-			concludeTheGame();
+			timeOutFindWinner();
+		}
+		else{
+			timeLeftFindWinner();
 		}
 	}
 	
-	public void concludeTheGame(){
-		System.out.println("gameFinish");
-		view.forcePause();
+	public void timeLeftFindWinner(){
 		
+		if(!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+			topLHSBase.setIsWinner(true);
+	    	System.out.println("Winner: "+ topLHSBase.getBaseName());
+			view.forcePause();
+
+		}
+		else if(topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+			topRHSBase.setIsWinner(true);
+	    	System.out.println("Winner: "+ topRHSBase.getBaseName());
+			view.forcePause();
+
+
+		}
+		else if(topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+			bottomLHSBase.setIsWinner(true);
+	    	System.out.println("Winner: "+ bottomLHSBase.getBaseName());
+			view.forcePause();
+
+
+		}
+		else if(topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
+			bottomRHSBase.setIsWinner(true);
+	    	System.out.println("Winner: "+ bottomRHSBase.getBaseName());
+			view.forcePause();
+
+		}
+	}
+	
+//	public void concludeTheGame(){
+//		System.out.println("gameFinish");
+//		view.forcePause();
+//		timeOutFindWinner();
+//	}
+	
+	public void timeOutFindWinner(){
+		
+		ArrayList<Integer> scoreList = new ArrayList<Integer>();
+		ArrayList<Base> baseList = new ArrayList<Base>();
+		
+		scoreList.add(this.topLHSBrick.getNumberOfBrick());
+		scoreList.add(this.topRHSBrick.getNumberOfBrick());
+		scoreList.add(this.bottomLHSBrick.getNumberOfBrick());
+		scoreList.add(this.bottomRHSBrick.getNumberOfBrick());
+		
+		baseList.add(this.topLHSBase);
+		baseList.add(this.topLHSBase);
+		baseList.add(this.bottomLHSBase);
+		baseList.add(this.bottomRHSBase);
+		
+		
+	    int temp = 0;
+	    Base tempName;
+	    
+	    for (int i = 0; i < 4; i++) {
+	        for (int j = 1; j < (4 - i); j++) {
+	            if (scoreList.get(j-1) > scoreList.get(j)) {
+	                temp = scoreList.get(j-1);
+	                scoreList.set(j-1, scoreList.get(j));
+	                scoreList.set(j, temp);
+	                
+	                tempName = baseList.get(j-1);
+	                baseList.set(j-1, baseList.get(j));
+	                baseList.set(j, tempName);             
+	            }
+	        }
+	    }
+	    
+	    baseList.get(0).setIsWinner(true);
+    	System.out.println("Winner: "+ baseList.get(0).getBaseName());
+
+	    
+	    if(scoreList.get(1) == scoreList.get(0)){
+	    	baseList.get(1).setIsWinner(true);
+	    	System.out.println("Winner: "+ baseList.get(1).getBaseName());
+	    }
+	    if(scoreList.get(2) == scoreList.get(0)){
+	    	baseList.get(2).setIsWinner(true);
+	    	System.out.println("Winner: "+ baseList.get(2).getBaseName());
+
+	    }
+	    if(scoreList.get(3) == scoreList.get(0)){
+	    	baseList.get(3).setIsWinner(true);
+	    	System.out.println("Winner: "+ baseList.get(3).getBaseName());
+
+	    }
+	    
 	}
 	
 	
-	public void startMasterTimer(){
-		
+	public void startMasterTimer(){	
 		//counting by one second, 120 times (2 mins)
 		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout ->{
 			if(!view.isPause()){
@@ -135,9 +221,7 @@ public class Game extends Application {
 		renderTimer.play();
 	}
 	
-
-	public void startGame1() {
-		
+	public void startGame1() {		
 		// Setup gameView
 		view.setupGameView(gameWindow);
 		// Invoking gameInit method
@@ -426,10 +510,10 @@ public class Game extends Application {
 	}
 
 	public void baseInit() {
-		topLHSBase = new Base("planet1_64.png", 0, 0, 64, 64);
-		topRHSBase = new Base("planet2_64.png", WINDOW_W - 64, 0, 64, 64);
-		bottomRHSBase = new Base("planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
-		bottomLHSBase = new Base("planet4_64.png", 0, WINDOW_H - 64, 64, 64);
+		topLHSBase = new Base("TopLHS","planet1_64.png", 0, 0, 64, 64);
+		topRHSBase = new Base("TopRHS","planet2_64.png", WINDOW_W - 64, 0, 64, 64);
+		bottomRHSBase = new Base("BottomRHS","planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
+		bottomLHSBase = new Base("BottomLHS","planet4_64.png", 0, WINDOW_H - 64, 64, 64);
 	}
 
 	public void bottomRHSBrickInit() {

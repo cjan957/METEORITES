@@ -16,13 +16,25 @@ public class Base extends ObjectInfo {
 
 	private boolean isDead; // true for dead, false for alive
 	private boolean isWinner; // true for winner, false for loser/ undetermined
+	private String baseName;
 	
-	public Base(String img,int xPos, int yPos, int width, int height){
+	
+	
+	public Base(String baseName, String img,int xPos, int yPos, int width, int height){
+		this.setBaseName(baseName);
 		this.setImage(img);
 		this.SetxPosition(xPos);
 		this.SetyPosition(yPos);
 		this.SetWidth(width);
 		this.SetHeight(height);
+	}
+	
+	public void setBaseName(String name){
+		this.baseName = name;
+	}
+	
+	public String getBaseName(){
+		return this.baseName;
 	}
 	
 
