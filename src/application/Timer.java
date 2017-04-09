@@ -8,7 +8,22 @@ import javafx.scene.text.FontWeight;
 public class Timer {
 	private int remainingSeconds;
 	private boolean countdownOver;
+	boolean showTimerOnScreen;
+	
+	public Timer(int initialTime, boolean visibility){
+		remainingSeconds = initialTime;
+		showTimerOnScreen = visibility;
+	}
 
+	
+	public void setVisibility(boolean value){
+		showTimerOnScreen = value;
+	}
+	
+	public boolean getVisibility(){
+		return showTimerOnScreen;
+	}
+	
 	public void setTime(int seconds){
 		remainingSeconds = seconds;
 	}
@@ -30,33 +45,20 @@ public class Timer {
 	}
 	
 	public void renderCountDownTimer(GraphicsContext gc){
-		if(remainingSeconds == 3){
-			gc.setFill(Color.YELLOW);
-			gc.setStroke(Color.BLUE);
-			gc.setLineWidth(2);
-			Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
-			gc.setFont(theFont);
-			gc.fillText("3", 1024/2, 768/2);
-			gc.strokeText("3", 1024/2, 768/2);
-		}
-		else if(remainingSeconds == 2){
-			gc.setFill(Color.YELLOW);
-			gc.setStroke(Color.BLUE);
-			gc.setLineWidth(2);
-			Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
-			gc.setFont(theFont);
-			gc.fillText("2", 1024/2, 768/2);
-			gc.strokeText("2", 1024/2, 768/2);
-		}
-		else if(remainingSeconds == 1){
-			gc.setFill(Color.YELLOW);
-			gc.setStroke(Color.BLUE);
-			gc.setLineWidth(2);
-			Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
-			gc.setFont(theFont);
-			gc.fillText("1", 1024/2, 768/2);
-			gc.strokeText("1", 1024/2, 768/2);
-		}
+		gc.setFill(Color.YELLOW);
+		gc.setStroke(Color.BLUE);
+		gc.setLineWidth(2);
+		Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
+		gc.setFont(theFont);
+		gc.fillText(Integer.toString(this.remainingSeconds), 1024/2, 768/2);
+		gc.strokeText(Integer.toString(this.remainingSeconds), 1024/2, 768/2);
+	}
+	
+	public void renderMasterTimer(GraphicsContext gc){
+		gc.setFill(Color.WHITE);
+		Font theFont = Font.font("Arial", FontWeight.BOLD, 32);
+		gc.setFont(theFont);
+		gc.fillText(Integer.toString(this.remainingSeconds), (gc.getCanvas().getWidth()/2)-20, 50);
 	}
 
 }

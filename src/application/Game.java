@@ -32,10 +32,11 @@ import java.io.File;
 public class Game extends Application {
 		
 	//QUICK DEBUGGING OPTIONS
-	private boolean inGameBallSpeedAdjust = false;
+	private boolean inGameBallSpeedAdjust = true;
 
 	// Instantiate game objects
-	private Timer timer;
+	private Timer timer3sec;
+	private Timer timer120sec;
 
 	private Ball ball;
 	private Bat bat;
@@ -102,8 +103,36 @@ public class Game extends Application {
 		gameStage.show();
 	}
 	
-	public void timeUp(){
-		timer.setTimeOut(true);	
+	public void startCountDowntimeUp(){
+		timer3sec.setTimeOut(true);
+		timer3sec.setVisibility(false);
+		timer120sec.setVisibility(true);
+	}
+	
+	public void checkActualTimeRemaining(){
+		if(timer120sec.getTime() == 0){
+			concludeTheGame();
+		}
+	}
+	
+	public void concludeTheGame(){
+		System.out.println("gameFinish");
+		view.forcePause();
+		
+	}
+	
+	
+	public void startMasterTimer(){
+		
+		//counting by one second, 120 times (2 mins)
+		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout ->{
+			if(!view.isPause()){
+				timer120sec.countDown();
+				checkActualTimeRemaining();
+			}
+		}));
+		renderTimer.setCycleCount(Timeline.INDEFINITE);
+		renderTimer.play();
 	}
 	
 
@@ -114,18 +143,22 @@ public class Game extends Application {
 		// Invoking gameInit method
 		gameInit();
 		
-		timer = new Timer();
-		timer.setTime(3);
+		timer3sec = new Timer(3, true);
+		timer120sec = new Timer(120, false);
 		
+		//Counting down from 3 to 0, decrement the timer for 1 sec every one second.
 		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout-> {
-			timer.countDown();
+			timer3sec.countDown();
 		}
 		));
-		renderKeyFrame.setCycleCount(3);
+		renderKeyFrame.setCycleCount(3); //repeat 1 sec for 3 times
 		renderKeyFrame.play();
 		
-	
-		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> timeUp()));
+		//Call timeUp method, after 3 seconds time is up
+		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> { 
+			startCountDowntimeUp();
+			startMasterTimer();
+		}));
 		countDown.play();
 		
 
@@ -137,26 +170,29 @@ public class Game extends Application {
 		// Setup so that the game Refresh/Repeat every 0.016 second (equals to
 		// approximately 60fps)
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event -> {
-			
-					
+							
 			// Obtain user key pressed from the view class
 			input = view.accessUserInput();
 
 			//Game proceeds if not paused
-			if (!view.isPause() && timer.isTimeOut()){
+			if (!view.isPause() && timer3sec.isTimeOut()){
 				countDown.stop();
 				tick();		
-			}
-			
+			}	
 			
 			// Render each object on canvas using GraphicContext (gc) set up
 			// from the View class. Clear canvas with transparent color after
 			// each frame
-			view.canvasGC().clearRect(0, 0, 1024, 768);
+			view.canvasGC().clearRect(0, 0, 1024, 768);		
+			
 			
 			//Check if the 3-2-1 countdown has finished, if yes then don't bother trying to render the text
-			if(!timer.isTimeOut()){ 
-				timer.renderCountDownTimer(view.canvasGC());
+			if(timer3sec.getVisibility()){ 
+				timer3sec.renderCountDownTimer(view.canvasGC());
+			}
+			
+			if(timer120sec.getVisibility()){
+				timer120sec.renderMasterTimer(view.canvasGC());
 			}
 			
 			if(!topLHSBase.isDead()){
@@ -266,6 +302,10 @@ public class Game extends Application {
 				ball.setYVelocity((float) (ball.getYVelocity() * 1.1));
 			}
 		}
+		
+		if(input.contains("PAGE_DOWN")){
+			this.setTimeRemainingToFive();
+		}
 	}
 
 	public void paddleCollisionCheck() {
@@ -316,8 +356,7 @@ public class Game extends Application {
 			}
 		}
 	}
-	
-	
+		
 	public void wallCollisionCheck() {
 
 		Iterator<Brick> topLHSbrickList = topLHSBrick.accessBrickArray().iterator();
@@ -387,7 +426,6 @@ public class Game extends Application {
 	}
 
 	public void baseInit() {
-		// Base (Img link, xPos, yPos, width, height)
 		topLHSBase = new Base("planet1_64.png", 0, 0, 64, 64);
 		topRHSBase = new Base("planet2_64.png", WINDOW_W - 64, 0, 64, 64);
 		bottomRHSBase = new Base("planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
@@ -498,12 +536,11 @@ public class Game extends Application {
 	}
 
 	public boolean isFinished() {
-		// Not yet implemented
 		return false;
 	}
 
-	public void setTimeRemaining(int seconds) {
-		// Not yet implemented
+	public void setTimeRemainingToFive() {
+		timer120sec.setTime(5);
 	}
 	
 	private void playPaddleDeflectSound(){

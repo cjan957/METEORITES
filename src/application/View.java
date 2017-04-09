@@ -97,6 +97,8 @@ public class View {
 				}
 			}
 			
+
+			
 			//Exit game if ESC is pressed 
 			//TODO: supposed to return to main menu instead of exit program
 			if(code == "ESCAPE"){
@@ -129,6 +131,10 @@ public class View {
 
 	public boolean isPause(){
 		return this.isPaused;
+	}
+	
+	public void forcePause(){
+		isPaused = true;
 	}
 	
 	
