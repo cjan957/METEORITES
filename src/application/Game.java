@@ -25,6 +25,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javafx.scene.media.MediaPlayer; 
+import javafx.scene.media.Media;
+import java.io.File;
+
 public class Game extends Application {
 		
 	//QUICK DEBUGGING OPTIONS
@@ -50,7 +54,7 @@ public class Game extends Application {
 	private Deflect deflect;
 	private View view;
 	private Scene mainMenuScene;
-	private Stage gameWindow;
+	private Stage gameWindow;	
 
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -265,30 +269,38 @@ public class Game extends Application {
 	}
 
 	public void paddleCollisionCheck() {
+		
 		if(!topLHSBase.isDead()){
 			if(ball.objectsIntersectBallAndPaddle(bat)){
 				ball.setXVelocity(-ball.getXVelocity());
+				playPaddleDeflectSound();
 			}
 		}
 		if(!bottomLHSBase.isDead()){
 			if(ball.objectsIntersectBallAndPaddle(bat2)){
 				ball.setXVelocity(-ball.getXVelocity());
+				playPaddleDeflectSound();
 			}
 		}
 	}
 
 	public void baseCollisionCheck() {
+		
 		if (ball.objectsIntersectBallAndBase(topLHSBase)) {
 			topLHSBase.setIsDead(true);
+			playBaseHitSound();
 			System.out.println("Blue");
 		} else if (ball.objectsIntersectBallAndBase(topRHSBase)) {
 			topRHSBase.setIsDead(true);
+			playBaseHitSound();
 			System.out.println("Green ");
 		} else if (ball.objectsIntersectBallAndBase(bottomRHSBase)) {
 			bottomRHSBase.setIsDead(true);
+			playBaseHitSound();
 			System.out.println("Red");
 		} else if (ball.objectsIntersectBallAndBase(bottomLHSBase)) {
 			bottomLHSBase.setIsDead(true);
+			playBaseHitSound();
 			System.out.println("Yellow");
 		}
 	}
@@ -306,6 +318,7 @@ public class Game extends Application {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				topRHSBrickList.remove();
 				topRHSBrick.removeBrick();
+				playWallHitSound();
 				System.out.println("1 Brick destroyed, " + topRHSBrick.getNumberOfBrick() + " left: (TopRHS)");
 			}
 		}
@@ -315,6 +328,7 @@ public class Game extends Application {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				topLHSbrickList.remove();
 				topLHSBrick.removeBrick();
+				playWallHitSound();
 				System.out.println("1 Brick destroyed, " + topLHSBrick.getNumberOfBrick() + " left: (TopLHS)");
 
 			}
@@ -325,6 +339,7 @@ public class Game extends Application {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				bottomLHSbrickList.remove();
 				bottomLHSBrick.removeBrick();
+				playWallHitSound();
 				System.out.println("1 Brick destroyed, " + bottomLHSBrick.getNumberOfBrick() + " left: (BottomLHS)");
 
 			}
@@ -335,6 +350,7 @@ public class Game extends Application {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				bottomRHSBrickList.remove();
 				bottomRHSBrick.removeBrick();
+				playWallHitSound();
 				System.out.println("1 Brick destroyed, " + bottomRHSBrick.getNumberOfBrick() + " left: (BottomRHS)");
 
 			}
@@ -476,4 +492,28 @@ public class Game extends Application {
 	public void setTimeRemaining(int seconds) {
 		// Not yet implemented
 	}
+	
+	private void playPaddleDeflectSound(){
+		String paddleDeflectSound = "Sounds/paddleDeflect.wav";	//Locations of sounds
+		Media sound = new Media(new File(paddleDeflectSound).toURI().toString());
+		MediaPlayer deflectSound = new MediaPlayer(sound);
+		deflectSound.play();
+	}
+	
+	private void playWallHitSound(){
+		String wallHitSound = "Sounds/wallHit.wav";
+		Media sound = new Media(new File(wallHitSound).toURI().toString());
+		MediaPlayer hitSound = new MediaPlayer(sound);
+		hitSound.play();
+		
+	}
+	
+	private void playBaseHitSound(){
+		String baseHitSound = "Sounds/baseHit.wav";
+		Media sound = new Media(new File(baseHitSound).toURI().toString());
+		MediaPlayer baseHit = new MediaPlayer(sound);
+		baseHit.play();
+	}
+	
+	
 }
