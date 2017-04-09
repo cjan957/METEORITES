@@ -26,6 +26,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Game extends Application {
+	
+	
+	private Timer timer;
+	
 
 	// Instantiate game objects
 	private Ball ball;
@@ -92,12 +96,32 @@ public class Game extends Application {
 		// Show the stage on the screen
 		gameStage.show();
 	}
+	
+	public void timeUp(){
+		timer.setTimeOut(true);	
+	}
 
 	public void startGame1() {
+		
 		// Setup gameView
 		view.setupGameView(gameWindow);
 		// Invoking gameInit method
 		gameInit();
+		
+		timer = new Timer();
+		timer.setTime(3);
+	
+		Timeline renderCountdown = new Timeline(new KeyFrame(Duration.seconds(0.016), event ->{
+			view.renderCountDownTimer();
+		}));
+		renderCountdown.setCycleCount(5000);
+		renderCountdown.play();
+		
+		
+		
+		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> timeUp()));
+		countDown.play();
+		
 
 		// Create timeline object called 'gameLoop' that will repeat
 		// indefinitely
@@ -107,11 +131,13 @@ public class Game extends Application {
 		// Setup so that the game Refresh/Repeat every 0.016 second (equals to
 		// approximately 60fps)
 		KeyFrame gameFrame = new KeyFrame(Duration.seconds(0.016), event -> {
+			
+					
 			// Obtain user key pressed from the view class
 			input = view.accessUserInput();
 
 			//Game proceeds if not paused
-			if (!view.isPause()){
+			if (!view.isPause() && timer.isTimeOut()){
 				tick();		
 			}
 			

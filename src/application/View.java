@@ -7,6 +7,7 @@ package application;
 
 import java.util.ArrayList;
 
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class View {
@@ -25,6 +27,9 @@ public class View {
 	private Group root;
 	
 	private int gameMode = 0;
+	
+	private int gameCountdownToStart = 3;
+	private int gameCountdownToEnd = 120;
 	
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
@@ -106,6 +111,13 @@ public class View {
 		
 		window.setScene(gamePlayScene);
 	}
+	
+	
+	public void renderCountDownTimer(){
+		Image image = new Image("planet1_64.png");
+		gc.drawImage(image, 50, 50);	
+		gc.clearRect(0, 0, 1024, 768);
+	}
 		
 	public int getGameMode(){
 		return gameMode;
@@ -114,6 +126,7 @@ public class View {
 	public boolean isPause(){
 		return this.isPaused;
 	}
+	
 	
 	//Make GraphicsContext on the canvas created in this View class available
 	//to Controller (Game) Class.
