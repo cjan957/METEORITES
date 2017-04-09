@@ -632,7 +632,7 @@ public class Game extends Application {
 	}
 
 	private void playBaseHitSound() {
-		new Sound("Sounds/baseHit.wav");
+		new Sound("Sounds/wallHit.wav");
 	}
 
 }
