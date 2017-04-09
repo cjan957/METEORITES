@@ -148,11 +148,6 @@ public class Game extends Application {
 		}
 	}
 	
-//	public void concludeTheGame(){
-//		System.out.println("gameFinish");
-//		view.forcePause();
-//		timeOutFindWinner();
-//	}
 	
 	public void timeOutFindWinner(){
 		
@@ -165,7 +160,7 @@ public class Game extends Application {
 		scoreList.add(this.bottomRHSBrick.getNumberOfBrick());
 		
 		baseList.add(this.topLHSBase);
-		baseList.add(this.topLHSBase);
+		baseList.add(this.topRHSBase);
 		baseList.add(this.bottomLHSBase);
 		baseList.add(this.bottomRHSBase);
 		
@@ -175,7 +170,7 @@ public class Game extends Application {
 	    
 	    for (int i = 0; i < 4; i++) {
 	        for (int j = 1; j < (4 - i); j++) {
-	            if (scoreList.get(j-1) > scoreList.get(j)) {
+	            if (scoreList.get(j-1) < scoreList.get(j)) {
 	                temp = scoreList.get(j-1);
 	                scoreList.set(j-1, scoreList.get(j));
 	                scoreList.set(j, temp);
@@ -186,6 +181,9 @@ public class Game extends Application {
 	            }
 	        }
 	    }
+	    
+	    System.out.println(scoreList);
+	    System.out.println(baseList);
 	    
 	    baseList.get(0).setIsWinner(true);
     	System.out.println("Winner: "+ baseList.get(0).getBaseName());
@@ -205,6 +203,8 @@ public class Game extends Application {
 	    	System.out.println("Winner: "+ baseList.get(3).getBaseName());
 
 	    }
+	    
+	    view.forcePause();
 	    
 	}
 	
