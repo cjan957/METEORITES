@@ -342,35 +342,35 @@ public class Game extends Application {
 		if (!topLHSBase.isDead()) {
 			int increment = 7;
 			if (input.contains("LEFT")) {
-				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical left
+				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical down
 					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));
 //					System.out.println("x position: " + topLHSbat.GetxPosition());
 //					System.out.println("y position: " + topLHSbat.GetyPosition());					
 				}
-				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical movement going left
+				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical down
 					topLHSbat.SetxPosition((int) (WINDOW_H/3));
 					topLHSbat.SetyPosition((int) (WINDOW_H/3));		
 				}
 				if ( (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) && (topLHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
 					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() - increment));
 				}
-				if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal
+				if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal left
 					topLHSbat.SetxPosition((int) (0));
 					topLHSbat.SetyPosition((int) (WINDOW_H/3));
 				} 
 			}
 			if (input.contains("RIGHT")) {
-				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal move
+				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal right
 					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() + increment));			
 				}
 				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//if it overshoots max point on horizontal movement going right
 					topLHSbat.SetxPosition((int) (WINDOW_H/3));
 					topLHSbat.SetyPosition((int) (WINDOW_H/3));				
 				}
-				if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical move
+				if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical up
 					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() - increment));
 				}
-				if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical going right
+				if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical up
 					topLHSbat.SetxPosition((int) (WINDOW_H/3));
 					topLHSbat.SetyPosition((int) (0));
 				} 
@@ -417,6 +417,78 @@ public class Game extends Application {
 				if ( (bottomLHSbat.GetyPosition() > 768) && (bottomLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical going down
 					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
 					bottomLHSbat.SetyPosition((int) (768 - 32));
+				} 
+			}
+		}
+		
+		if (!topRHSBase.isDead()) {
+			int increment = 7;
+			if (input.contains("NUMPAD7")) {
+				if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical up
+					topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() - increment));		
+				}
+				if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() < 0) ) {	//if it overshoots max point on vertical up
+					topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+					topRHSbat.SetyPosition((int) (0));		
+				}
+				if ( (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
+					topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() - increment));
+				}
+				if ( (topRHSbat.GetxPosition() < 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal left 
+					topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+					topRHSbat.SetyPosition((int) (WINDOW_H/3));
+				} 
+			}
+			if (input.contains("NUMPAD9")) {
+				if ( (topRHSbat.GetyPosition() == (WINDOW_H/3)) && (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) ) {	//horizontal right
+					topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() + increment));			
+				}
+				if ( (topRHSbat.GetyPosition() == (WINDOW_H/3 )) && (topRHSbat.GetxPosition() > 1024 - 32) ) {	//if it overshoots max point on horizontal right
+					topRHSbat.SetxPosition((int) (1024 - 32));
+					topRHSbat.SetyPosition((int) (WINDOW_H/3));				
+				}
+				if ( (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ) {	//vertical down
+					topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() + increment));
+				}
+				if ( (topRHSbat.GetyPosition() > WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ){ //overshoot max pt on vertical down
+					topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+					topRHSbat.SetyPosition((int) (WINDOW_H/3));
+				} 
+			}
+		}
+		
+		if (!bottomRHSBase.isDead()) {
+			int increment = 7;
+			if (input.contains("NUMPAD1")) {
+				if ( (bottomRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (bottomRHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32 ) && (bottomRHSbat.GetyPosition() <= 768 - 32) ) {		//vertical down
+					bottomRHSbat.SetyPosition((int) (bottomRHSbat.GetyPosition() + increment));		
+				}
+				if ( (bottomRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (bottomRHSbat.GetyPosition() > 768 - 32) ) {	//if it overshoots max point on vertical down
+					bottomRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+					bottomRHSbat.SetyPosition((int) (768 - 32));		
+				}
+				if ( (bottomRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (bottomRHSbat.GetxPosition() <= 1024 - 32) && (bottomRHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ) {	//horizontal left
+					bottomRHSbat.SetxPosition((int) (bottomRHSbat.GetxPosition() - increment));
+				}
+				if ( (bottomRHSbat.GetxPosition() < 1024 - WINDOW_H/3 - 32) && (bottomRHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ){ //overshoot max pt on horizontal left 
+					bottomRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+					bottomRHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));
+				} 
+			}
+			if (input.contains("NUMPAD3")) {
+				if ( (bottomRHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32)) && (bottomRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (bottomRHSbat.GetxPosition() <= 1024 - 32) ) {	//horizontal right
+					bottomRHSbat.SetxPosition((int) (bottomRHSbat.GetxPosition() + increment));			
+				}
+				if ( (bottomRHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32 )) && (bottomRHSbat.GetxPosition() > 1024 - 32) ) {	//if it overshoots max point on horizontal right
+					bottomRHSbat.SetxPosition((int) (1024 - 32));
+					bottomRHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));				
+				}
+				if ( (bottomRHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32) && (bottomRHSbat.GetyPosition() <= 768 - 32) && (bottomRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ) {	//vertical up
+					bottomRHSbat.SetyPosition((int) (bottomRHSbat.GetyPosition() - increment));
+				}
+				if ( (bottomRHSbat.GetyPosition() < 768 - WINDOW_H/3 - 32) && (bottomRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ){ //overshoot max pt on vertical up
+					bottomRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+					bottomRHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));
 				} 
 			}
 		}
@@ -558,8 +630,8 @@ public class Game extends Application {
 		// with necessary properties.
 		topLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, WINDOW_H / 3);
 		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32);
-		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3, WINDOW_H / 3);
-		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3, 768 - WINDOW_H / 3);
+		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3);
+		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32);
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
 
 		baseInit();
