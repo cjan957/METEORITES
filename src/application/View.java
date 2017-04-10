@@ -97,6 +97,11 @@ public class View {
 				}
 			}
 			
+		//	if(code == "ESCAPE"){
+		//		if()
+		//			return
+		//	}
+			
 
 			
 			//Exit game if ESC is pressed 

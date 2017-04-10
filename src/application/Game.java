@@ -30,6 +30,7 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,8 +46,10 @@ public class Game extends Application {
 	private Timer timer120sec;
 
 	private Ball ball;
-	private Bat bat;
-	private Bat bat2;
+	private Bat topLHSbat;
+	private Bat bottomLHSbat;
+	private Bat topRHSbat;
+	private Bat bottomRHSbat;
 
 	private Base topLHSBase;
 	private Base bottomLHSBase;
@@ -70,8 +73,8 @@ public class Game extends Application {
 	private static final String GAMENAME = "Meteorites";
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
-	private static double angle1 = 0.0;
-	private static double angle2 = 0.0;
+//	private static double angle1 = 0.0;
+//	private static double angle2 = 0.0;
 
 	public static void main(String[] args) {
 		// Launch javafx application / run start method
@@ -273,12 +276,20 @@ public class Game extends Application {
 			if (timer120sec.getVisibility()) {
 				timer120sec.renderMasterTimer(view.canvasGC());
 			}
-
+			
+			
+			//
 			if (!topLHSBase.isDead()) {
-				bat.render(view.canvasGC());
+				topLHSbat.render(view.canvasGC());
 			}
 			if (!bottomLHSBase.isDead()) {
-				bat2.render(view.canvasGC());
+				bottomLHSbat.render(view.canvasGC());
+			}
+			if (!topRHSBase.isDead()) {
+				topRHSbat.render(view.canvasGC());
+			}
+			if (!bottomRHSBase.isDead()) {
+				bottomRHSbat.render(view.canvasGC());
 			}
 
 			ball.render(view.canvasGC());
@@ -329,47 +340,88 @@ public class Game extends Application {
 
 		// Check user input and move the paddle accordingly
 		if (!topLHSBase.isDead()) {
+			int increment = 7;
 			if (input.contains("LEFT")) {
-				// check LHS boundary condition so that the paddle won't be able
-				// to
-				// go beyond the limit
-				if (bat.GetxPosition() >= 6) {
-					// Increase angle so the paddle/bat can move in circular
-					// path as
-					// defined by the maths function
-					angle1 += 0.05;
-					bat.SetxPosition((int) (Math.cos(angle1) * (WINDOW_H / 3)));
-					bat.SetyPosition((int) (Math.sin(angle1) * (WINDOW_H / 3)));
+				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical left
+					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));
+//					System.out.println("x position: " + topLHSbat.GetxPosition());
+//					System.out.println("y position: " + topLHSbat.GetyPosition());					
 				}
-			} else if (input.contains("RIGHT")) {
-				// check RHS boundary condition
-				if (bat.GetyPosition() > 0) {
-					angle1 -= 0.05;
-					bat.SetxPosition((int) (Math.cos(angle1) * (WINDOW_H / 3)));
-					bat.SetyPosition((int) (Math.sin(angle1) * (WINDOW_H / 3)));
+				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical movement going left
+					topLHSbat.SetxPosition((int) (WINDOW_H/3));
+					topLHSbat.SetyPosition((int) (WINDOW_H/3));		
 				}
+				if ( (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) && (topLHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
+					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() - increment));
+				}
+				if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal
+					topLHSbat.SetxPosition((int) (0));
+					topLHSbat.SetyPosition((int) (WINDOW_H/3));
+				} 
+			}
+			if (input.contains("RIGHT")) {
+				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal move
+					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() + increment));			
+				}
+				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//if it overshoots max point on horizontal movement going right
+					topLHSbat.SetxPosition((int) (WINDOW_H/3));
+					topLHSbat.SetyPosition((int) (WINDOW_H/3));				
+				}
+				if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical move
+					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() - increment));
+				}
+				if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical going right
+					topLHSbat.SetxPosition((int) (WINDOW_H/3));
+					topLHSbat.SetyPosition((int) (0));
+				} 
 			}
 		}
-
+		
 		if (!bottomLHSBase.isDead()) {
+			int increment = 7;
 			if (input.contains("A")) {
-				// check LHS boundary condition so that the paddle won't be able
-				// to
-				// go beyond the limit
-				if (bat2.GetxPosition() >= 6) {
-					angle2 += 0.05;
-					bat2.SetxPosition((int) (Math.cos(angle2) * (WINDOW_H / 3)));
-					bat2.SetyPosition((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
+				if ( (bottomLHSbat.GetxPosition() == (WINDOW_H/3)) && (bottomLHSbat.GetyPosition() <= 768) && (bottomLHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32) ) {	//vertical movement up
+					bottomLHSbat.SetyPosition((int) (bottomLHSbat.GetyPosition() - increment));	
+					System.out.println("x position: " + bottomLHSbat.GetxPosition());
+					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
 				}
-			} else if (input.contains("D")) {
-				// check bottom boundary condition
-				if (bat2.GetyPosition() < WINDOW_H - 39) {
-					angle2 -= 0.05;
-					bat2.SetxPosition((int) (Math.cos(angle2) * (WINDOW_H / 3)));
-					bat2.SetyPosition((int) (704 - Math.sin(angle2) * (WINDOW_H / 3)));
+				if ( (bottomLHSbat.GetxPosition() == (WINDOW_H/3 )) && (bottomLHSbat.GetyPosition() < (768 - WINDOW_H/3 - 32)) ) {	//if it overshoots max point on vertical movement going up
+					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
+					bottomLHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));	
+					System.out.println("x position: " + bottomLHSbat.GetxPosition());
+					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
 				}
+				if ( (bottomLHSbat.GetxPosition() >= 0) && (bottomLHSbat.GetxPosition() <= WINDOW_H/3) && (bottomLHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ) {//horizontal movement left
+					bottomLHSbat.SetxPosition((int) (bottomLHSbat.GetxPosition() - increment));
+					System.out.println("x position: " + bottomLHSbat.GetxPosition());
+					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
+				}
+				if ( (bottomLHSbat.GetxPosition() < 0) && (bottomLHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ){ //overshoot max pt on horizontal going left
+					bottomLHSbat.SetxPosition((int) (0));
+					bottomLHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));
+					System.out.println("x position: " + bottomLHSbat.GetxPosition());
+					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
+				} 
+			}
+			if (input.contains("D")) {
+				if ( (bottomLHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32 )) && (bottomLHSbat.GetxPosition() >= 0) && (bottomLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal move right
+					bottomLHSbat.SetxPosition((int) (bottomLHSbat.GetxPosition() + increment));			
+				}
+				if ( (bottomLHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32)) && (bottomLHSbat.GetxPosition() > WINDOW_H/3) ) {	//if it overshoots max point on horizontal movement going right
+					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
+					bottomLHSbat.SetyPosition((int) (768-WINDOW_H/3 - 32));				
+				}
+				if ( (bottomLHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32) && (bottomLHSbat.GetyPosition() <= 768 - 32) && (bottomLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical move down
+					bottomLHSbat.SetyPosition((int) (bottomLHSbat.GetyPosition() + increment));
+				}
+				if ( (bottomLHSbat.GetyPosition() > 768) && (bottomLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical going down
+					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
+					bottomLHSbat.SetyPosition((int) (768 - 32));
+				} 
 			}
 		}
+		
+
 
 		// TODO: DEBUG ONLY, remove when deliver
 		if (inGameBallSpeedAdjust) {
@@ -390,16 +442,28 @@ public class Game extends Application {
 	public void paddleCollisionCheck() {
 
 		if (!topLHSBase.isDead()) {
-			if (ball.objectsIntersectBallAndPaddle(bat)) {
+			if (ball.objectsIntersectBallAndPaddle(topLHSbat)) {
 				ball.setXVelocity(-ball.getXVelocity());
 				playPaddleDeflectSound();
 			}
 		}
 		if (!bottomLHSBase.isDead()) {
-			if (ball.objectsIntersectBallAndPaddle(bat2)) {
+			if (ball.objectsIntersectBallAndPaddle(bottomLHSbat)) {
+				ball.setXVelocity(-ball.getXVelocity());
+				playPaddleDeflectSound();
+			}	
+		}
+		if (!topRHSBase.isDead()) {
+			if (ball.objectsIntersectBallAndPaddle(topRHSbat)) {
 				ball.setXVelocity(-ball.getXVelocity());
 				playPaddleDeflectSound();
 			}
+		}
+		if (!bottomRHSBase.isDead()) {
+			if (ball.objectsIntersectBallAndPaddle(bottomRHSbat)) {
+				ball.setXVelocity(-ball.getXVelocity());
+				playPaddleDeflectSound();
+			}	
 		}
 	}
 
@@ -492,8 +556,10 @@ public class Game extends Application {
 	public void gameInit() {
 		// Create objects needed for the game play
 		// with necessary properties.
-		bat = new Bat("paddle_32.png", WINDOW_H / 3, 0);
-		bat2 = new Bat("paddle_32.png", WINDOW_H / 3, WINDOW_H - 32);
+		topLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, WINDOW_H / 3);
+		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32);
+		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3, WINDOW_H / 3);
+		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3, 768 - WINDOW_H / 3);
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
 
 		baseInit();
