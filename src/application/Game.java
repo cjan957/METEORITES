@@ -56,10 +56,7 @@ public class Game extends Application {
 	private Base topRHSBase;
 	private Base bottomRHSBase;
 
-	private BrickManager topLHSBrick;
-	private BrickManager bottomLHSBrick;
-	private BrickManager topRHSBrick;
-	private BrickManager bottomRHSBrick;
+	private BrickBuilder gameBrick;
 
 	private Deflect deflect;
 	private View view;
@@ -156,10 +153,10 @@ public class Game extends Application {
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		ArrayList<Base> baseList = new ArrayList<Base>();
 
-		scoreList.add(this.topLHSBrick.getNumberOfBrick());
-		scoreList.add(this.topRHSBrick.getNumberOfBrick());
-		scoreList.add(this.bottomLHSBrick.getNumberOfBrick());
-		scoreList.add(this.bottomRHSBrick.getNumberOfBrick());
+		scoreList.add(this.gameBrick.getTopLHSBrick().getNumberOfBrick());
+		scoreList.add(this.gameBrick.getTopRHSBrick().getNumberOfBrick());
+		scoreList.add(this.gameBrick.getBottomLHSBrick().getNumberOfBrick());
+		scoreList.add(this.gameBrick.getBottomRHSBrick().getNumberOfBrick());
 
 		baseList.add(this.topLHSBase);
 		baseList.add(this.topRHSBase);
@@ -265,67 +262,72 @@ public class Game extends Application {
 			// Render each object on canvas using GraphicContext (gc) set up
 			// from the View class. Clear canvas with transparent color after
 			// each frame
-			view.canvasGC().clearRect(0, 0, 1024, 768);
-
-			// Check if the 3-2-1 countdown has finished, if yes then don't
-			// bother trying to render the text
-			if (timer3sec.getVisibility()) {
-				timer3sec.renderCountDownTimer(view.canvasGC());
-			}
-
-			if (timer120sec.getVisibility()) {
-				timer120sec.renderMasterTimer(view.canvasGC());
-			}
+			render();
 			
-			
-			// If the player is still alive, render the base and bat, otherwise do not render.
-			if (!topLHSBase.isDead()) {
-				topLHSbat.render(view.canvasGC());
-			}
-			if (!bottomLHSBase.isDead()) {
-				bottomLHSbat.render(view.canvasGC());
-			}
-			if (!topRHSBase.isDead()) {
-				topRHSbat.render(view.canvasGC());
-			}
-			if (!bottomRHSBase.isDead()) {
-				bottomRHSbat.render(view.canvasGC());
-			}
-			if (!topLHSBase.isDead()) {
-				topLHSBase.render(view.canvasGC());
-			}
-			if (!topRHSBase.isDead()) {
-				topRHSBase.render(view.canvasGC());
-			}
-			if (!bottomRHSBase.isDead()) {
-				bottomRHSBase.render(view.canvasGC());
-			}
-			if (!bottomLHSBase.isDead()) {
-				bottomLHSBase.render(view.canvasGC());
-			}
-
-			ball.render(view.canvasGC());
-
-			for (Brick brick : topLHSBrick.accessBrickArray()) {
-				// view.canvasGC().fillRect(brick.GetxPosition(),
-				// brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
-				brick.render(view.canvasGC());
-			}
-			for (Brick brick : bottomLHSBrick.accessBrickArray()) {
-				brick.render(view.canvasGC());
-			}
-			for (Brick brick : topRHSBrick.accessBrickArray()) {
-				brick.render(view.canvasGC());
-			}
-
-			for (Brick brick : bottomRHSBrick.accessBrickArray()) {
-				brick.render(view.canvasGC());
-			}
 		});
 
 		// Play and Repeat the graphic rendering
 		gameLoop.getKeyFrames().add(gameFrame);
 		gameLoop.play();
+	}
+	
+	
+	public void render(){
+		view.canvasGC().clearRect(0, 0, 1024, 768);
+
+		// Check if the 3-2-1 countdown has finished, if yes then don't
+		// bother trying to render the text
+		if (timer3sec.getVisibility()) {
+			timer3sec.renderCountDownTimer(view.canvasGC());
+		}
+
+		if (timer120sec.getVisibility()) {
+			timer120sec.renderMasterTimer(view.canvasGC());
+		}
+		
+		
+		// If the player is still alive, render the base and bat, otherwise do not render.
+		if (!topLHSBase.isDead()) {
+			topLHSbat.render(view.canvasGC());
+		}
+		if (!bottomLHSBase.isDead()) {
+			bottomLHSbat.render(view.canvasGC());
+		}
+		if (!topRHSBase.isDead()) {
+			topRHSbat.render(view.canvasGC());
+		}
+		if (!bottomRHSBase.isDead()) {
+			bottomRHSbat.render(view.canvasGC());
+		}
+		if (!topLHSBase.isDead()) {
+			topLHSBase.render(view.canvasGC());
+		}
+		if (!topRHSBase.isDead()) {
+			topRHSBase.render(view.canvasGC());
+		}
+		if (!bottomRHSBase.isDead()) {
+			bottomRHSBase.render(view.canvasGC());
+		}
+		if (!bottomLHSBase.isDead()) {
+			bottomLHSBase.render(view.canvasGC());
+		}
+
+		ball.render(view.canvasGC());
+
+		for (Brick brick : this.gameBrick.getTopLHSBrick().accessBrickArray()) {
+			// view.canvasGC().fillRect(brick.GetxPosition(),
+			// brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
+			brick.render(view.canvasGC());
+		}
+		for (Brick brick : this.gameBrick.getBottomLHSBrick().accessBrickArray()) {
+			brick.render(view.canvasGC());
+		}
+		for (Brick brick : this.gameBrick.getTopRHSBrick().accessBrickArray()) {
+			brick.render(view.canvasGC());
+		}
+		for (Brick brick : this.gameBrick.getBottomRHSBrick().accessBrickArray()) {
+			brick.render(view.canvasGC());
+		}
 	}
 
 	// Tick, run the game by 1 frame
@@ -564,29 +566,29 @@ public class Game extends Application {
 
 	public void wallCollisionCheck() {
 
-		Iterator<Brick> topLHSbrickList = topLHSBrick.accessBrickArray().iterator();
-		Iterator<Brick> bottomLHSbrickList = bottomLHSBrick.accessBrickArray().iterator();
-		Iterator<Brick> topRHSBrickList = topRHSBrick.accessBrickArray().iterator();
-		Iterator<Brick> bottomRHSBrickList = bottomRHSBrick.accessBrickArray().iterator();
+		Iterator<Brick> topLHSBrickList = this.gameBrick.getTopLHSBrick().accessBrickArray().iterator();
+		Iterator<Brick> bottomLHSbrickList = this.gameBrick.getBottomLHSBrick().accessBrickArray().iterator();
+		Iterator<Brick> topRHSBrickList = this.gameBrick.getTopRHSBrick().accessBrickArray().iterator();
+		Iterator<Brick> bottomRHSBrickList = this.gameBrick.getBottomRHSBrick().accessBrickArray().iterator();
 
 		while (topRHSBrickList.hasNext()) {
 			Brick brick = topRHSBrickList.next();
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				topRHSBrickList.remove();
-				topRHSBrick.removeBrick();
+				this.gameBrick.getTopRHSBrick().removeBrick();
 				playWallHitSound();
-				System.out.println("1 Brick destroyed, " + topRHSBrick.getNumberOfBrick() + " left: (TopRHS)");
+				System.out.println("1 Brick destroyed, " + this.gameBrick.getTopRHSBrick().getNumberOfBrick() + " left: (TopRHS)");
 			}
 		}
-		while (topLHSbrickList.hasNext()) {
-			Brick brick = topLHSbrickList.next();
+		while (topLHSBrickList.hasNext()) {
+			Brick brick = topLHSBrickList.next();
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
-				topLHSbrickList.remove();
-				topLHSBrick.removeBrick();
+				topLHSBrickList.remove();
+				this.gameBrick.getTopLHSBrick().removeBrick();
 				playWallHitSound();
-				System.out.println("1 Brick destroyed, " + topLHSBrick.getNumberOfBrick() + " left: (TopLHS)");
+				System.out.println("1 Brick destroyed, " + this.gameBrick.getTopLHSBrick().getNumberOfBrick() + " left: (TopLHS)");
 
 			}
 		}
@@ -595,9 +597,9 @@ public class Game extends Application {
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				bottomLHSbrickList.remove();
-				bottomLHSBrick.removeBrick();
+				this.gameBrick.getBottomLHSBrick().removeBrick();
 				playWallHitSound();
-				System.out.println("1 Brick destroyed, " + bottomLHSBrick.getNumberOfBrick() + " left: (BottomLHS)");
+				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomLHSBrick().getNumberOfBrick() + " left: (BottomLHS)");
 
 			}
 		}
@@ -606,9 +608,9 @@ public class Game extends Application {
 			if (ball.objectsIntersect(brick)) {
 				deflect.deflectTheBall(ball, brick.getArrangement());
 				bottomRHSBrickList.remove();
-				bottomRHSBrick.removeBrick();
+				this.gameBrick.getBottomRHSBrick().removeBrick();
 				playWallHitSound();
-				System.out.println("1 Brick destroyed, " + bottomRHSBrick.getNumberOfBrick() + " left: (BottomRHS)");
+				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomRHSBrick().getNumberOfBrick() + " left: (BottomRHS)");
 
 			}
 		}
@@ -625,10 +627,9 @@ public class Game extends Application {
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
 
 		baseInit();
-		topLHSBrickInit();
-		bottomLHSBrickInit();
-		topRHSBrickInit();
-		bottomRHSBrickInit();
+		
+		gameBrick = new BrickBuilder();
+
 		deflect = new Deflect();
 	}
 
@@ -637,110 +638,6 @@ public class Game extends Application {
 		topRHSBase = new Base("TopRHS", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
 		bottomRHSBase = new Base("BottomRHS", "planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
 		bottomLHSBase = new Base("BottomLHS", "planet4_64.png", 0, WINDOW_H - 64, 64, 64);
-	}
-
-	public void bottomRHSBrickInit() {
-		bottomRHSBrick = new BrickManager();
-
-		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks Inner
-			Brick brick = new Brick(i, WINDOW_H - 140 - 32, 32, 32, 0);
-			bottomRHSBrick.addBrick(brick);
-		}
-
-		for (int j = 728; j > 568; j -= (33)) { // Vertical Bricks Inner
-			Brick brick = new Brick(WINDOW_W - 180, j, 32, 32, 1);
-			bottomRHSBrick.addBrick(brick);
-		}
-
-		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks Outer
-			Brick brick = new Brick(i, WINDOW_H - 140 - 64, 32, 32, 0);
-			bottomRHSBrick.addBrick(brick);
-		}
-
-		for (int j = 728; j > 568; j -= 33) { // Vertical Bricks
-			Brick brick = new Brick(WINDOW_W - 180 - 32, j, 32, 32, 1);
-			bottomRHSBrick.addBrick(brick);
-		}
-
-	}
-
-	public void topRHSBrickInit() {
-		topRHSBrick = new BrickManager();
-
-		// INNER
-		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks
-			Brick brick = new Brick(i, 180, 32, 32, 0);
-			topRHSBrick.addBrick(brick);
-		}
-
-		for (int j = 0; j < 140; j += 33) { // Vertical Bricks
-			Brick brick = new Brick(WINDOW_W - 180, j, 32, 32, 1);
-			topRHSBrick.addBrick(brick);
-		}
-
-		// OUTER WALL
-		for (int i = 991; i > 826; i -= 33) { // Horizontal bricks
-			Brick brick = new Brick(i, 148, 32, 32, 0);
-			topRHSBrick.addBrick(brick);
-		}
-
-		for (int j = 0; j < 140; j += 33) { // Vertical Bricks
-			Brick brick = new Brick(WINDOW_W - 180 - 32, j, 32, 32, 1);
-			topRHSBrick.addBrick(brick);
-		}
-	}
-
-	public void bottomLHSBrickInit() {
-		bottomLHSBrick = new BrickManager();
-
-		for (int i = 0; i < 140; i += 33) { // Horizontal bricks
-			Brick brick = new Brick(i, WINDOW_H - 140 - 32, 32, 32, 0);
-			bottomLHSBrick.addBrick(brick);
-		}
-
-		for (int j = 728; j > 568; j -= (33)) { // Vertical Bricks
-			Brick brick = new Brick(180, j, 32, 32, 1);
-			bottomLHSBrick.addBrick(brick);
-		}
-
-		// Outer Wall
-		for (int i = 0; i < 140; i += 33) { // Horizontal bricks
-			Brick brick = new Brick(i, WINDOW_H - 140 - 32 - 32, 32, 32, 0);
-			bottomLHSBrick.addBrick(brick);
-		}
-
-		for (int j = 728; j > 568; j -= (33)) { // Vertical Bricks
-			Brick brick = new Brick(148, j, 32, 32, 1);
-			brick.setImage("iceblock_32.png");
-			bottomLHSBrick.addBrick(brick);
-		}
-	}
-
-	public void topLHSBrickInit() {
-		topLHSBrick = new BrickManager();
-
-		// TLHS
-		for (int i = 0; i < 140; i += 33) { // Horizontal bricks 5 Bricks
-											// 0,33,66,99,132
-			Brick brick = new Brick(i, 180, 32, 32, 0);
-			topLHSBrick.addBrick(brick);
-		}
-
-		for (int j = 0; j < 140; j += 33) { // Vertical Bricks
-			Brick brick = new Brick(180, j, 32, 32, 1);
-			topLHSBrick.addBrick(brick);
-		}
-
-		// INNER WALL
-		for (int i = 0; i < 140; i += 33) { // Horizontal bricks
-			Brick brick = new Brick(i, 148, 32, 32, 0);
-			topLHSBrick.addBrick(brick);
-		}
-
-		for (int j = 0; j < 140; j += 33) { // Vertical Bricks
-			Brick brick = new Brick(148, j, 32, 32, 1);
-			topLHSBrick.addBrick(brick);
-		}
 	}
 
 	public boolean isFinished() {
