@@ -144,7 +144,6 @@ public class Game extends Application {
 			bottomRHSBase.setIsWinner(true);
 			System.out.println("Winner: " + bottomRHSBase.getBaseName());
 			view.forcePause();
-
 		}
 	}
 
@@ -153,21 +152,29 @@ public class Game extends Application {
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		ArrayList<Base> baseList = new ArrayList<Base>();
 
-		scoreList.add(this.gameBrick.getTopLHSBrick().getNumberOfBrick());
-		scoreList.add(this.gameBrick.getTopRHSBrick().getNumberOfBrick());
-		scoreList.add(this.gameBrick.getBottomLHSBrick().getNumberOfBrick());
-		scoreList.add(this.gameBrick.getBottomRHSBrick().getNumberOfBrick());
-
-		baseList.add(this.topLHSBase);
-		baseList.add(this.topRHSBase);
-		baseList.add(this.bottomLHSBase);
-		baseList.add(this.bottomRHSBase);
-
+		if(!this.topLHSBase.isDead()){
+			scoreList.add(this.gameBrick.getTopLHSBrick().getNumberOfBrick());
+			baseList.add(this.topLHSBase);
+		}
+		if(!this.topRHSBase.isDead()){
+			scoreList.add(this.gameBrick.getTopRHSBrick().getNumberOfBrick());
+			baseList.add(this.topRHSBase);
+		}
+		if(!this.bottomLHSBase.isDead()){
+			scoreList.add(this.gameBrick.getBottomLHSBrick().getNumberOfBrick());
+			baseList.add(this.bottomLHSBase);
+		}
+		if(!this.bottomRHSBase.isDead()){
+			scoreList.add(this.gameBrick.getBottomRHSBrick().getNumberOfBrick());
+			baseList.add(this.bottomRHSBase);
+		}
+		
+		int arraySize = scoreList.size();
 		int temp = 0;
 		Base tempName;
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 1; j < (4 - i); j++) {
+		for (int i = 0; i < arraySize; i++) {
+			for (int j = 1; j < (arraySize - i); j++) {
 				if (scoreList.get(j - 1) < scoreList.get(j)) {
 					temp = scoreList.get(j - 1);
 					scoreList.set(j - 1, scoreList.get(j));
@@ -185,21 +192,28 @@ public class Game extends Application {
 
 		baseList.get(0).setIsWinner(true);
 		System.out.println("Winner: " + baseList.get(0).getBaseName());
-
-		if (scoreList.get(1) == scoreList.get(0)) {
-			baseList.get(1).setIsWinner(true);
-			System.out.println("Winner: " + baseList.get(1).getBaseName());
+		
+		for(int i = 1; i < arraySize; i++){
+			if(scoreList.get(i) == scoreList.get(0)){
+				baseList.get(i).setIsWinner(true);
+				System.out.println("Winner: " + baseList.get(i).getBaseName());
+			}
 		}
-		if (scoreList.get(2) == scoreList.get(0)) {
-			baseList.get(2).setIsWinner(true);
-			System.out.println("Winner: " + baseList.get(2).getBaseName());
 
-		}
-		if (scoreList.get(3) == scoreList.get(0)) {
-			baseList.get(3).setIsWinner(true);
-			System.out.println("Winner: " + baseList.get(3).getBaseName());
-
-		}
+//		if (scoreList.get(1) == scoreList.get(0)) {
+//			baseList.get(1).setIsWinner(true);
+//			System.out.println("Winner: " + baseList.get(1).getBaseName());
+//		}
+//		if (scoreList.get(2) == scoreList.get(0)) {
+//			baseList.get(2).setIsWinner(true);
+//			System.out.println("Winner: " + baseList.get(2).getBaseName());
+//
+//		}
+//		if (scoreList.get(3) == scoreList.get(0)) {
+//			baseList.get(3).setIsWinner(true);
+//			System.out.println("Winner: " + baseList.get(3).getBaseName());
+//
+//		}
 
 		view.forcePause();
 
@@ -342,38 +356,66 @@ public class Game extends Application {
 		// Check user input and move the paddle accordingly
 		// Positioning has been adjusted (+/- 32) to take into account the reference point of the bat (topleft corner)
 		if (!topLHSBase.isDead()) {
-			int increment = 7;
-			if (input.contains("LEFT")) {
-				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical down
-					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));				
+			if(!this.topLHSbat.isAIBat()){
+				int increment = 7;
+				if (input.contains("Q")) {
+					if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical down
+						topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));				
+					}
+					if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical down
+						topLHSbat.SetxPosition((int) (WINDOW_H/3));
+						topLHSbat.SetyPosition((int) (WINDOW_H/3));		
+					}
+					if ( (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) && (topLHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
+						topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() - increment));
+					}
+					if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max point on horizontal left
+						topLHSbat.SetxPosition((int) (0));
+						topLHSbat.SetyPosition((int) (WINDOW_H/3));
+					} 
 				}
-				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical down
-					topLHSbat.SetxPosition((int) (WINDOW_H/3));
-					topLHSbat.SetyPosition((int) (WINDOW_H/3));		
+				if (input.contains("E")) {
+					if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal right
+						topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() + increment));			
+					}
+					if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//overshoots max point on horizontal movement going right
+						topLHSbat.SetxPosition((int) (WINDOW_H/3));
+						topLHSbat.SetyPosition((int) (WINDOW_H/3));				
+					}
+					if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical up
+						topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() - increment));
+					}
+					if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max point on vertical up
+						topLHSbat.SetxPosition((int) (WINDOW_H/3));
+						topLHSbat.SetyPosition((int) (0));
+					} 
 				}
-				if ( (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) && (topLHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
-					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() - increment));
-				}
-				if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max point on horizontal left
-					topLHSbat.SetxPosition((int) (0));
-					topLHSbat.SetyPosition((int) (WINDOW_H/3));
-				} 
 			}
-			if (input.contains("RIGHT")) {
-				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal right
-					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() + increment));			
+			else{
+				double batMaxX = 256;
+				double batMaxY = (WINDOW_H / 3);
+				double gradient = (ball.getYVelocity()) / (ball.getXVelocity());
+				double C = ball.GetyPosition() - (gradient * ball.GetxPosition());
+					
+				//If the ball is heading toward the AI Horizontal area
+				if ( ((batMaxY-C)/gradient) > 0 && ((batMaxY-C)/gradient) < batMaxX){
+					if(((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0))){
+						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) + 32);
+					}
+					else if((ball.getYVelocity() < 0) && (ball.getXVelocity() > 0)){
+						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) - 32);
+					}
 				}
-				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//overshoots max point on horizontal movement going right
-					topLHSbat.SetxPosition((int) (WINDOW_H/3));
-					topLHSbat.SetyPosition((int) (WINDOW_H/3));				
+				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
+
+				else if((((gradient * batMaxX) + C ) < batMaxY ) && (((gradient * batMaxX) +  C) > 0)){ 
+					if(((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0))){ // ball direction is top left, apply calibration
+						topLHSbat.makeAIMoveY(((gradient * batMaxX) + C) + 32);
+					}
+					else if((ball.getYVelocity() > 0) && (ball.getXVelocity() > 0)){ // ball direction is bottom left, apply calibration
+						topLHSbat.makeAIMoveY(((gradient * batMaxX) + C) - 32);
+					}
 				}
-				if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical up
-					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() - increment));
-				}
-				if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max point on vertical up
-					topLHSbat.SetxPosition((int) (WINDOW_H/3));
-					topLHSbat.SetyPosition((int) (0));
-				} 
 			}
 		}
 		
@@ -414,44 +456,73 @@ public class Game extends Application {
 		}
 		
 		if (!topRHSBase.isDead()) {
-			int increment = 7;
-			if (input.contains("NUMPAD7")) {
-				if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical up
-					topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() - increment));		
+			if(!this.topRHSbat.isAIBat()){
+				int increment = 7;
+				if (input.contains("NUMPAD7")) {
+					if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical up
+						topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() - increment));		
+					}
+					if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() < 0) ) {	//if it overshoots max point on vertical up
+						topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+						topRHSbat.SetyPosition((int) (0));		
+					}
+					if ( (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
+						topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() - increment));
+					}
+					if ( (topRHSbat.GetxPosition() < 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal left 
+						topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+						topRHSbat.SetyPosition((int) (WINDOW_H/3));
+					} 
 				}
-				if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() < 0) ) {	//if it overshoots max point on vertical up
-					topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
-					topRHSbat.SetyPosition((int) (0));		
+				if (input.contains("NUMPAD9")) {
+					if ( (topRHSbat.GetyPosition() == (WINDOW_H/3)) && (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) ) {	//horizontal right
+						topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() + increment));			
+					}
+					if ( (topRHSbat.GetyPosition() == (WINDOW_H/3 )) && (topRHSbat.GetxPosition() > 1024 - 32) ) {	//if it overshoots max point on horizontal right
+						topRHSbat.SetxPosition((int) (1024 - 32));
+						topRHSbat.SetyPosition((int) (WINDOW_H/3));				
+					}
+					if ( (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ) {	//vertical down
+						topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() + increment));
+					}
+					if ( (topRHSbat.GetyPosition() > WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ){ //overshoot max pt on vertical down
+						topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
+						topRHSbat.SetyPosition((int) (WINDOW_H/3));
+					} 
 				}
-				if ( (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
-					topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() - increment));
-				}
-				if ( (topRHSbat.GetxPosition() < 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal left 
-					topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
-					topRHSbat.SetyPosition((int) (WINDOW_H/3));
-				} 
 			}
-			if (input.contains("NUMPAD9")) {
-				if ( (topRHSbat.GetyPosition() == (WINDOW_H/3)) && (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) ) {	//horizontal right
-					topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() + increment));			
+			//If this paddle is AI controlled!
+			else{
+				double batMinX = (WINDOW_W - (WINDOW_H/3) - 32);
+				double batMaxY = (WINDOW_H / 3);
+				double gradient = (ball.getYVelocity()) / (ball.getXVelocity());
+				double C = ball.GetyPosition() - (gradient * ball.GetxPosition());
+				
+				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
+				//736 is the AI x Position when it can only move vertically		
+				if((((gradient * batMinX) + C ) < batMaxY ) && (((gradient * batMinX) +  C) > 0)){ 
+					if(((ball.getYVelocity() < 0) && (ball.getXVelocity() > 0))){ // ball traveling to top right
+						topRHSbat.makeAIMoveY(((gradient * 736) + C) + 30);
+					}
+					else if((ball.getYVelocity() > 0) && (ball.getXVelocity() > 0)){ // ball traveling to bottom right, apply calibration
+						topRHSbat.makeAIMoveY(((gradient * 736) + C) - 30);
+					}
+				}	
+				//If the ball is heading toward the AI Horizontal area
+				else if ( ((batMaxY-C)/gradient) > batMinX && ((batMaxY-C)/gradient) < WINDOW_W){
+					if(((ball.getYVelocity() < 0) && (ball.getXVelocity() > 0))){
+						topRHSbat.makeAIMoveX(((batMaxY-C)/gradient) +32);
+					}
+					else if((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0)){
+						topRHSbat.makeAIMoveX(((batMaxY-C)/gradient) +32);
+					}
 				}
-				if ( (topRHSbat.GetyPosition() == (WINDOW_H/3 )) && (topRHSbat.GetxPosition() > 1024 - 32) ) {	//if it overshoots max point on horizontal right
-					topRHSbat.SetxPosition((int) (1024 - 32));
-					topRHSbat.SetyPosition((int) (WINDOW_H/3));				
-				}
-				if ( (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ) {	//vertical down
-					topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() + increment));
-				}
-				if ( (topRHSbat.GetyPosition() > WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ){ //overshoot max pt on vertical down
-					topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
-					topRHSbat.SetyPosition((int) (WINDOW_H/3));
-				} 
 			}
 		}
 		
 		if (!bottomRHSBase.isDead()) {
 			int increment = 7;
-			if (input.contains("NUMPAD1")) {
+			if (input.contains("LEFT")) {
 				if ( (bottomRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (bottomRHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32 ) && (bottomRHSbat.GetyPosition() <= 768 - 32) ) {		//vertical down
 					bottomRHSbat.SetyPosition((int) (bottomRHSbat.GetyPosition() + increment));		
 				}
@@ -467,7 +538,7 @@ public class Game extends Application {
 					bottomRHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));
 				} 
 			}
-			if (input.contains("NUMPAD3")) {
+			if (input.contains("RIGHT")) {
 				if ( (bottomRHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32)) && (bottomRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (bottomRHSbat.GetxPosition() <= 1024 - 32) ) {	//horizontal right
 					bottomRHSbat.SetxPosition((int) (bottomRHSbat.GetxPosition() + increment));			
 				}
@@ -619,17 +690,15 @@ public class Game extends Application {
 
 	public void gameInit() {
 		// Create objects needed for the game play
-		// with necessary properties.
-		topLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, WINDOW_H / 3);
-		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32);
-		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3);
-		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32);
+		// with necessary properties. <Image, xPos, yPos, isAI, location>
+		topLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, WINDOW_H / 3, true, Bat.batPosition.TopLEFT);	
+		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32, false, Bat.batPosition.BottomLEFT);
+		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3, true, Bat.batPosition.TopRIGHT);
+		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32, false, Bat.batPosition.BottomRIGHT);
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
 
-		baseInit();
-		
+		baseInit();	
 		gameBrick = new BrickBuilder();
-
 		deflect = new Deflect();
 	}
 
