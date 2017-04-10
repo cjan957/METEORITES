@@ -278,7 +278,7 @@ public class Game extends Application {
 			}
 			
 			
-			//
+			// If the player is still alive, render the base and bat, otherwise do not render.
 			if (!topLHSBase.isDead()) {
 				topLHSbat.render(view.canvasGC());
 			}
@@ -290,6 +290,18 @@ public class Game extends Application {
 			}
 			if (!bottomRHSBase.isDead()) {
 				bottomRHSbat.render(view.canvasGC());
+			}
+			if (!topLHSBase.isDead()) {
+				topLHSBase.render(view.canvasGC());
+			}
+			if (!topRHSBase.isDead()) {
+				topRHSBase.render(view.canvasGC());
+			}
+			if (!bottomRHSBase.isDead()) {
+				bottomRHSBase.render(view.canvasGC());
+			}
+			if (!bottomLHSBase.isDead()) {
+				bottomLHSBase.render(view.canvasGC());
 			}
 
 			ball.render(view.canvasGC());
@@ -309,19 +321,6 @@ public class Game extends Application {
 			for (Brick brick : bottomRHSBrick.accessBrickArray()) {
 				brick.render(view.canvasGC());
 			}
-
-			if (!topLHSBase.isDead()) {
-				topLHSBase.render(view.canvasGC());
-			}
-			if (!topRHSBase.isDead()) {
-				topRHSBase.render(view.canvasGC());
-			}
-			if (!bottomRHSBase.isDead()) {
-				bottomRHSBase.render(view.canvasGC());
-			}
-			if (!bottomLHSBase.isDead()) {
-				bottomLHSBase.render(view.canvasGC());
-			}
 		});
 
 		// Play and Repeat the graphic rendering
@@ -339,13 +338,12 @@ public class Game extends Application {
 		baseCollisionCheck();
 
 		// Check user input and move the paddle accordingly
+		// Positioning has been adjusted (+/- 32) to take into account the reference point of the bat (topleft corner)
 		if (!topLHSBase.isDead()) {
 			int increment = 7;
 			if (input.contains("LEFT")) {
 				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical down
-					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));
-//					System.out.println("x position: " + topLHSbat.GetxPosition());
-//					System.out.println("y position: " + topLHSbat.GetyPosition());					
+					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));				
 				}
 				if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical down
 					topLHSbat.SetxPosition((int) (WINDOW_H/3));
@@ -354,7 +352,7 @@ public class Game extends Application {
 				if ( (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) && (topLHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
 					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() - increment));
 				}
-				if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal left
+				if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max point on horizontal left
 					topLHSbat.SetxPosition((int) (0));
 					topLHSbat.SetyPosition((int) (WINDOW_H/3));
 				} 
@@ -363,14 +361,14 @@ public class Game extends Application {
 				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal right
 					topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() + increment));			
 				}
-				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//if it overshoots max point on horizontal movement going right
+				if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//overshoots max point on horizontal movement going right
 					topLHSbat.SetxPosition((int) (WINDOW_H/3));
 					topLHSbat.SetyPosition((int) (WINDOW_H/3));				
 				}
 				if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical up
 					topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() - increment));
 				}
-				if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical up
+				if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max point on vertical up
 					topLHSbat.SetxPosition((int) (WINDOW_H/3));
 					topLHSbat.SetyPosition((int) (0));
 				} 
@@ -382,25 +380,17 @@ public class Game extends Application {
 			if (input.contains("A")) {
 				if ( (bottomLHSbat.GetxPosition() == (WINDOW_H/3)) && (bottomLHSbat.GetyPosition() <= 768) && (bottomLHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32) ) {	//vertical movement up
 					bottomLHSbat.SetyPosition((int) (bottomLHSbat.GetyPosition() - increment));	
-					System.out.println("x position: " + bottomLHSbat.GetxPosition());
-					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
 				}
 				if ( (bottomLHSbat.GetxPosition() == (WINDOW_H/3 )) && (bottomLHSbat.GetyPosition() < (768 - WINDOW_H/3 - 32)) ) {	//if it overshoots max point on vertical movement going up
 					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
 					bottomLHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));	
-					System.out.println("x position: " + bottomLHSbat.GetxPosition());
-					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
 				}
 				if ( (bottomLHSbat.GetxPosition() >= 0) && (bottomLHSbat.GetxPosition() <= WINDOW_H/3) && (bottomLHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ) {//horizontal movement left
 					bottomLHSbat.SetxPosition((int) (bottomLHSbat.GetxPosition() - increment));
-					System.out.println("x position: " + bottomLHSbat.GetxPosition());
-					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
 				}
 				if ( (bottomLHSbat.GetxPosition() < 0) && (bottomLHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ){ //overshoot max pt on horizontal going left
 					bottomLHSbat.SetxPosition((int) (0));
 					bottomLHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));
-					System.out.println("x position: " + bottomLHSbat.GetxPosition());
-					System.out.println("y position: " + bottomLHSbat.GetyPosition());	
 				} 
 			}
 			if (input.contains("D")) {
