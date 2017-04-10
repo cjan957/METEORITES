@@ -7,6 +7,8 @@ package application;
 
 import java.util.ArrayList;
 
+import com.ttcj.view.ViewManager;
+
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -25,27 +27,21 @@ import javafx.stage.Stage;
 public class View {
 
 	//QUICK DEBUGGING OPTIONS
-	private boolean enableBackground = true;
 
-	
-	//private Stage window;
 	private Scene gamePlayScene;
 	private Group root;
-	
-	private int gameMode = 0;
-	
-	private int gameCountdownToStart = 3;
-	private int gameCountdownToEnd = 120;
-	
-	private static final int WINDOW_W = 1024;
-	private static final int WINDOW_H = 768;
 	
 	private boolean isPaused; //Game is paused or running
 
 	private GraphicsContext gc;
 	private ArrayList<String> input = new ArrayList<String>();
-
 	
+	private boolean enableBackground = true;
+	
+	private static final int WINDOW_W = 1024;
+	private static final int WINDOW_H = 768;
+	//private Stage window;
+
 	public void setupGameView(Stage window){
 		
 		root = new Group();
@@ -87,7 +83,6 @@ public class View {
 			//Convert the keycode to string so we can handle it easily
 			String code = event.getCode().toString();
 			
-			
 			//Pause game if P is pressed
 			if(code == "P"){
 				if(!isPaused){
@@ -97,17 +92,13 @@ public class View {
 				}
 			}
 			
-		//	if(code == "ESCAPE"){
-		//		if()
-		//			return
-		//	}
-			
-
-			
 			//Exit game if ESC is pressed 
-			//TODO: supposed to return to main menu instead of exit program
+			//TODO: supposed to return to main menu instead of exit program, THIS IS BAD RIGHT NOW :|
+			
 			if(code == "ESCAPE"){
-				System.exit(0);
+				isPaused = true;
+				ViewManager viewMgr = new ViewManager();
+				viewMgr.MainMenu(window);				
 			}
 			
 			//Check if the key is already in the array, if not add that key to the array
@@ -126,12 +117,6 @@ public class View {
 		gc = canvas.getGraphicsContext2D();
 		
 		window.setScene(gamePlayScene);
-	}
-	
-
-		
-	public int getGameMode(){
-		return gameMode;
 	}
 
 	public boolean isPause(){
