@@ -759,7 +759,7 @@ public class Game extends Application {
 		new Sound("Sounds/wallHit.wav");
 	}
 
-	private void playBaseHitSound() {
+	private void playBaseHitSound() { //TODO: change sound
 		new Sound("Sounds/wallHit.wav");
 	}
 
