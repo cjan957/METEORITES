@@ -55,6 +55,10 @@ public class Game extends Application {
 	private Base bottomLHSBase;
 	private Base topRHSBase;
 	private Base bottomRHSBase;
+	
+	private Sound paddleDeflect;
+	private Sound wallHit;
+	private Sound baseHit;
 
 	private BrickBuilder gameBrick;
 
@@ -352,6 +356,23 @@ public class Game extends Application {
 		paddleCollisionCheck();
 		wallCollisionCheck();
 		baseCollisionCheck();
+		
+		if(input.contains("Z")){
+			topLHSBase.setIsDead(true);
+			System.out.println("topLHS forced dead");
+		}
+		if(input.contains("X")){
+			topRHSBase.setIsDead(true);
+			System.out.println("topRHSBase forced dead");
+		}
+		if(input.contains("C")){
+			bottomLHSBase.setIsDead(true);
+			System.out.println("tobottomLHSBasepLHS forced dead");
+		}
+		if(input.contains("V")){
+			bottomRHSBase.setIsDead(true);
+			System.out.println("bottomRHSBase forced dead");
+		}
 
 		// Check user input and move the paddle accordingly
 		// Positioning has been adjusted (+/- 32) to take into account the reference point of the bat (topleft corner)
@@ -696,6 +717,10 @@ public class Game extends Application {
 		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3, true, Bat.batPosition.TopRIGHT);
 		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32, false, Bat.batPosition.BottomRIGHT);
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
+		
+		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
+		 wallHit = new Sound("Sounds/wallHit.wav");
+		 baseHit = new Sound("Sounds/wallHit.wav");
 
 		baseInit();	
 		gameBrick = new BrickBuilder();
@@ -718,15 +743,15 @@ public class Game extends Application {
 	}
 
 	private void playPaddleDeflectSound() {
-		new Sound("Sounds/paddleDeflect.wav");
+		this.paddleDeflect.playSound();
 	}
 
 	private void playWallHitSound() {
-		new Sound("Sounds/wallHit.wav");
+		this.wallHit.playSound();
 	}
 
 	private void playBaseHitSound() { //TODO: change sound
-		new Sound("Sounds/wallHit.wav");
+		this.baseHit.playSound();
 	}
 
 }
