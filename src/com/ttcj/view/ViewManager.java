@@ -53,7 +53,7 @@ public class ViewManager {
 			new GamePlaySingle(0, gameStage);
 		});
 		
-		ButtonMaker twoPlayer = new ButtonMaker("Two Players");
+		ButtonMaker twoPlayer = new ButtonMaker("Two Player");
 		twoPlayer.setOnMouseClicked(event->{
 			new GamePlay(0, gameStage);
 		});

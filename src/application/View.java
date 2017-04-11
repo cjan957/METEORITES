@@ -53,7 +53,7 @@ public class View {
 		
 		//TODO: Remove this if statement when deliver
 		if(enableBackground){
-			Image background = new Image("gal1.jpg");
+			Image background = new Image("galaxy_bg.jpg");
 			gamePlayScene.setFill(new ImagePattern(background));
 		}
 

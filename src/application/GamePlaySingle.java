@@ -179,10 +179,20 @@ public class GamePlaySingle {
 		if(numberOfTies > 1){
 			message = "Tie: " + winnerName;
 			longMessage = true;
+			if(winnerName.contains(bottomRHSBase.getBaseName())){
+				playWinSound();
+			} else {
+				playLoseSound();
+			}
 		}
 		else{
 			message = "Winner: " + winnerName;
 			longMessage = false;
+			if(winnerName == bottomRHSBase.getBaseName()){
+				playWinSound();
+			} else {
+				playLoseSound();
+			}
 		}
 
 		//stop the game
