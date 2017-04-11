@@ -41,6 +41,8 @@ public class GamePlay {
 	private Sound baseHit;
 	private Sound countdownVoice;
 	private Sound countdownSound;
+	private Sound winJingleSound;
+	private Sound loseJingleSound;
 
 	private BrickBuilder gameBrick;
 
@@ -678,6 +680,8 @@ public class GamePlay {
 		 baseHit = new Sound("Sounds/baseHit.aiff");
 		 countdownVoice = new Sound("Sounds/countdownVoice.wav");
 		 countdownSound = new Sound("Sounds/countdownSoundStart.wav");
+		 winJingleSound = new Sound("Sounds/winJingle.wav");
+		 loseJingleSound = new Sound("Sounds/loseJingle.wav");
 
 		baseInit();	
 		gameBrick = new BrickBuilder();
@@ -717,6 +721,14 @@ public class GamePlay {
 	
 	private void playCountdownSound() {
 		this.countdownSound.playSound();
+	}
+	
+	private void playWinSound() {
+		this.winJingleSound.playSound();
+	}
+	
+	private void playLoseSound() {
+		this.loseJingleSound.playSound();
 	}
 	
 }

@@ -38,6 +38,8 @@ public class GamePlaySingle {
 	private Sound baseHit;
 	private Sound countdownVoice;
 	private Sound countdownSound;
+	private Sound winJingleSound;
+	private Sound loseJingleSound;
 
 	private BrickBuilder gameBrick;
 
@@ -92,12 +94,14 @@ public class GamePlaySingle {
 		if(topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
 			bottomRHSBase.isWinner();
 			System.out.println("You won");
+			playWinSound();
 			stopTheGame(); 
 			
 		}
 		else if(bottomRHSBase.isDead()){
 			System.out.println("You lose");
 			stopTheGame();
+			playLoseSound();
 		}
 
 //		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
@@ -599,6 +603,8 @@ public class GamePlaySingle {
 		 baseHit = new Sound("Sounds/baseHit.aiff");
 		 countdownVoice = new Sound("Sounds/countdownVoice.wav");
 		 countdownSound = new Sound("Sounds/countdownSoundStart.wav");
+		 winJingleSound = new Sound("Sounds/winJingle.wav");
+		 loseJingleSound = new Sound("Sounds/loseJingle.wav");
 
 		baseInit();	
 		gameBrick = new BrickBuilder();
@@ -638,6 +644,14 @@ public class GamePlaySingle {
 	
 	private void playCountdownSound() {
 		this.countdownSound.playSound();
+	}
+	
+	private void playWinSound() {
+		this.winJingleSound.playSound();
+	}
+	
+	private void playLoseSound() {
+		this.loseJingleSound.playSound();
 	}
 	
 }
