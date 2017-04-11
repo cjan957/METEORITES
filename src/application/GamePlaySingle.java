@@ -127,6 +127,7 @@ public class GamePlaySingle {
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		ArrayList<Base> baseList = new ArrayList<Base>();
 
+		//if dead, dont put into the arrays. Arrays will be used to find who has the most bricks left
 		if(!this.topLHSBase.isDead()){
 			scoreList.add(this.gameBrick.getTopLHSBrick().getNumberOfBrick());
 			baseList.add(this.topLHSBase);
@@ -174,21 +175,6 @@ public class GamePlaySingle {
 				System.out.println("Winner: " + baseList.get(i).getBaseName());
 			}
 		}
-
-//		if (scoreList.get(1) == scoreList.get(0)) {
-//			baseList.get(1).setIsWinner(true);
-//			System.out.println("Winner: " + baseList.get(1).getBaseName());
-//		}
-//		if (scoreList.get(2) == scoreList.get(0)) {
-//			baseList.get(2).setIsWinner(true);
-//			System.out.println("Winner: " + baseList.get(2).getBaseName());
-//
-//		}
-//		if (scoreList.get(3) == scoreList.get(0)) {
-//			baseList.get(3).setIsWinner(true);
-//			System.out.println("Winner: " + baseList.get(3).getBaseName());
-//
-//		}
 
 		//stop the game
 		stopTheGame();
@@ -359,10 +345,10 @@ public class GamePlaySingle {
 				//If the ball is heading toward the AI Horizontal area
 				if ( ((batMaxY-C)/gradient) > 0 && ((batMaxY-C)/gradient) < batMaxX){
 					if(((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0))){
-						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) + 32);
+						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) - 32);
 					}
 					else if((ball.getYVelocity() < 0) && (ball.getXVelocity() > 0)){
-						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) - 32);
+						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) + 32);
 					}
 				}
 				
@@ -386,20 +372,20 @@ public class GamePlaySingle {
 			//If the ball is heading toward the AI Horizontal area
 			if ( ((batMinY-C)/gradient) > 0 && ((batMinY-C)/gradient) < batMaxX){
 				if(((ball.getYVelocity() > 0) && (ball.getXVelocity() < 0))){
-					bottomLHSbat.makeAIMoveX(((batMinY-C)/gradient) + 32);
+					bottomLHSbat.makeAIMoveX(((batMinY-C)/gradient) - 32);
 				}
 				else if((ball.getYVelocity() > 0) && (ball.getXVelocity() > 0)){
-					bottomLHSbat.makeAIMoveX(((batMinY-C)/gradient) - 32);
+					bottomLHSbat.makeAIMoveX(((batMinY-C)/gradient) + 32);
 				}
 			}
 			
 			//determine whether the ball will travel to the AI vertical area (y = mx+c) y path of AI valid between 0 to 255
 			else if((((gradient * batMaxX) + C ) > batMinY ) && (((gradient * batMaxX) +  C) < WINDOW_H)){ 
 				if(((ball.getYVelocity() > 0) && (ball.getXVelocity() < 0))){ //
-					bottomLHSbat.makeAIMoveY(((gradient * batMaxX) + C) + 32);
+					bottomLHSbat.makeAIMoveY(((gradient * batMaxX) + C) - 32);
 				}
 				else if((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0)){ // 
-					bottomLHSbat.makeAIMoveY(((gradient * batMaxX) + C) - 32);
+					bottomLHSbat.makeAIMoveY(((gradient * batMaxX) + C) + 32);
 				}
 			}
 

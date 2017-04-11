@@ -48,7 +48,7 @@ public class ViewManager {
 		menuList.setTranslateX(110);
 		menuList.setTranslateY(300);
 			
-		ButtonMaker singlePlayer = new ButtonMaker("Single Players");
+		ButtonMaker singlePlayer = new ButtonMaker("Single Player");
 		singlePlayer.setOnMouseClicked(event->{
 			new GamePlaySingle(0, gameStage);
 		});
@@ -58,7 +58,7 @@ public class ViewManager {
 			new GamePlay(0, gameStage);
 		});
 		
-		ButtonMaker exit = new ButtonMaker("Quit");
+		ButtonMaker exit = new ButtonMaker("Exit");
 		exit.setOnMouseClicked(event->{
 			System.exit(0);
 		});
