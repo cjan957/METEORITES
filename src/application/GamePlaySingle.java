@@ -70,6 +70,7 @@ public class GamePlaySingle {
 	
 	public void stopTheGame(){
 		playing = false;
+		view.setGameFinished();	
 	}
 	
 	public void startTheGame(){

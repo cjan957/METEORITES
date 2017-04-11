@@ -34,6 +34,7 @@ public class View {
 	private boolean isPaused; //Game is paused or running
 	private boolean confimationToExit;
 	private boolean countDown3IsDone;
+	private boolean gameHasFinished;
 	
 
 	private GraphicsContext gc;
@@ -104,7 +105,11 @@ public class View {
 			
 			//Exit game if ESC is pressed 			
 			if(code == "ESCAPE"){
-				if(countDown3IsDone){
+				if(gameHasFinished){
+					ViewManager viewMgr = new ViewManager();
+					viewMgr.MainMenu(window);
+				}
+				else if(countDown3IsDone){
 					if(!confimationToExit){
 						confimationToExit = true;
 						isPaused = true;
@@ -153,6 +158,10 @@ public class View {
 	
 	public void setCountDown3IsDone(){
 		this.countDown3IsDone = true;
+	}
+	
+	public void setGameFinished(){
+		this.gameHasFinished = true;
 	}
 	
 	//Make GraphicsContext on the canvas created in this View class available

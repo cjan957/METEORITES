@@ -77,6 +77,7 @@ public class GamePlay {
 
 	public void stopTheGame(){
 		playing = false;
+		view.setGameFinished();
 	}
 	
 	public void startTheGame(){
