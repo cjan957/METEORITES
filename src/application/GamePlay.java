@@ -7,13 +7,10 @@ import com.ttcj.components.Ball;
 import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
 import com.ttcj.components.Brick;
-import com.ttcj.components.BrickManager;
 import com.ttcj.components.Sound;
-import com.ttcj.view.ViewManager;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -22,8 +19,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GamePlay {
+	
 	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
+	private boolean showGhostBall = true;
 
 	// Instantiate game objects
 	private Timer timer3sec;
@@ -313,7 +312,10 @@ public class GamePlay {
 		}
 
 		ball.render(view.canvasGC());
-		ghostBall.render(view.canvasGC());
+		
+		if(showGhostBall){
+			ghostBall.render(view.canvasGC());
+		}
 
 		for (Brick brick : this.gameBrick.getTopLHSBrick().accessBrickArray()) {
 			// view.canvasGC().fillRect(brick.GetxPosition(),

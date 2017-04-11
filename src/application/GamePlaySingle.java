@@ -19,14 +19,18 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GamePlaySingle {
+	
 	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
+	private boolean showGhostBall = true;
+
 
 	// Instantiate game objects
 	private Timer timer3sec;
 	private Timer timer120sec;
 
 	private Ball ball;
+	private Ball ghostBall;
 	private Bat topLHSbat;
 	private Bat bottomLHSbat;
 	private Bat topRHSbat;
@@ -294,6 +298,9 @@ public class GamePlaySingle {
 		}
 
 		ball.render(view.canvasGC());
+		if(showGhostBall){
+			ghostBall.render(view.canvasGC());
+		}
 
 		for (Brick brick : this.gameBrick.getTopLHSBrick().accessBrickArray()) {
 			// view.canvasGC().fillRect(brick.GetxPosition(),
@@ -357,6 +364,7 @@ public class GamePlaySingle {
 
 		// Move the ball once, checking necessary conditions.
 		ball.moveThatBall();
+		ghostBall.moveThatBall();
 		paddleCollisionCheck();
 		wallCollisionCheck();
 		baseCollisionCheck();
@@ -403,6 +411,31 @@ public class GamePlaySingle {
 					}
 					else if((ball.getYVelocity() > 0) && (ball.getXVelocity() > 0)){ // ball direction is bottom left, apply calibration
 						topLHSbat.makeAIMoveY(((gradient * batMaxX) + C) - 32);
+					}
+				}
+				
+				
+				//GHOST BALL TO CONFUSE AI
+				double gradientGhost = (ghostBall.getYVelocity()) / (ghostBall.getXVelocity());
+				double CGhostBall = ghostBall.GetyPosition() - (gradientGhost * ball.GetxPosition());
+					
+				//If the ball is heading toward the AI Horizontal area
+				if ( ((batMaxY-CGhostBall)/gradientGhost) > 0 && ((batMaxY-CGhostBall)/gradientGhost) < batMaxX){
+					if(((ghostBall.getYVelocity() < 0) && (ghostBall.getXVelocity() < 0))){
+						topLHSbat.makeAIMoveX(((batMaxY-CGhostBall)/gradientGhost) + 32);
+					}
+					else if((ghostBall.getYVelocity() < 0) && (ghostBall.getXVelocity() > 0)){
+						topLHSbat.makeAIMoveX(((batMaxY-CGhostBall)/gradientGhost) - 32);
+					}
+				}
+				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
+
+				else if((((gradientGhost * batMaxX) + CGhostBall ) < batMaxY ) && (((gradientGhost * batMaxX) +  CGhostBall) > 0)){ 
+					if(((ghostBall.getYVelocity() < 0) && (ghostBall.getXVelocity() < 0))){ // ball direction is top left, apply calibration
+						topLHSbat.makeAIMoveY(((gradientGhost * batMaxX) + CGhostBall) + 32);
+					}
+					else if((ghostBall.getYVelocity() > 0) && (ghostBall.getXVelocity() > 0)){ // ball direction is bottom left, apply calibration
+						topLHSbat.makeAIMoveY(((gradientGhost * batMaxX) + CGhostBall) - 32);
 					}
 				}
 		}
@@ -637,6 +670,8 @@ public class GamePlaySingle {
 		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3, true, Bat.batPosition.TopRIGHT);
 		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32, false, Bat.batPosition.BottomRIGHT);
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
+		ghostBall = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2 - 16, 32, 32);
+
 		
 		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
 		 wallHit = new Sound("Sounds/wallHit.wav");
