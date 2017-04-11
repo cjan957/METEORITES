@@ -59,6 +59,8 @@ public class Game extends Application {
 	private Sound paddleDeflect;
 	private Sound wallHit;
 	private Sound baseHit;
+	private Sound countdownVoice;
+	private Sound countdownSoundStart;
 
 	private BrickBuilder gameBrick;
 
@@ -246,6 +248,8 @@ public class Game extends Application {
 
 		// Counting down from 3 to 0, decrement the timer for 1 sec every one
 		// second.
+		// Voice counts down from 3 to 1
+		playCountdownVoiceSound();
 		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
 			timer3sec.countDown();
 		}));
@@ -256,6 +260,7 @@ public class Game extends Application {
 		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> {
 			startCountDowntimeUp();
 			startMasterTimer();
+			playCountdownStartSound(); //Play start sound
 		}));
 		countDown.play();
 
@@ -720,7 +725,10 @@ public class Game extends Application {
 		
 		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
 		 wallHit = new Sound("Sounds/wallHit.wav");
-		 baseHit = new Sound("Sounds/wallHit.wav");
+		 baseHit = new Sound("Sounds/baseHit.aiff");
+		 countdownVoice = new Sound("Sounds/countdownVoice.wav");
+		 countdownSoundStart = new Sound("Sounds/countdownSoundStart.wav");
+		 
 
 		baseInit();	
 		gameBrick = new BrickBuilder();
@@ -752,6 +760,14 @@ public class Game extends Application {
 
 	private void playBaseHitSound() { //TODO: change sound
 		this.baseHit.playSound();
+	}
+
+	private void playCountdownVoiceSound() {
+		this.countdownVoice.playSound();
+	}
+	
+	private void playCountdownStartSound() {
+		this.countdownSoundStart.playSound();
 	}
 
 }
