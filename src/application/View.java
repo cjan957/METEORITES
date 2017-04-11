@@ -32,6 +32,7 @@ public class View {
 	private Group root;
 	
 	private boolean isPaused; //Game is paused or running
+	
 
 	private GraphicsContext gc;
 	private ArrayList<String> input = new ArrayList<String>();

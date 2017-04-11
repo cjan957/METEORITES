@@ -63,7 +63,7 @@ public class ViewManager {
 			System.exit(0);
 		});
 		
-		menuList.getChildren().addAll(singlePlayer,exit);
+		menuList.getChildren().addAll(singlePlayer,twoPlayer,exit);
 		
 		
 		ImageView imageView = new ImageView(image);

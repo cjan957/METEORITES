@@ -7,13 +7,10 @@ import com.ttcj.components.Ball;
 import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
 import com.ttcj.components.Brick;
-import com.ttcj.components.BrickManager;
 import com.ttcj.components.Sound;
-import com.ttcj.view.ViewManager;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -44,31 +41,37 @@ public class GamePlaySingle {
 
 	private Deflect deflect;
 	private View view;
-	
-	private ViewManager viewMgr;
-	
+		
 	private Stage gameWindow;
+	
+	private boolean playing;
 
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
 
 	// Defining constants
-	private static final String GAMENAME = "Meteorites";
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	
 	
+	public void stopTheGame(){
+		playing = false;
+	}
+	
+	public void startTheGame(){
+		playing = true;
+	}
+	
 	public GamePlaySingle(int gameMode, Stage gameStage){
-		if(gameMode == 0){
 			view = new View();
 			gameWindow = gameStage;
-			startGame1();
-		}
+			startGame();
 	}
 
 	
 	public void startCountDowntimeUp() {
 		timer3sec.setTimeOut(true);
+		playing = true;
 		timer3sec.setVisibility(false);
 		timer120sec.setVisibility(true);
 	}
@@ -82,27 +85,39 @@ public class GamePlaySingle {
 	}
 
 	public void timeLeftFindWinner() {
-
-		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-			topLHSBase.setIsWinner(true);
-			System.out.println("Winner: " + topLHSBase.getBaseName());
-			view.forcePause();
-
-		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-			topRHSBase.setIsWinner(true);
-			System.out.println("Winner: " + topRHSBase.getBaseName());
-			view.forcePause();
-
-		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-			bottomLHSBase.setIsWinner(true);
-			System.out.println("Winner: " + bottomLHSBase.getBaseName());
-			view.forcePause();
-
-		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
-			bottomRHSBase.setIsWinner(true);
-			System.out.println("Winner: " + bottomRHSBase.getBaseName());
-			view.forcePause();
+		
+		//when all other players are dead, and you are the only one left
+		if(topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
+			bottomRHSBase.isWinner();
+			System.out.println("You won");
+			stopTheGame(); 
+			
 		}
+		else if(bottomRHSBase.isDead()){
+			System.out.println("You lose");
+			stopTheGame();
+		}
+
+//		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+//			topLHSBase.setIsWinner(true);
+//			System.out.println("Winner: " + topLHSBase.getBaseName());
+//			view.forcePause();
+//
+//		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+//			topRHSBase.setIsWinner(true);
+//			System.out.println("Winner: " + topRHSBase.getBaseName());
+//			view.forcePause();
+//
+//		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+//			bottomLHSBase.setIsWinner(true);
+//			System.out.println("Winner: " + bottomLHSBase.getBaseName());
+//			view.forcePause();
+//
+//		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
+//			bottomRHSBase.setIsWinner(true);
+//			System.out.println("Winner: " + bottomRHSBase.getBaseName());
+//			view.forcePause();
+//		}
 	}
 
 	public void timeOutFindWinner() {
@@ -173,14 +188,15 @@ public class GamePlaySingle {
 //
 //		}
 
-		view.forcePause();
+		//stop the game
+		stopTheGame();
 
 	}
 
 	public void startMasterTimer() {
 		// counting by one second, 120 times (2 mins)
 		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
-			if (!view.isPause()) {
+			if (!view.isPause() && playing) {
 				timer120sec.countDown();
 				checkActualTimeRemaining();
 			}
@@ -189,7 +205,7 @@ public class GamePlaySingle {
 		renderTimer.play();
 	}
 
-	public void startGame1() {
+	public void startGame() {
 		// Setup gameView
 		view.setupGameView(gameWindow);
 		// Invoking gameInit method
@@ -227,15 +243,12 @@ public class GamePlaySingle {
 
 			// Game proceeds if not paused
 			if (!view.isPause() && timer3sec.isTimeOut()) {
-				countDown.stop();
-				tick();
+				if(playing){
+					countDown.stop();
+					tick();
+				}
 			}
-
-			// Render each object on canvas using GraphicContext (gc) set up
-			// from the View class. Clear canvas with transparent color after
-			// each frame
-			render();
-			
+			render();	
 		});
 
 		// Play and Repeat the graphic rendering
@@ -259,6 +272,7 @@ public class GamePlaySingle {
 		
 		
 		// If the player is still alive, render the base and bat, otherwise do not render.
+		//bat render
 		if (!topLHSBase.isDead()) {
 			topLHSbat.render(view.canvasGC());
 		}
@@ -271,6 +285,8 @@ public class GamePlaySingle {
 		if (!bottomRHSBase.isDead()) {
 			bottomRHSbat.render(view.canvasGC());
 		}
+		
+		//base render
 		if (!topLHSBase.isDead()) {
 			topLHSBase.render(view.canvasGC());
 		}
@@ -331,42 +347,6 @@ public class GamePlaySingle {
 		// Check user input and move the paddle accordingly
 		// Positioning has been adjusted (+/- 32) to take into account the reference point of the bat (topleft corner)
 		if (!topLHSBase.isDead()) {
-			if(!this.topLHSbat.isAIBat()){
-				int increment = 7;
-				if (input.contains("Q")) {
-					if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical down
-						topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() + increment));				
-					}
-					if ( (topLHSbat.GetxPosition() == (WINDOW_H/3 )) && (topLHSbat.GetyPosition() > WINDOW_H/3) ) {	//if it overshoots max point on vertical down
-						topLHSbat.SetxPosition((int) (WINDOW_H/3));
-						topLHSbat.SetyPosition((int) (WINDOW_H/3));		
-					}
-					if ( (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) && (topLHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
-						topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() - increment));
-					}
-					if ( (topLHSbat.GetxPosition() < 0) && (topLHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max point on horizontal left
-						topLHSbat.SetxPosition((int) (0));
-						topLHSbat.SetyPosition((int) (WINDOW_H/3));
-					} 
-				}
-				if (input.contains("E")) {
-					if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() >= 0) && (topLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal right
-						topLHSbat.SetxPosition((int) (topLHSbat.GetxPosition() + increment));			
-					}
-					if ( (topLHSbat.GetyPosition() == (WINDOW_H/3 )) && (topLHSbat.GetxPosition() > WINDOW_H/3) ) {	//overshoots max point on horizontal movement going right
-						topLHSbat.SetxPosition((int) (WINDOW_H/3));
-						topLHSbat.SetyPosition((int) (WINDOW_H/3));				
-					}
-					if ( (topLHSbat.GetyPosition() >= 0) && (topLHSbat.GetyPosition() <= WINDOW_H/3) && (topLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical up
-						topLHSbat.SetyPosition((int) (topLHSbat.GetyPosition() - increment));
-					}
-					if ( (topLHSbat.GetyPosition() < 0) && (topLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max point on vertical up
-						topLHSbat.SetxPosition((int) (WINDOW_H/3));
-						topLHSbat.SetyPosition((int) (0));
-					} 
-				}
-			}
-			else{
 				double batMaxX = 256;
 				double batMaxY = (WINDOW_H / 3);
 				double gradient = (ball.getYVelocity()) / (ball.getXVelocity());
@@ -381,8 +361,8 @@ public class GamePlaySingle {
 						topLHSbat.makeAIMoveX(((batMaxY-C)/gradient) - 32);
 					}
 				}
+				
 				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
-
 				else if((((gradient * batMaxX) + C ) < batMaxY ) && (((gradient * batMaxX) +  C) > 0)){ 
 					if(((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0))){ // ball direction is top left, apply calibration
 						topLHSbat.makeAIMoveY(((gradient * batMaxX) + C) + 32);
@@ -391,83 +371,37 @@ public class GamePlaySingle {
 						topLHSbat.makeAIMoveY(((gradient * batMaxX) + C) - 32);
 					}
 				}
-			}
 		}
 		
 		if (!bottomLHSBase.isDead()) {
-			int increment = 7;
-			if (input.contains("A")) {
-				if ( (bottomLHSbat.GetxPosition() == (WINDOW_H/3)) && (bottomLHSbat.GetyPosition() <= 768) && (bottomLHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32) ) {	//vertical movement up
-					bottomLHSbat.SetyPosition((int) (bottomLHSbat.GetyPosition() - increment));	
+			double batMaxX = 256;
+			double batMinY = (WINDOW_H - (WINDOW_H/3) - 32);
+			double gradient = (ball.getYVelocity()) / (ball.getXVelocity());
+			double C = ball.GetyPosition() - (gradient * ball.GetxPosition());
+				
+			//If the ball is heading toward the AI Horizontal area
+			if ( ((batMinY-C)/gradient) > 0 && ((batMinY-C)/gradient) < batMaxX){
+				if(((ball.getYVelocity() > 0) && (ball.getXVelocity() < 0))){
+					bottomLHSbat.makeAIMoveX(((batMinY-C)/gradient) + 32);
 				}
-				if ( (bottomLHSbat.GetxPosition() == (WINDOW_H/3 )) && (bottomLHSbat.GetyPosition() < (768 - WINDOW_H/3 - 32)) ) {	//if it overshoots max point on vertical movement going up
-					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
-					bottomLHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));	
+				else if((ball.getYVelocity() > 0) && (ball.getXVelocity() > 0)){
+					bottomLHSbat.makeAIMoveX(((batMinY-C)/gradient) - 32);
 				}
-				if ( (bottomLHSbat.GetxPosition() >= 0) && (bottomLHSbat.GetxPosition() <= WINDOW_H/3) && (bottomLHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ) {//horizontal movement left
-					bottomLHSbat.SetxPosition((int) (bottomLHSbat.GetxPosition() - increment));
-				}
-				if ( (bottomLHSbat.GetxPosition() < 0) && (bottomLHSbat.GetyPosition() == 768 - WINDOW_H/3 - 32) ){ //overshoot max pt on horizontal going left
-					bottomLHSbat.SetxPosition((int) (0));
-					bottomLHSbat.SetyPosition((int) (768 - WINDOW_H/3 - 32));
-				} 
 			}
-			if (input.contains("D")) {
-				if ( (bottomLHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32 )) && (bottomLHSbat.GetxPosition() >= 0) && (bottomLHSbat.GetxPosition() <= WINDOW_H/3) ) {	//horizontal move right
-					bottomLHSbat.SetxPosition((int) (bottomLHSbat.GetxPosition() + increment));			
+			
+			//determine whether the ball will travel to the AI vertical area (y = mx+c) y path of AI valid between 0 to 255
+			else if((((gradient * batMaxX) + C ) > batMinY ) && (((gradient * batMaxX) +  C) < WINDOW_H)){ 
+				if(((ball.getYVelocity() > 0) && (ball.getXVelocity() < 0))){ //
+					bottomLHSbat.makeAIMoveY(((gradient * batMaxX) + C) + 32);
 				}
-				if ( (bottomLHSbat.GetyPosition() == (768 - WINDOW_H/3 - 32)) && (bottomLHSbat.GetxPosition() > WINDOW_H/3) ) {	//if it overshoots max point on horizontal movement going right
-					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
-					bottomLHSbat.SetyPosition((int) (768-WINDOW_H/3 - 32));				
+				else if((ball.getYVelocity() < 0) && (ball.getXVelocity() < 0)){ // 
+					bottomLHSbat.makeAIMoveY(((gradient * batMaxX) + C) - 32);
 				}
-				if ( (bottomLHSbat.GetyPosition() >= 768 - WINDOW_H/3 - 32) && (bottomLHSbat.GetyPosition() <= 768 - 32) && (bottomLHSbat.GetxPosition() == WINDOW_H/3) ) {	//vertical move down
-					bottomLHSbat.SetyPosition((int) (bottomLHSbat.GetyPosition() + increment));
-				}
-				if ( (bottomLHSbat.GetyPosition() > 768) && (bottomLHSbat.GetxPosition() == WINDOW_H/3) ){ //overshoot max pt on vertical going down
-					bottomLHSbat.SetxPosition((int) (WINDOW_H/3));
-					bottomLHSbat.SetyPosition((int) (768 - 32));
-				} 
 			}
+
 		}
 		
 		if (!topRHSBase.isDead()) {
-			if(!this.topRHSbat.isAIBat()){
-				int increment = 7;
-				if (input.contains("NUMPAD7")) {
-					if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) ) {		//vertical up
-						topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() - increment));		
-					}
-					if ( (topRHSbat.GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (topRHSbat.GetyPosition() < 0) ) {	//if it overshoots max point on vertical up
-						topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
-						topRHSbat.SetyPosition((int) (0));		
-					}
-					if ( (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ) {	//horizontal left
-						topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() - increment));
-					}
-					if ( (topRHSbat.GetxPosition() < 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetyPosition() == WINDOW_H/3) ){ //overshoot max pt on horizontal left 
-						topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
-						topRHSbat.SetyPosition((int) (WINDOW_H/3));
-					} 
-				}
-				if (input.contains("NUMPAD9")) {
-					if ( (topRHSbat.GetyPosition() == (WINDOW_H/3)) && (topRHSbat.GetxPosition() >= 1024 - WINDOW_H/3 - 32) && (topRHSbat.GetxPosition() <= 1024 - 32) ) {	//horizontal right
-						topRHSbat.SetxPosition((int) (topRHSbat.GetxPosition() + increment));			
-					}
-					if ( (topRHSbat.GetyPosition() == (WINDOW_H/3 )) && (topRHSbat.GetxPosition() > 1024 - 32) ) {	//if it overshoots max point on horizontal right
-						topRHSbat.SetxPosition((int) (1024 - 32));
-						topRHSbat.SetyPosition((int) (WINDOW_H/3));				
-					}
-					if ( (topRHSbat.GetyPosition() >= 0) && (topRHSbat.GetyPosition() <= WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ) {	//vertical down
-						topRHSbat.SetyPosition((int) (topRHSbat.GetyPosition() + increment));
-					}
-					if ( (topRHSbat.GetyPosition() > WINDOW_H/3) && (topRHSbat.GetxPosition() == 1024 - WINDOW_H/3 - 32) ){ //overshoot max pt on vertical down
-						topRHSbat.SetxPosition((int) (1024 - WINDOW_H/3 - 32));
-						topRHSbat.SetyPosition((int) (WINDOW_H/3));
-					} 
-				}
-			}
-			//If this paddle is AI controlled!
-			else{
 				double batMinX = (WINDOW_W - (WINDOW_H/3) - 32);
 				double batMaxY = (WINDOW_H / 3);
 				double gradient = (ball.getYVelocity()) / (ball.getXVelocity());
@@ -493,7 +427,6 @@ public class GamePlaySingle {
 					}
 				}
 			}
-		}
 		
 		if (!bottomRHSBase.isDead()) {
 			int increment = 7;
@@ -550,7 +483,6 @@ public class GamePlaySingle {
 	}
 
 	public void paddleCollisionCheck() {
-
 		if (!topLHSBase.isDead()) {
 			if (ball.objectsIntersectBallAndPaddle(topLHSbat)) {
 				ball.setXVelocity(-ball.getXVelocity());
@@ -667,7 +599,7 @@ public class GamePlaySingle {
 		// Create objects needed for the game play
 		// with necessary properties. <Image, xPos, yPos, isAI, location>
 		topLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, WINDOW_H / 3, true, Bat.batPosition.TopLEFT);	
-		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32, false, Bat.batPosition.BottomLEFT);
+		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32, true, Bat.batPosition.BottomLEFT);
 		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3, true, Bat.batPosition.TopRIGHT);
 		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32, false, Bat.batPosition.BottomRIGHT);
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
@@ -684,8 +616,8 @@ public class GamePlaySingle {
 	public void baseInit() {
 		topLHSBase = new Base("TopLHS", "planet1_64.png", 0, 0, 64, 64);
 		topRHSBase = new Base("TopRHS", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
-		bottomRHSBase = new Base("BottomRHS", "planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
-		bottomLHSBase = new Base("BottomLHS", "planet4_64.png", 0, WINDOW_H - 64, 64, 64);
+		bottomLHSBase = new Base("BottomLHS", "planet3_64.png", 0, WINDOW_H - 64, 64, 64);
+		bottomRHSBase = new Base("BottomRHS", "planet4_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
 	}
 
 	public boolean isFinished() {

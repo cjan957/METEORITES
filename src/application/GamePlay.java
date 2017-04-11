@@ -47,6 +47,8 @@ public class GamePlay {
 	
 	private ViewManager viewMgr;
 	
+	private boolean playing;
+	
 	private Stage gameWindow;
 
 	// This array list will store user input (key pressed).
@@ -59,16 +61,22 @@ public class GamePlay {
 	
 	
 	public GamePlay(int gameMode, Stage gameStage){
-		if(gameMode == 0){
 			view = new View();
 			gameWindow = gameStage;
 			startGame1();
-		}
 	}
 
+	public void stopGame(){
+		playing = false;
+	}
+	
+	public void startTheGame(){
+		playing = true;
+	}
 	
 	public void startCountDowntimeUp() {
 		timer3sec.setTimeOut(true);
+		startTheGame();
 		timer3sec.setVisibility(false);
 		timer120sec.setVisibility(true);
 	}
@@ -82,26 +90,29 @@ public class GamePlay {
 	}
 
 	public void timeLeftFindWinner() {
-
-		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+		if(bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+			System.out.println("AIs Won");
+			stopGame();
+		}
+		else if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			topLHSBase.setIsWinner(true);
 			System.out.println("Winner: " + topLHSBase.getBaseName());
-			view.forcePause();
+			stopGame();
 
 		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			topRHSBase.setIsWinner(true);
 			System.out.println("Winner: " + topRHSBase.getBaseName());
-			view.forcePause();
+			stopGame();
 
 		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			bottomLHSBase.setIsWinner(true);
 			System.out.println("Winner: " + bottomLHSBase.getBaseName());
-			view.forcePause();
+			stopGame();
 
 		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
 			bottomRHSBase.setIsWinner(true);
 			System.out.println("Winner: " + bottomRHSBase.getBaseName());
-			view.forcePause();
+			stopGame();
 		}
 	}
 
@@ -157,23 +168,7 @@ public class GamePlay {
 				System.out.println("Winner: " + baseList.get(i).getBaseName());
 			}
 		}
-
-//		if (scoreList.get(1) == scoreList.get(0)) {
-//			baseList.get(1).setIsWinner(true);
-//			System.out.println("Winner: " + baseList.get(1).getBaseName());
-//		}
-//		if (scoreList.get(2) == scoreList.get(0)) {
-//			baseList.get(2).setIsWinner(true);
-//			System.out.println("Winner: " + baseList.get(2).getBaseName());
-//
-//		}
-//		if (scoreList.get(3) == scoreList.get(0)) {
-//			baseList.get(3).setIsWinner(true);
-//			System.out.println("Winner: " + baseList.get(3).getBaseName());
-//
-//		}
-
-		view.forcePause();
+		stopGame();
 
 	}
 
@@ -227,8 +222,10 @@ public class GamePlay {
 
 			// Game proceeds if not paused
 			if (!view.isPause() && timer3sec.isTimeOut()) {
-				countDown.stop();
-				tick();
+				if(playing){
+					countDown.stop();
+					tick();
+				}
 			}
 
 			// Render each object on canvas using GraphicContext (gc) set up
@@ -684,8 +681,8 @@ public class GamePlay {
 	public void baseInit() {
 		topLHSBase = new Base("TopLHS", "planet1_64.png", 0, 0, 64, 64);
 		topRHSBase = new Base("TopRHS", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
-		bottomRHSBase = new Base("BottomRHS", "planet3_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
-		bottomLHSBase = new Base("BottomLHS", "planet4_64.png", 0, WINDOW_H - 64, 64, 64);
+		bottomLHSBase = new Base("BottomLHS", "planet3_64.png", 0, WINDOW_H - 64, 64, 64);
+		bottomRHSBase = new Base("BottomRHS", "planet4_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
 	}
 
 	public boolean isFinished() {

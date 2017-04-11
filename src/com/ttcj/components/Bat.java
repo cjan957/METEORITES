@@ -57,6 +57,26 @@ public class Bat extends ObjectInfo {
 				}
 			}
 		}
+		else if(batLocation == batPosition.BottomLEFT){
+			if (this.GetxPosition() < 251) {
+				this.SetxPosition(this.GetxPosition() + 5);
+			} else if (this.GetxPosition() <= 255) {
+				this.SetxPosition(256);
+			} else {
+				//if the bat is within +-5 pixels tolerance, don't do anything
+				if ((this.GetyPosition() >= targetY - 5) && (this.GetyPosition() <= targetY + 5)) {
+
+				} else if (this.GetyPosition() < targetY) {
+					if (this.GetyPosition() < 768-32-5) {
+						this.SetyPosition(this.GetyPosition() + 5);
+					}
+				} else if (this.GetyPosition() > targetY) {
+					if (this.GetyPosition() > 480+5) {
+						this.SetyPosition(this.GetyPosition() - 5);
+					}
+				}
+			}
+		}
 		else{ //TOPLEFT
 			//If the bat is not at the corner where it will curve back to vertical, move the bat to the corner. 
 			if (this.GetxPosition() < 251){
@@ -109,6 +129,30 @@ public class Bat extends ObjectInfo {
 				}
 	
 			}
+		}
+		else if(batLocation == batPosition.BottomLEFT){
+			//If bat is not at the corner, move it to the corner
+			if (this.GetyPosition() >= 485) {
+				this.SetyPosition(this.GetyPosition() - 5);
+			} 
+			else if (this.GetyPosition() >= 481) {
+				this.SetyPosition(480);
+			}
+			else {
+				if ((this.GetxPosition() >= targetX - 5) && (this.GetxPosition() <= targetX + 5)) {
+	
+				} else if (this.GetxPosition() < targetX) {
+					if (this.GetxPosition() < (256-5)) {
+						this.SetxPosition(this.GetxPosition() + 5);
+					}
+				} else if (this.GetxPosition() > targetX) {
+					if (this.GetxPosition() > 5) {
+						this.SetxPosition(this.GetxPosition() - 5);
+					}
+				}
+	
+			}
+			
 		}
 		else{
 			if (this.GetyPosition() <= 251) {
