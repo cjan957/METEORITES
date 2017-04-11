@@ -86,6 +86,7 @@ public class GamePlaySingle {
 	public void startCountDowntimeUp() {
 		timer3sec.setTimeOut(true);
 		startTheGame();
+		view.setCountDown3IsDone();
 		timer3sec.setVisibility(false);
 		timer120sec.setVisibility(true);
 	}
@@ -327,6 +328,15 @@ public class GamePlaySingle {
 			view.canvasGC().fillText("PAUSED", 1024/2, (768/2)-50);
 			view.canvasGC().strokeText("PAUSED", 1024/2, (768/2)-50);
 
+		}
+		
+		if(view.confirmationShown()){
+			view.canvasGC().setFill(Color.YELLOW);
+			view.canvasGC().setLineWidth(2);
+			Font theFont = Font.font("Arial", FontWeight.BOLD, 30);
+			view.canvasGC().setFont(theFont);
+			view.canvasGC().setTextAlign(TextAlignment.CENTER);
+			view.canvasGC().fillText("Press Y to Exit. ESC to Resume", 1024/2, (768/2)+10);
 		}
 		
 		//Display message on the screen after the game has finished

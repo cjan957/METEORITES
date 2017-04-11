@@ -32,6 +32,8 @@ public class View {
 	private Group root;
 	
 	private boolean isPaused; //Game is paused or running
+	private boolean confimationToExit;
+	private boolean countDown3IsDone;
 	
 
 	private GraphicsContext gc;
@@ -77,6 +79,7 @@ public class View {
 		//Create a new canvas and add it as a child of root  
 		Canvas canvas = new Canvas(WINDOW_W, WINDOW_H);
 		root.getChildren().add(canvas); 
+		gc = canvas.getGraphicsContext2D();
 
 		//Handle user input, do something when an event occurs (a key is pressed) 
 		gamePlayScene.setOnKeyPressed(event -> {
@@ -86,20 +89,37 @@ public class View {
 			
 			//Pause game if P is pressed
 			if(code == "P"){
-				if(!isPaused){
-					isPaused = true;
-				} else {
-					isPaused = false;
+				//Don't allow any actions if the start countdown is not yet finished
+				if(countDown3IsDone){ 
+					//prevent conflict with ESC
+					if(!confimationToExit){ 
+						if(!isPaused){
+							isPaused = true;
+						} else {
+							isPaused = false;
+						}
+					}
 				}
 			}
 			
-			//Exit game if ESC is pressed 
-			//TODO: supposed to return to main menu instead of exit program, THIS IS BAD RIGHT NOW :|
-			
+			//Exit game if ESC is pressed 			
 			if(code == "ESCAPE"){
-				isPaused = true;
-				ViewManager viewMgr = new ViewManager();
-				viewMgr.MainMenu(window);				
+				if(countDown3IsDone){
+					if(!confimationToExit){
+						confimationToExit = true;
+						isPaused = true;
+					}
+					else{
+						isPaused = false;
+						confimationToExit = false;
+					}
+				}
+			}
+			if(code == "Y"){
+				if(confimationToExit){
+					ViewManager viewMgr = new ViewManager();
+					viewMgr.MainMenu(window);
+				}
 			}
 			
 			//Check if the key is already in the array, if not add that key to the array
@@ -115,7 +135,6 @@ public class View {
 		});
 
 		//Issue a draw call on the canvas
-		gc = canvas.getGraphicsContext2D();
 		
 		window.setScene(gamePlayScene);
 	}
@@ -128,6 +147,13 @@ public class View {
 		isPaused = true;
 	}
 	
+	public boolean confirmationShown(){
+		return confimationToExit;
+	}
+	
+	public void setCountDown3IsDone(){
+		this.countDown3IsDone = true;
+	}
 	
 	//Make GraphicsContext on the canvas created in this View class available
 	//to Controller (Game) Class.
@@ -140,5 +166,7 @@ public class View {
 	public ArrayList<String> accessUserInput() {
 		return input;
 	}
+	
+	
 
 }

@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 public class Timer {
 	private int remainingSeconds;
@@ -58,7 +59,8 @@ public class Timer {
 		gc.setFill(Color.WHITE);
 		Font theFont = Font.font("Arial", FontWeight.BOLD, 32);
 		gc.setFont(theFont);
-		gc.fillText(Integer.toString(this.remainingSeconds), (gc.getCanvas().getWidth()/2)-15, 50);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.fillText(Integer.toString(this.remainingSeconds), (gc.getCanvas().getWidth()/2), 50);
 	}
 
 }
