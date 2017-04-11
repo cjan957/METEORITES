@@ -104,26 +104,31 @@ public class GamePlay {
 			topLHSBase.setIsWinner(true);
 			message = "Winner: "+topLHSBase.getBaseName();	
 			longMessage = false;
+			playLoseSound();
 			stopTheGame();
 
 		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			topRHSBase.setIsWinner(true);
-			message = "Winner: "+topRHSBase.getBaseName();	
+			message = "Winner: "+topRHSBase.getBaseName();
+			playLoseSound();
 			stopTheGame();
 
 		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 			bottomLHSBase.setIsWinner(true);
-			message = "Winner: "+bottomLHSBase.getBaseName();	
+			message = "Winner: "+bottomLHSBase.getBaseName();
+			playWinSound();
 			stopTheGame();
 
 		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
 			bottomRHSBase.setIsWinner(true);
-			message = "Winner: "+bottomRHSBase.getBaseName();	
+			message = "Winner: "+bottomRHSBase.getBaseName();
+			playWinSound();
 			stopTheGame();
 		}
 		else if(bottomLHSBase.isDead() && bottomRHSBase.isDead()){
 			message = "Blue and Green Win";
 			System.out.println("AIs Win");
+			playLoseSound();
 			stopTheGame();
 		}
 	}
