@@ -721,7 +721,7 @@ public class Game extends Application {
 		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32, false, Bat.batPosition.BottomLEFT);
 		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3, true, Bat.batPosition.TopRIGHT);
 		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32, false, Bat.batPosition.BottomRIGHT);
-		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
+		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2 - 32, 32, 32);
 		
 		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
 		 wallHit = new Sound("Sounds/wallHit.wav");
