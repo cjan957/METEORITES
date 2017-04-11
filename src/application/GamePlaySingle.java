@@ -40,6 +40,10 @@ public class GamePlaySingle {
 	private Sound paddleDeflect;
 	private Sound wallHit;
 	private Sound baseHit;
+	private Sound countdownVoice;
+	private Sound countdownSound;
+	private Sound winJingleSound;
+	private Sound loseJingleSound;
 
 	private BrickBuilder gameBrick;
 
@@ -97,12 +101,14 @@ public class GamePlaySingle {
 			bottomRHSBase.isWinner();
 			message = "You Win";	
 			longMessage = false;
+			playWinSound();
 			stopTheGame(); 
 			
 		}
 		else if(bottomRHSBase.isDead()){
 			message = "You Lose";
 			longMessage = false;
+			playLoseSound();
 			stopTheGame();
 		}
 	}
@@ -201,6 +207,7 @@ public class GamePlaySingle {
 
 		// Counting down from 3 to 0, decrement the timer for 1 sec every one
 		// second.
+		playCountdownVoice();
 		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
 			timer3sec.countDown();
 		}));
@@ -211,6 +218,7 @@ public class GamePlaySingle {
 		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> {
 			startCountDowntimeUp();
 			startMasterTimer();
+			playCountdownSound();
 		}));
 		countDown.play();
 
@@ -317,7 +325,7 @@ public class GamePlaySingle {
 				view.canvasGC().setFill(Color.WHITE);
 				view.canvasGC().setStroke(Color.BLACK);
 				view.canvasGC().setLineWidth(2);
-				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
+				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 19);
 				view.canvasGC().setFont(theSubFont);
 				view.canvasGC().setTextAlign(TextAlignment.CENTER);
 				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+100);
@@ -334,7 +342,7 @@ public class GamePlaySingle {
 				view.canvasGC().setFill(Color.WHITE);
 				view.canvasGC().setStroke(Color.BLACK);
 				view.canvasGC().setLineWidth(2);
-				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
+				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 19);
 				view.canvasGC().setFont(theSubFont);
 				view.canvasGC().setTextAlign(TextAlignment.CENTER);
 				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+80);
@@ -632,7 +640,11 @@ public class GamePlaySingle {
 		
 		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
 		 wallHit = new Sound("Sounds/wallHit.wav");
-		 baseHit = new Sound("Sounds/wallHit.wav");
+		 baseHit = new Sound("Sounds/baseHit.aiff");
+		 countdownVoice = new Sound("Sounds/countdownVoice.wav");
+		 countdownSound = new Sound("Sounds/countdownSoundStart.wav");
+		 winJingleSound = new Sound("Sounds/winJingle.wav");
+		 loseJingleSound = new Sound("Sounds/loseJingle.wav");
 
 		baseInit();	
 		gameBrick = new BrickBuilder();
@@ -662,8 +674,24 @@ public class GamePlaySingle {
 		this.wallHit.playSound();
 	}
 
-	private void playBaseHitSound() { //TODO: change sound
+	private void playBaseHitSound() { 
 		this.baseHit.playSound();
+	}
+	
+	private void playCountdownVoice() {
+		this.countdownVoice.playSound();
+	}
+	
+	private void playCountdownSound() {
+		this.countdownSound.playSound();
+	}
+	
+	private void playWinSound() {
+		this.winJingleSound.playSound();
+	}
+	
+	private void playLoseSound() {
+		this.loseJingleSound.playSound();
 	}
 	
 }
