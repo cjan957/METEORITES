@@ -36,6 +36,8 @@ public class GamePlaySingle {
 	private Sound paddleDeflect;
 	private Sound wallHit;
 	private Sound baseHit;
+	private Sound countdownVoice;
+	private Sound countdownSound;
 
 	private BrickBuilder gameBrick;
 
@@ -216,6 +218,7 @@ public class GamePlaySingle {
 
 		// Counting down from 3 to 0, decrement the timer for 1 sec every one
 		// second.
+		playCountdownVoice();
 		Timeline renderKeyFrame = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
 			timer3sec.countDown();
 		}));
@@ -226,6 +229,7 @@ public class GamePlaySingle {
 		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> {
 			startCountDowntimeUp();
 			startMasterTimer();
+			playCountdownSound();
 		}));
 		countDown.play();
 
@@ -602,11 +606,13 @@ public class GamePlaySingle {
 		bottomLHSbat = new Bat("paddle_32.png", WINDOW_H / 3, 768 - WINDOW_H/3 - 32, true, Bat.batPosition.BottomLEFT);
 		topRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, WINDOW_H / 3, true, Bat.batPosition.TopRIGHT);
 		bottomRHSbat = new Bat("paddle_32.png", 1024 - WINDOW_H / 3 - 32, 768 - WINDOW_H / 3 - 32, false, Bat.batPosition.BottomRIGHT);
-		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2, 32, 32);
+		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2 - 16, 32, 32);
 		
 		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
 		 wallHit = new Sound("Sounds/wallHit.wav");
-		 baseHit = new Sound("Sounds/wallHit.wav");
+		 baseHit = new Sound("Sounds/baseHit.aiff");
+		 countdownVoice = new Sound("Sounds/countdownVoice.wav");
+		 countdownSound = new Sound("Sounds/countdownSoundStart.wav");
 
 		baseInit();	
 		gameBrick = new BrickBuilder();
@@ -636,8 +642,16 @@ public class GamePlaySingle {
 		this.wallHit.playSound();
 	}
 
-	private void playBaseHitSound() { //TODO: change sound
+	private void playBaseHitSound() { 
 		this.baseHit.playSound();
+	}
+	
+	private void playCountdownVoice() {
+		this.countdownVoice.playSound();
+	}
+	
+	private void playCountdownSound() {
+		this.countdownSound.playSound();
 	}
 	
 }
