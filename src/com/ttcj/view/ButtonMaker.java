@@ -29,14 +29,10 @@ public class ButtonMaker extends StackPane{
 		getChildren().addAll(bg,text);
 		
 		setOnMouseEntered(event ->{
-			//bg.setTranslateX(20);
-			//text.setTranslateX(20);
 			setEffect(dropShadow);
 		});
 		
 		setOnMouseExited(event ->{
-			//bg.setTranslateX(0);
-			//text.setTranslateX(0);
 			setEffect(null);
 		});
 		

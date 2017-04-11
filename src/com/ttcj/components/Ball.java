@@ -16,6 +16,8 @@ public class Ball extends ObjectInfo{
 
 	private double destroyPower;
 	private int ballRadius;
+	
+	private boolean visible = true;
 
 	private float xVelocity;
 	private float yVelocity;
@@ -48,7 +50,10 @@ public class Ball extends ObjectInfo{
 		this.SetHeight(height);
 	}
 	
-
+	public void setGhostBall(){
+		visible = false;
+	}
+	
 	public void setXVelocity(float dX) {
 		this.xVelocity = dX;
 	}

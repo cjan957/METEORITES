@@ -32,7 +32,7 @@ public class ViewManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			System.out.println("xxx");
+			System.out.println("Error opening files");
 		}
 		Image image = new Image(stream);
 		try {
