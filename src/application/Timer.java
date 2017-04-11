@@ -50,8 +50,8 @@ public class Timer {
 		gc.setLineWidth(2);
 		Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
 		gc.setFont(theFont);
-		gc.fillText(Integer.toString(this.remainingSeconds), 1024/2, 768/2);
-		gc.strokeText(Integer.toString(this.remainingSeconds), 1024/2, 768/2);
+		gc.fillText(Integer.toString(this.remainingSeconds), 1024/2 - 20, 768/2 - 30);
+		gc.strokeText(Integer.toString(this.remainingSeconds), 1024/2 - 20, 768/2 - 30);
 	}
 	
 	public void renderMasterTimer(GraphicsContext gc){

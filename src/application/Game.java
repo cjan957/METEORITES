@@ -3,12 +3,12 @@
  * 	
  */
 package application;
-
 import com.ttcj.view.ViewManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Game extends Application {	
+
+public class Game extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -18,4 +18,5 @@ public class Game extends Application {
 		ViewManager viewMgr = new ViewManager();
 		viewMgr.MainMenu(gameStage);
 	}
+
 }
