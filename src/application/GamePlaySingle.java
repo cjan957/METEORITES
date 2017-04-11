@@ -22,7 +22,7 @@ public class GamePlaySingle {
 	
 	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
-	private boolean showGhostBall = true;
+	private boolean showGhostBall = false;
 
 
 	// Instantiate game objects
@@ -493,6 +493,32 @@ public class GamePlaySingle {
 						topRHSbat.makeAIMoveX(((batMaxY-C)/gradient) +32);
 					}
 				}
+				
+				
+				double ghostGradient = (ghostBall.getYVelocity()) / (ghostBall.getXVelocity());
+				double ghostC = ghostBall.GetyPosition() - (ghostGradient * ghostBall.GetxPosition());
+				
+				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
+				//736 is the AI x Position when it can only move vertically		
+				if((((ghostGradient * batMinX) + ghostC ) < batMaxY ) && (((ghostGradient * batMinX) +  ghostC) > 0)){ 
+					if(((ghostBall.getYVelocity() < 0) && (ghostBall.getXVelocity() > 0))){ // ball traveling to top right
+						topRHSbat.makeAIMoveY(((ghostGradient * 736) + ghostC) + 30);
+					}
+					else if((ghostBall.getYVelocity() > 0) && (ghostBall.getXVelocity() > 0)){ // ball traveling to bottom right, apply calibration
+						topRHSbat.makeAIMoveY(((ghostGradient * 736) + ghostC) - 30);
+					}
+				}	
+				//If the ball is heading toward the AI Horizontal area
+				else if ( ((batMaxY-ghostC)/ghostGradient) > batMinX && ((batMaxY-ghostC)/ghostGradient) < WINDOW_W){
+					if(((ghostBall.getYVelocity() < 0) && (ghostBall.getXVelocity() > 0))){
+						topRHSbat.makeAIMoveX(((batMaxY-ghostC)/ghostGradient) +32);
+					}
+					else if((ghostBall.getYVelocity() < 0) && (ghostBall.getXVelocity() < 0)){
+						topRHSbat.makeAIMoveX(((batMaxY-ghostC)/ghostGradient) +32);
+					}
+				}
+				
+				
 			}
 		
 		if (!bottomRHSBase.isDead()) {
