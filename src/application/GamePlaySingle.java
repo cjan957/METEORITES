@@ -11,6 +11,10 @@ import com.ttcj.components.Sound;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -44,7 +48,9 @@ public class GamePlaySingle {
 		
 	private Stage gameWindow;
 	
-	private boolean playing;
+	private boolean playing = true;
+	private boolean longMessage;
+	private String message;
 
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
@@ -71,7 +77,7 @@ public class GamePlaySingle {
 	
 	public void startCountDowntimeUp() {
 		timer3sec.setTimeOut(true);
-		playing = true;
+		startTheGame();
 		timer3sec.setVisibility(false);
 		timer120sec.setVisibility(true);
 	}
@@ -89,35 +95,16 @@ public class GamePlaySingle {
 		//when all other players are dead, and you are the only one left
 		if(topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
 			bottomRHSBase.isWinner();
-			System.out.println("You won");
+			message = "You Win";	
+			longMessage = false;
 			stopTheGame(); 
 			
 		}
 		else if(bottomRHSBase.isDead()){
-			System.out.println("You lose");
+			message = "You Lose";
+			longMessage = false;
 			stopTheGame();
 		}
-
-//		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-//			topLHSBase.setIsWinner(true);
-//			System.out.println("Winner: " + topLHSBase.getBaseName());
-//			view.forcePause();
-//
-//		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-//			topRHSBase.setIsWinner(true);
-//			System.out.println("Winner: " + topRHSBase.getBaseName());
-//			view.forcePause();
-//
-//		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-//			bottomLHSBase.setIsWinner(true);
-//			System.out.println("Winner: " + bottomLHSBase.getBaseName());
-//			view.forcePause();
-//
-//		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
-//			bottomRHSBase.setIsWinner(true);
-//			System.out.println("Winner: " + bottomRHSBase.getBaseName());
-//			view.forcePause();
-//		}
 	}
 
 	public void timeOutFindWinner() {
@@ -164,14 +151,26 @@ public class GamePlaySingle {
 		System.out.println(scoreList);
 		System.out.println(baseList);
 
+		int numberOfTies = 0;
 		baseList.get(0).setIsWinner(true);
-		System.out.println("Winner: " + baseList.get(0).getBaseName());
+		String winnerName = baseList.get(0).getBaseName();
+		//System.out.println("Winner: " + baseList.get(0).getBaseName());
 		
 		for(int i = 1; i < arraySize; i++){
 			if(scoreList.get(i) == scoreList.get(0)){
+				numberOfTies++;
 				baseList.get(i).setIsWinner(true);
-				System.out.println("Winner: " + baseList.get(i).getBaseName());
+				winnerName = winnerName + ", "+ baseList.get(i).getBaseName();
 			}
+		}
+		
+		if(numberOfTies > 1){
+			message = "Tie: " + winnerName;
+			longMessage = true;
+		}
+		else{
+			message = "Winner: " + winnerName;
+			longMessage = false;
 		}
 
 		//stop the game
@@ -302,6 +301,47 @@ public class GamePlaySingle {
 		for (Brick brick : this.gameBrick.getBottomRHSBrick().accessBrickArray()) {
 			brick.render(view.canvasGC());
 		}
+		
+		//Display message on the screen after the game has finished
+		if(!playing){
+			if(!longMessage){
+				view.canvasGC().setFill(Color.WHITE);
+				view.canvasGC().setStroke(Color.BLACK);
+				view.canvasGC().setLineWidth(2);
+				Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
+				view.canvasGC().setFont(theFont);
+				view.canvasGC().setTextAlign(TextAlignment.CENTER);
+				view.canvasGC().fillText(message, 1024/2, 768/2);
+				view.canvasGC().strokeText(message, 1024/2, 768/2);
+				
+				view.canvasGC().setFill(Color.WHITE);
+				view.canvasGC().setStroke(Color.BLACK);
+				view.canvasGC().setLineWidth(2);
+				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
+				view.canvasGC().setFont(theSubFont);
+				view.canvasGC().setTextAlign(TextAlignment.CENTER);
+				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+100);
+				
+			}
+			else{
+				view.canvasGC().setFill(Color.WHITE);
+				view.canvasGC().setLineWidth(2);
+				view.canvasGC().setTextAlign(TextAlignment.CENTER);
+				Font theFont = Font.font("Arial", FontWeight.BOLD, 30);
+				view.canvasGC().setFont(theFont);
+				view.canvasGC().fillText(message, 1024/2, 768/2);
+				
+				view.canvasGC().setFill(Color.WHITE);
+				view.canvasGC().setStroke(Color.BLACK);
+				view.canvasGC().setLineWidth(2);
+				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
+				view.canvasGC().setFont(theSubFont);
+				view.canvasGC().setTextAlign(TextAlignment.CENTER);
+				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+80);
+
+			}
+		}
+		
 	}
 
 	// Tick, run the game by 1 frame
@@ -600,10 +640,10 @@ public class GamePlaySingle {
 	}
 
 	public void baseInit() {
-		topLHSBase = new Base("TopLHS", "planet1_64.png", 0, 0, 64, 64);
-		topRHSBase = new Base("TopRHS", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
-		bottomLHSBase = new Base("BottomLHS", "planet3_64.png", 0, WINDOW_H - 64, 64, 64);
-		bottomRHSBase = new Base("BottomRHS", "planet4_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
+		topLHSBase = new Base("Blue", "planet1_64.png", 0, 0, 64, 64);
+		topRHSBase = new Base("Green", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
+		bottomLHSBase = new Base("Yellow", "planet3_64.png", 0, WINDOW_H - 64, 64, 64);
+		bottomRHSBase = new Base("Red", "planet4_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
 	}
 
 	public boolean isFinished() {
@@ -611,7 +651,7 @@ public class GamePlaySingle {
 	}
 
 	public void setTimeRemainingToFive() {
-		timer120sec.setTime(5);
+		timer120sec.setTime(2);
 	}
 
 	private void playPaddleDeflectSound() {

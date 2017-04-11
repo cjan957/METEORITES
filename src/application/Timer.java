@@ -50,15 +50,15 @@ public class Timer {
 		gc.setLineWidth(2);
 		Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
 		gc.setFont(theFont);
-		gc.fillText(Integer.toString(this.remainingSeconds), 1024/2 - 20, 768/2 - 30);
-		gc.strokeText(Integer.toString(this.remainingSeconds), 1024/2 - 20, 768/2 - 30);
+		gc.fillText(Integer.toString(this.remainingSeconds), (1024/2)-15, 768/2 - 30);
+		gc.strokeText(Integer.toString(this.remainingSeconds), (1024/2)-15, 768/2 - 30);
 	}
 	
 	public void renderMasterTimer(GraphicsContext gc){
 		gc.setFill(Color.WHITE);
 		Font theFont = Font.font("Arial", FontWeight.BOLD, 32);
 		gc.setFont(theFont);
-		gc.fillText(Integer.toString(this.remainingSeconds), (gc.getCanvas().getWidth()/2)-20, 50);
+		gc.fillText(Integer.toString(this.remainingSeconds), (gc.getCanvas().getWidth()/2)-15, 50);
 	}
 
 }
