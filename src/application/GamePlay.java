@@ -332,6 +332,18 @@ public class GamePlay {
 			brick.render(view.canvasGC());
 		}
 		
+		if(view.isPause()){
+			view.canvasGC().setFill(Color.YELLOW);
+			view.canvasGC().setStroke(Color.RED);
+			view.canvasGC().setLineWidth(2);
+			Font theFont = Font.font("Arial", FontWeight.BOLD, 50);
+			view.canvasGC().setFont(theFont);
+			view.canvasGC().setTextAlign(TextAlignment.CENTER);
+			view.canvasGC().fillText("PAUSED", 1024/2, (768/2)-50);
+			view.canvasGC().strokeText("PAUSED", 1024/2, (768/2)-50);
+
+		}
+		
 		if(!playing){
 			if(!longMessage){
 				view.canvasGC().setFill(Color.WHITE);
