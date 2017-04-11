@@ -8,6 +8,7 @@ import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
 import com.ttcj.components.Brick;
 import com.ttcj.components.Sound;
+import com.ttcj.components.Bat.batPosition;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,6 +41,9 @@ public class GamePlay {
 	private Base topRHSBase;
 	private Base bottomRHSBase;
 	
+	private BrickBuilder gameBrick;
+	private Deflect deflect;
+	
 	private Sound paddleDeflect;
 	private Sound wallHit;
 	private Sound baseHit;
@@ -48,31 +52,42 @@ public class GamePlay {
 	private Sound winJingleSound;
 	private Sound loseJingleSound;
 
-	private BrickBuilder gameBrick;
 
-	private Deflect deflect;
+	private Stage gameWindow;
 	private View view;
 	
-	
+	//State game mode and whether the game is still going
 	private boolean playing = true;
+	
+	private enum gameMode{
+		SINGLE, MULTI
+	}
+	private gameMode currentGameMode;
+
+	
+	//message controller
 	private boolean longMessage;
 	private String message;
 	
-	private Stage gameWindow;
 
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
 
 	// Defining constants
-	private static final String GAMENAME = "Meteorites";
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	
 	
-	public GamePlay(int gameMode, Stage gameStage){
+	public GamePlay(int gameModeNum, Stage gameStage){
 			view = new View();
 			gameWindow = gameStage;
-			startGame1();
+			if(gameModeNum == 0){ //game mode 0 = single
+				currentGameMode = gameMode.SINGLE;
+			}
+			else{ //game mode 1 = multi-player
+				currentGameMode = gameMode.MULTI;
+				startGame1();
+			}
 	}
 
 	public void stopTheGame(){
@@ -87,12 +102,18 @@ public class GamePlay {
 	public void startCountDowntimeUp() {
 		timer3sec.setTimeOut(true);
 		startTheGame();
+		
+		//Notify the view that the 3s counter has finished
 		view.setCountDown3IsDone();
+		
+		//Hide and show relevant timers on the screen.
 		timer3sec.setVisibility(false);
 		timer120sec.setVisibility(true);
 	}
 
 	public void checkActualTimeRemaining() {
+		//If the game has finished (timer = 0), check for winner. Otherwise,
+		//the game is still going so check if there's any in-game winner.
 		if (timer120sec.getTime() == 0) {
 			timeOutFindWinner();
 		} else {
@@ -101,36 +122,54 @@ public class GamePlay {
 	}
 
 	public void timeLeftFindWinner() {
-		if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-			topLHSBase.setIsWinner(true);
-			message = "Winner: "+topLHSBase.getBaseName();	
-			longMessage = false;
-			playLoseSound();
-			stopTheGame();
-
-		} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-			topRHSBase.setIsWinner(true);
-			message = "Winner: "+topRHSBase.getBaseName();
-			playLoseSound();
-			stopTheGame();
-
-		} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
-			bottomLHSBase.setIsWinner(true);
-			message = "Winner: "+bottomLHSBase.getBaseName();
-			playWinSound();
-			stopTheGame();
-
-		} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
-			bottomRHSBase.setIsWinner(true);
-			message = "Winner: "+bottomRHSBase.getBaseName();
-			playWinSound();
-			stopTheGame();
+		if(currentGameMode == gameMode.MULTI){
+			if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+				topLHSBase.setIsWinner(true);
+				message = "Winner: "+topLHSBase.getBaseName();	
+				longMessage = false;
+				playLoseSound();
+				stopTheGame();
+	
+			} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+				topRHSBase.setIsWinner(true);
+				message = "Winner: "+topRHSBase.getBaseName();
+				playLoseSound();
+				stopTheGame();
+	
+			} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
+				bottomLHSBase.setIsWinner(true);
+				message = "Winner: "+bottomLHSBase.getBaseName();
+				playWinSound();
+				stopTheGame();
+	
+			} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
+				bottomRHSBase.setIsWinner(true);
+				message = "Winner: "+bottomRHSBase.getBaseName();
+				playWinSound();
+				stopTheGame();
+			}
+			else if(bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+				message = "Blue and Green Win";
+				System.out.println("AIs Win");
+				playLoseSound();
+				stopTheGame();
+			}
 		}
-		else if(bottomLHSBase.isDead() && bottomRHSBase.isDead()){
-			message = "Blue and Green Win";
-			System.out.println("AIs Win");
-			playLoseSound();
-			stopTheGame();
+		else{ //Must be single player mode
+			if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
+				bottomRHSBase.isWinner();
+				message = "You Win";	
+				longMessage = false;
+				playWinSound();
+				stopTheGame(); 
+				
+			}
+			else if (bottomRHSBase.isDead()){
+				message = "You Lose";
+				longMessage = false;
+				playLoseSound();
+				stopTheGame();
+			}
 		}
 	}
 

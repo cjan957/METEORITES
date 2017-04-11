@@ -50,12 +50,12 @@ public class ViewManager {
 			
 		ButtonMaker singlePlayer = new ButtonMaker("Single Player");
 		singlePlayer.setOnMouseClicked(event->{
-			new GamePlaySingle(0, gameStage);
+			new GamePlay(0, gameStage); //game Mode 0 for single player
 		});
 		
-		ButtonMaker twoPlayer = new ButtonMaker("Two Players");
+		ButtonMaker twoPlayer = new ButtonMaker("Two Player");
 		twoPlayer.setOnMouseClicked(event->{
-			new GamePlay(0, gameStage);
+			new GamePlay(1, gameStage); // 1 for 2 player
 		});
 		
 		ButtonMaker exit = new ButtonMaker("Exit");
