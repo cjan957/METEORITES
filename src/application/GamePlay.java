@@ -40,15 +40,9 @@ public class GamePlay {
 
 	// Instantiate game objects
 	private Timer timer3sec;
-	private Timer timer120sec;
-	
+	private Timer timer120sec;	
 	private ComponentManager gameComponent;
-
-	private Base topLHSBase;
-	private Base bottomLHSBase;
-	private Base topRHSBase;
-	private Base bottomRHSBase;
-	
+	private Base topLHSBase, bottomLHSBase, topRHSBase, bottomRHSBase;
 	private BrickBuilder gameBrick;
 	private Deflect deflect;
 
@@ -71,7 +65,7 @@ public class GamePlay {
 	private ArrayList<String> input = new ArrayList<String>();
 	
 	/*
-	 *  GAMEPLAY CONST
+	 * -------------------------------------- GAMEPLAY CONST--------------------------------------
 	 */
 	public GamePlay(int gameModeNum, Stage gameStage){
 			view = new GameView();
@@ -83,8 +77,7 @@ public class GamePlay {
 				currentGameMode = gameMode.MULTI;
 			}
 			startGame();
-	}
-	
+	}	
 	
 	/*
 	 * --------------------------------------TIMER RELEVANT METHODS--------------------------------------
@@ -144,7 +137,6 @@ public class GamePlay {
 			timeLeftFindWinner();
 		}
 	}
-	
 	
 	/*
 	 * --------------------------------------GAME PLAY METHODS--------------------------------------
@@ -525,8 +517,7 @@ public class GamePlay {
 				view.canvasGC().setTextAlign(TextAlignment.CENTER);
 				view.canvasGC().fillText(message, 1024/2, 768/2);
 				view.canvasGC().strokeText(message, 1024/2, 768/2);
-
-				
+		
 				view.canvasGC().setFill(Color.WHITE);
 				view.canvasGC().setStroke(Color.BLACK);
 				view.canvasGC().setLineWidth(2);
@@ -614,11 +605,8 @@ public class GamePlay {
 		//if (!topLHSBase.isDead()) {
 			//int increment = 7;
 		if(!freezeThePaddle){
-
-			if(!gameComponent.gettopLHSbat().isAIBat()){
-			}
-			else{
-				//If this is an AI's bat. Let the AI do the work 
+			//This bat will always be AI controlled
+			if(gameComponent.gettopLHSbat().isAIBat()){
 				double batMaxX = 256;
 				double batMaxY = (WINDOW_H / 3);
 				double gradient = (gameComponent.getBall().getYVelocity()) / (gameComponent.getBall().getXVelocity());
@@ -627,7 +615,7 @@ public class GamePlay {
 				double gradientGhost = (gameComponent.getGhostBall().getYVelocity()) / (gameComponent.getGhostBall().getXVelocity());
 				double CGhostBall = gameComponent.getGhostBall().GetyPosition() - (gradientGhost * gameComponent.getGhostBall().GetxPosition());
 					
-				//ghost
+				//GHOST BALL
 				//If the ball is heading toward the AI Horizontal area
 				if ( ((batMaxY-CGhostBall)/gradientGhost) > 0 && ((batMaxY-CGhostBall)/gradientGhost) < batMaxX){
 					if(((gameComponent.getGhostBall().getYVelocity() < 0) && (gameComponent.getGhostBall().getXVelocity() < 0))){
@@ -666,10 +654,7 @@ public class GamePlay {
 					else if((gameComponent.getBall().getYVelocity() > 0) && (gameComponent.getBall().getXVelocity() > 0)){ // ball direction is bottom left, apply calibration
 						gameComponent.gettopLHSbat().makeAIMoveY(((gradient * batMaxX) + C) - 32);
 					}
-				}
-				
-				
-				
+				}			
 			}
 		//}
 		
@@ -853,33 +838,12 @@ public class GamePlay {
 	 */
 
 	public void paddleCollisionCheck() {
-
-		//if (!topLHSBase.isDead()) {
-			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopLHSbat())) {
+			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopLHSbat()) ||
+					gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomLHSbat()) ||
+					gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopRHSbat()) ||
+					gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomRHSbat())) {	
 				changeBallVelocity();
-				gameComponent.getBall().setBatContact(basePosition.TOPLEFT);
 			}
-		//}
-		//if (!bottomLHSBase.isDead()) {
-			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomLHSbat())) {
-				changeBallVelocity();	
-				gameComponent.getBall().setBatContact(basePosition.BOTTOMLEFT);
-
-			}	
-		//}
-		//if (!topRHSBase.isDead()) {
-			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopRHSbat())) {
-				changeBallVelocity();
-				gameComponent.getBall().setBatContact(basePosition.TOPRIGHT);
-
-			}
-		//}
-		//if (!bottomRHSBase.isDead()) {
-			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomRHSbat())) {
-				changeBallVelocity();
-				gameComponent.getBall().setBatContact(basePosition.BOTTOMRIGHT);
-			}	
-		//}
 	}
 	
 	public void changeBallVelocity(){
@@ -987,7 +951,8 @@ public class GamePlay {
 			}
 		}
 		
-		//Reset ball previous velocity after all Brick List has been checked. 
+		//Reset ball previous velocity after all Brick List has been checked.
+		//For more info, please jump to Deflect class
 		deflect.setTempDir(99, 99);
 	}
 
