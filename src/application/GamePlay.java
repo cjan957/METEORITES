@@ -31,8 +31,8 @@ public class GamePlay {
 	private static final int WINDOW_H = 768;
 	private static final float speedIncrementOverTime = 0.013f;
 	private static final int paddleSpeed = 7;
-	private static int powerupTime_Time = ThreadLocalRandom.current().nextInt(15, 100 + 1);
-	private static int powerupTime_Frozen = ThreadLocalRandom.current().nextInt(20, 105 + 1);
+	private static int powerupTime_Time = ThreadLocalRandom.current().nextInt(15, 40 + 1);
+	private static int powerupTime_Frozen = ThreadLocalRandom.current().nextInt(60, 110 + 1);
 	
 	private int startPowerup;
 	

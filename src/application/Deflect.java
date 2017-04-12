@@ -71,6 +71,7 @@ public class Deflect {
 		}
 	}
 	
+	//Reset temporary velocity 
 	public void setTempDir(int right, int up){
 		this.tempBallDirection_RIGHT = right;
 		this.tempBallDirection_UP = up;
