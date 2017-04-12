@@ -8,34 +8,44 @@
 
 package com.ttcj.components;
 
+import javafx.geometry.Rectangle2D;
+
 public class Powerup extends ObjectInfo {
+	
+	private boolean visible = false;
 
-	private enum powerupType { // for identifying type of Power up.
-		GOOD, NEUTRAL, BAD
+	public enum powerupType { // The modifier to apply to the game
+		BAT_FROZEN, DECREASE_TIME;
 	}
 
-	private enum powerupModifier { // The modifier to apply to the game
-		BAT_SMALLER, BAT_LARGER, BAT_SLOWER, BAT_FASTER, BAT_FROZEN, BALL_SMALLER, BALL_BIGGER, BALL_SLOWER, BALL_FASTER, BASE_SMALLER, BASE_LARGER
+	private powerupType puModifier;
+	
+	
+	public Powerup(String img, int xPos, int yPos, powerupType modifier){
+		this.setImage(img);
+		this.SetxPosition(xPos);
+		this.SetyPosition(yPos);
+		this.setpowerupModifier(modifier);
 	}
-
-	private powerupType puType;
-	private powerupModifier puModifier;
-
-	public void setPowerupType(powerupType Type) {
-		puType = Type;
-	}
-
-	public powerupType getPowerupType() {
-		return this.puType;
-	}
-
-	public void setpowerupModifier(powerupModifier Type) {
+	
+	public void setpowerupModifier(powerupType Type) {
 		puModifier = Type;
 	}
 
-	public powerupModifier getPowerupModifier() {
+	public powerupType getPowerupModifier() {
 		return this.puModifier;
 	}
 	
+	public boolean isVisible(){
+		return visible;
+	}
+	
+	public void setVisibility(boolean visible){
+		this.visible = visible;
+	}
+	
+	public Rectangle2D getBoundary(){
+		return new Rectangle2D(xPosition,yPosition,width,height);
+	}
 
 }

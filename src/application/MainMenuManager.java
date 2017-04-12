@@ -1,11 +1,12 @@
-package com.ttcj.view;
+package application;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import application.GamePlay;
+import com.ttcj.view.ButtonMaker;
+
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -74,10 +75,6 @@ public class MainMenuManager {
 		// Show the stage on the screen
 		gameStage.show();
 
-		
-
-		
-	
 		
 //		Button button = new Button("Launch Game");
 //		Button button2 = new Button("Exit");

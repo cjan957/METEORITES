@@ -15,7 +15,9 @@ public class Bat extends ObjectInfo {
 	private int batWidth;
 	private int batLength;
 	private batPosition batLocation;
-
+	
+	private int AISpeed = 5;
+	
 	public enum batPosition {
 		TopLEFT, TopRIGHT, BottomLEFT, BottomRIGHT
 	}
@@ -39,7 +41,7 @@ public class Bat extends ObjectInfo {
 	public void makeAIMoveY(double targetY) {
 		if (batLocation == batPosition.TopRIGHT) {
 			if (this.GetxPosition() > 741) {
-				this.SetxPosition(this.GetxPosition() - 5);
+				this.SetxPosition(this.GetxPosition() - AISpeed);
 			} else if (this.GetxPosition() >= 737) {
 				this.SetxPosition(736);
 			} else {
@@ -48,18 +50,18 @@ public class Bat extends ObjectInfo {
 
 				} else if (this.GetyPosition() < targetY) {
 					if (this.GetyPosition() < 250) {
-						this.SetyPosition(this.GetyPosition() + 5);
+						this.SetyPosition(this.GetyPosition() + AISpeed);
 					}
 				} else if (this.GetyPosition() > targetY) {
 					if (this.GetyPosition() > 5) {
-						this.SetyPosition(this.GetyPosition() - 5);
+						this.SetyPosition(this.GetyPosition() - AISpeed);
 					}
 				}
 			}
 		}
 		else if(batLocation == batPosition.BottomLEFT){
 			if (this.GetxPosition() < 251) {
-				this.SetxPosition(this.GetxPosition() + 5);
+				this.SetxPosition(this.GetxPosition() + AISpeed);
 			} else if (this.GetxPosition() <= 255) {
 				this.SetxPosition(256);
 			} else {
@@ -68,11 +70,11 @@ public class Bat extends ObjectInfo {
 
 				} else if (this.GetyPosition() < targetY) {
 					if (this.GetyPosition() < 768-32-5) {
-						this.SetyPosition(this.GetyPosition() + 5);
+						this.SetyPosition(this.GetyPosition() + AISpeed);
 					}
 				} else if (this.GetyPosition() > targetY) {
 					if (this.GetyPosition() > 480+5) {
-						this.SetyPosition(this.GetyPosition() - 5);
+						this.SetyPosition(this.GetyPosition() - AISpeed);
 					}
 				}
 			}
@@ -80,7 +82,7 @@ public class Bat extends ObjectInfo {
 		else{ //TOPLEFT
 			//If the bat is not at the corner where it will curve back to vertical, move the bat to the corner. 
 			if (this.GetxPosition() < 251){
-				this.SetxPosition(this.GetxPosition() + 5); 
+				this.SetxPosition(this.GetxPosition() + AISpeed); 
 			}
 			//if xPos is between 252 and 255, set position to 256 straight away
 			else if(this.GetxPosition() <= 255){ 
@@ -93,11 +95,11 @@ public class Bat extends ObjectInfo {
 				//if the bat is above the ball's path, move the bat down!
 				else if (this.GetyPosition() < targetY) {
 					if (this.GetyPosition() < 250) {
-						this.SetyPosition(this.GetyPosition() + 5);
+						this.SetyPosition(this.GetyPosition() + AISpeed);
 					}
 				} else if (this.GetyPosition() > targetY) {
 					if (this.GetyPosition() > 5) {
-						this.SetyPosition(this.GetyPosition() - 5);
+						this.SetyPosition(this.GetyPosition() - AISpeed);
 					}
 				}
 				
@@ -109,7 +111,7 @@ public class Bat extends ObjectInfo {
 	public void makeAIMoveX(double targetX) {
 		if(batLocation == batPosition.TopRIGHT){
 			if (this.GetyPosition() <= 251) {
-				this.SetyPosition(this.GetyPosition() + 5);
+				this.SetyPosition(this.GetyPosition() + AISpeed);
 			} 
 			else if (this.GetyPosition() <= 255) {
 				this.SetyPosition(256);
@@ -120,11 +122,11 @@ public class Bat extends ObjectInfo {
 	
 				} else if (this.GetxPosition() < targetX) {
 					if (this.GetxPosition() < 992) {
-						this.SetxPosition(this.GetxPosition() + 5);
+						this.SetxPosition(this.GetxPosition() + AISpeed);
 					}
 				} else if (this.GetxPosition() > targetX) {
 					if (this.GetxPosition() > 741) {
-						this.SetxPosition(this.GetxPosition() - 5);
+						this.SetxPosition(this.GetxPosition() - AISpeed);
 					}
 				}
 	
@@ -133,7 +135,7 @@ public class Bat extends ObjectInfo {
 		else if(batLocation == batPosition.BottomLEFT){
 			//If bat is not at the corner, move it to the corner
 			if (this.GetyPosition() >= 485) {
-				this.SetyPosition(this.GetyPosition() - 5);
+				this.SetyPosition(this.GetyPosition() - AISpeed);
 			} 
 			else if (this.GetyPosition() >= 481) {
 				this.SetyPosition(480);
@@ -143,20 +145,20 @@ public class Bat extends ObjectInfo {
 	
 				} else if (this.GetxPosition() < targetX) {
 					if (this.GetxPosition() < (256-5)) {
-						this.SetxPosition(this.GetxPosition() + 5);
+						this.SetxPosition(this.GetxPosition() + AISpeed);
 					}
 				} else if (this.GetxPosition() > targetX) {
 					if (this.GetxPosition() > 5) {
-						this.SetxPosition(this.GetxPosition() - 5);
+						this.SetxPosition(this.GetxPosition() - AISpeed);
 					}
 				}
 	
 			}
 			
 		}
-		else{
+		else{ //TOP LEFT
 			if (this.GetyPosition() <= 251) {
-				this.SetyPosition(this.GetyPosition() + 5);
+				this.SetyPosition(this.GetyPosition() + AISpeed);
 			} 
 			else if (this.GetyPosition() <= 255) {
 				this.SetyPosition(256);
@@ -167,11 +169,11 @@ public class Bat extends ObjectInfo {
 	
 				} else if (this.GetxPosition() < targetX) {
 					if (this.GetxPosition() < (256-5)) {
-						this.SetxPosition(this.GetxPosition() + 5);
+						this.SetxPosition(this.GetxPosition() + AISpeed);
 					}
 				} else if (this.GetxPosition() > targetX) {
 					if (this.GetxPosition() > 5) {
-						this.SetxPosition(this.GetxPosition() - 5);
+						this.SetxPosition(this.GetxPosition() - AISpeed);
 					}
 				}
 	

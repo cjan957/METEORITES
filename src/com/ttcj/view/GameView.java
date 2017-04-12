@@ -7,6 +7,7 @@ package com.ttcj.view;
 
 import java.util.ArrayList;
 
+import application.MainMenuManager;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;

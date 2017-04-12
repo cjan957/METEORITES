@@ -1,8 +1,11 @@
 package application;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.ttcj.components.Ball;
 import com.ttcj.components.Base;
 import com.ttcj.components.Bat;
+import com.ttcj.components.Powerup;
 import com.ttcj.components.Sound;
 
 import application.GamePlay.gameMode;
@@ -29,6 +32,10 @@ public class ComponentManager {
 	private Sound countdownSound;
 	private Sound winJingleSound;
 	private Sound loseJingleSound;
+	
+	private Powerup powerup_decreaseTime;
+	private Powerup powerup_frozen;
+	
 		
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
@@ -57,6 +64,14 @@ public class ComponentManager {
 		ball = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2 - 16, 32, 32);
 		ghostBall = new Ball("b10008.png", WINDOW_W / 2 - 32, WINDOW_H / 2 - 16, 32, 32);
 		
+		//Powerups
+		int randomNumXFrozen = ThreadLocalRandom.current().nextInt(356, 668 + 1);
+		int randomNumYFrozen = ThreadLocalRandom.current().nextInt(100, 668 + 1);
+		int randomNumXTime = ThreadLocalRandom.current().nextInt(356, 668 + 1);
+		int randomNumYTime = ThreadLocalRandom.current().nextInt(100, 668 + 1);
+		powerup_decreaseTime = new Powerup("minus10.png",randomNumXFrozen, randomNumYFrozen,Powerup.powerupType.DECREASE_TIME);
+		powerup_frozen = new Powerup("snow.png", randomNumXTime, randomNumYTime, Powerup.powerupType.BAT_FROZEN);
+
 		 //Sounds
 		 paddleDeflect = new Sound("Sounds/paddleDeflect.wav");
 		 wallHit = new Sound("Sounds/wallHit.wav");
@@ -65,6 +80,14 @@ public class ComponentManager {
 		 countdownSound = new Sound("Sounds/countdownSoundStart.wav");
 		 winJingleSound = new Sound("Sounds/winJingle.wav");
 		 loseJingleSound = new Sound("Sounds/loseJingle.wav");
+	}
+	
+	public Powerup getPowerupFrozen(){
+		return powerup_frozen;
+	}
+	
+	public Powerup getPowerupTime(){
+		return powerup_decreaseTime;
 	}
 		
 	//Balls Getter

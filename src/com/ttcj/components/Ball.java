@@ -25,6 +25,16 @@ public class Ball extends ObjectInfo{
 	private boolean travelingRight;
 	private boolean travelingUp;
 	
+	public enum basePosition { 
+		TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT 
+	}
+	
+	private basePosition lastBaseContact;
+	
+	public void setBatContact(basePosition lastBaseContact){
+		this.lastBaseContact = lastBaseContact;
+	}
+	
 	public Ball(String img, int xPos, int yPos, int width, int height){
 		
 		//Set the ball up with necessary properties
@@ -169,7 +179,7 @@ public class Ball extends ObjectInfo{
 		return obj.getBoundary().intersects(this.getBoundary());
 	}
 	
-	
-	
-
+	public boolean objectsIntersectBallAndPowerup(Powerup obj){
+		return obj.getBoundary().intersects(this.getBoundary());
+	}
 }
