@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.ttcj.components.Base;
 import com.ttcj.components.Brick;
 import com.ttcj.components.Timer;
-import com.ttcj.view.View;
+import com.ttcj.view.GameView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
@@ -36,7 +36,7 @@ public class GamePlay {
 	private Deflect deflect;
 
 	private Stage gameWindow;
-	private View view;
+	private GameView view;
 	
 	//State game mode and whether the game is still going
 	private boolean playing = true;
@@ -58,7 +58,7 @@ public class GamePlay {
 	private static final int WINDOW_H = 768;
 	
 	public GamePlay(int gameModeNum, Stage gameStage){
-			view = new View();
+			view = new GameView();
 			gameWindow = gameStage;
 			if(gameModeNum == 0){ //game mode 0 = single
 				currentGameMode = gameMode.SINGLE;

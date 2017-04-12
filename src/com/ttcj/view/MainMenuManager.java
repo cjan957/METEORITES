@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ViewManager {
+public class MainMenuManager {
 	public void MainMenu(Stage gameStage){
 		
 		Pane root = new Pane();

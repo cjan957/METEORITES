@@ -3,7 +3,7 @@
  * 	
  */
 package application;
-import com.ttcj.view.ViewManager;
+import com.ttcj.view.MainMenuManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,7 +15,7 @@ public class Game extends Application {
 
 	@Override
 	public void start(Stage gameStage) {
-		ViewManager viewMgr = new ViewManager();
+		MainMenuManager viewMgr = new MainMenuManager();
 		viewMgr.MainMenu(gameStage);
 	}
 

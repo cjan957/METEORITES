@@ -18,7 +18,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 
-public class View {
+public class GameView {
 
 	//QUICK DEBUGGING OPTIONS
 
@@ -100,7 +100,7 @@ public class View {
 			//Exit game if ESC is pressed 			
 			if(code == "ESCAPE"){
 				if(gameHasFinished){
-					ViewManager viewMgr = new ViewManager();
+					MainMenuManager viewMgr = new MainMenuManager();
 					viewMgr.MainMenu(window);
 				}
 				else if(countDown3IsDone){
@@ -116,7 +116,7 @@ public class View {
 			}
 			if(code == "Y"){
 				if(confimationToExit){
-					ViewManager viewMgr = new ViewManager();
+					MainMenuManager viewMgr = new MainMenuManager();
 					viewMgr.MainMenu(window);
 				}
 			}
