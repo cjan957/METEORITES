@@ -869,7 +869,6 @@ public class GamePlay {
 				topLHSBase.setIsDead(true);
 				gameComponent.gettopLHSbat().setAIBat(true);
 				gameComponent.getbaseHitSound().playSound();
-				System.out.println("Blue");
 			}
 		}
 		if (!topRHSBase.isDead()) {
@@ -877,7 +876,6 @@ public class GamePlay {
 				topRHSBase.setIsDead(true);
 				gameComponent.gettopRHSbat().setAIBat(true);
 				gameComponent.getbaseHitSound().playSound();
-				System.out.println("Green");
 			}
 		}
 
@@ -885,7 +883,6 @@ public class GamePlay {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(bottomRHSBase)) {
 				bottomRHSBase.setIsDead(true);
 				gameComponent.getbaseHitSound().playSound();
-				System.out.println("Red");
 			}
 		}
 
@@ -896,7 +893,6 @@ public class GamePlay {
 					gameComponent.getbottomLHSbat().setAIBat(true);
 				}
 				gameComponent.getbaseHitSound().playSound();
-				System.out.println("Yellow");
 			}
 		}
 	}
@@ -917,7 +913,6 @@ public class GamePlay {
 				topRHSBrickList.remove();
 				this.gameBrick.getTopRHSBrick().removeBrick();
 				gameComponent.getwallHitSound().playSound();
-				System.out.println("1 Brick destroyed, " + this.gameBrick.getTopRHSBrick().getNumberOfBrick() + " left: (TopRHS)");
 			}
 		}
 		while (topLHSBrickList.hasNext()) {
@@ -927,7 +922,6 @@ public class GamePlay {
 				topLHSBrickList.remove();
 				this.gameBrick.getTopLHSBrick().removeBrick();
 				gameComponent.getwallHitSound().playSound();
-				System.out.println("1 Brick destroyed, " + this.gameBrick.getTopLHSBrick().getNumberOfBrick() + " left: (TopLHS)");
 			}
 		}
 		while (bottomLHSbrickList.hasNext()) {
@@ -937,7 +931,6 @@ public class GamePlay {
 				bottomLHSbrickList.remove();
 				this.gameBrick.getBottomLHSBrick().removeBrick();
 				gameComponent.getwallHitSound().playSound();
-				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomLHSBrick().getNumberOfBrick() + " left: (BottomLHS)");
 			}
 		}
 		while (bottomRHSBrickList.hasNext()) {
@@ -947,7 +940,6 @@ public class GamePlay {
 				bottomRHSBrickList.remove();
 				this.gameBrick.getBottomRHSBrick().removeBrick();
 				gameComponent.getwallHitSound().playSound();
-				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomRHSBrick().getNumberOfBrick() + " left: (BottomRHS)");
 			}
 		}
 		
