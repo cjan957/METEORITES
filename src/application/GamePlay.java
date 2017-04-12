@@ -16,11 +16,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GamePlay {
-	
 	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
 	private boolean showGhostBall = false;
-	private boolean forceDeadkey = false;
+	private boolean forceDeadkey = true;
 
 	// Instantiate game objects
 	private Timer timer3sec;
@@ -58,7 +57,6 @@ public class GamePlay {
 	private static final int WINDOW_W = 1024;
 	private static final int WINDOW_H = 768;
 	
-	
 	public GamePlay(int gameModeNum, Stage gameStage){
 			view = new View();
 			gameWindow = gameStage;
@@ -75,7 +73,7 @@ public class GamePlay {
 		//Initilse timer objects
 		timer3sec = new Timer(3, true);
 		timer120sec = new Timer(120, false);
-		playCountdownVoice();
+		gameComponent.getcountdownVoice().playSound();
 		
 		// Counting down from 3 to 0, decrement the timer for 1 sec every one
 		// second.
@@ -98,7 +96,7 @@ public class GamePlay {
 		Timeline countDown = new Timeline(new KeyFrame(Duration.millis(3000), timeout -> {
 			startCountDowntimeUp();
 			startMasterTimer();
-			playCountdownSound();
+			gameComponent.getcountdownSound().playSound();
 		}));
 		countDown.play();
 
@@ -187,31 +185,35 @@ public class GamePlay {
 				topLHSBase.setIsWinner(true);
 				message = "Winner: "+topLHSBase.getBaseName();	
 				longMessage = false;
-				playLoseSound();
+				gameComponent.getloseJingleSound().playSound();
 				stopTheGame();
 	
 			} else if (topLHSBase.isDead() && !topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 				topRHSBase.setIsWinner(true);
+				longMessage = false;
 				message = "Winner: "+topRHSBase.getBaseName();
-				playLoseSound();
+				gameComponent.getloseJingleSound().playSound();
 				stopTheGame();
 	
 			} else if (topLHSBase.isDead() && topRHSBase.isDead() && !bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 				bottomLHSBase.setIsWinner(true);
+				longMessage = false;
 				message = "Winner: "+bottomLHSBase.getBaseName();
-				playWinSound();
+				gameComponent.getwinJingleSound().playSound();
 				stopTheGame();
 	
 			} else if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()) {
 				bottomRHSBase.setIsWinner(true);
+				longMessage = false;
 				message = "Winner: "+bottomRHSBase.getBaseName();
-				playWinSound();
+				gameComponent.getwinJingleSound().playSound();
 				stopTheGame();
 			}
 			else if(bottomLHSBase.isDead() && bottomRHSBase.isDead()){
+				longMessage = true;
 				message = "Blue and Green Win";
 				System.out.println("AIs Win");
-				playLoseSound();
+				gameComponent.getloseJingleSound().playSound();
 				stopTheGame();
 			}
 		}
@@ -222,13 +224,13 @@ public class GamePlay {
 				bottomRHSBase.isWinner();
 				message = "You Win";	
 				longMessage = false;
-				playWinSound();
+				gameComponent.getwinJingleSound().playSound();
 				stopTheGame(); 	
 			}
 			else if (bottomRHSBase.isDead()){
 				message = "You Lose";
 				longMessage = false;
-				playLoseSound();
+				gameComponent.getloseJingleSound().playSound();
 				stopTheGame();
 			}
 		}
@@ -239,6 +241,7 @@ public class GamePlay {
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		ArrayList<Base> baseList = new ArrayList<Base>();
 
+		//Store players and their scores into arrays if they are not dead
 		if(!this.topLHSBase.isDead()){
 			scoreList.add(this.gameBrick.getTopLHSBrick().getNumberOfBrick());
 			baseList.add(this.topLHSBase);
@@ -260,6 +263,7 @@ public class GamePlay {
 		int temp = 0;
 		Base tempName;
 
+		//Sort to find who has the most number of bricks left
 		for (int i = 0; i < arraySize; i++) {
 			for (int j = 1; j < (arraySize - i); j++) {
 				if (scoreList.get(j - 1) < scoreList.get(j)) {
@@ -278,10 +282,14 @@ public class GamePlay {
 		System.out.println(baseList);
 
 		int numberOfTies = 0;
+		
+		//Index 0, is the winner
 		baseList.get(0).setIsWinner(true);
 		String winnerName = baseList.get(0).getBaseName();
 		//System.out.println("Winner: " + baseList.get(0).getBaseName());
 		
+		//Now find whether other players have the same number of bricks as the winner.
+		//(Find if the game is tie.)
 		for(int i = 1; i < arraySize; i++){
 			if(scoreList.get(i) == scoreList.get(0)){
 				numberOfTies++;
@@ -290,40 +298,43 @@ public class GamePlay {
 			}
 		}
 		
-		if(numberOfTies > 1){
+		//If there's a tie, prepare string to display their names
+		if(numberOfTies > 0){
 			message = "Tie: " + winnerName;
 			longMessage = true;
 			if(currentGameMode == gameMode.SINGLE){
 				//Play appropriate sound when in single player mode.
 				if(winnerName.contains(bottomRHSBase.getBaseName())){
-					playWinSound();
+					gameComponent.getwinJingleSound().playSound();;
 				} else {
-					playLoseSound();
+					gameComponent.getloseJingleSound().playSound();
 				}
 			} else if (currentGameMode == gameMode.MULTI){
 				//Play appropriate sound when in 2 player mode
 				if(winnerName.contains(bottomRHSBase.getBaseName()) || winnerName.contains(bottomLHSBase.getBaseName())){
-					playWinSound();
+					gameComponent.getwinJingleSound().playSound();
 				} else {
-					playLoseSound();
+					gameComponent.getloseJingleSound().playSound();
 				}
 			}
 		}
 		else{
+			//If there's only one winner, save the player's name to the string, and play 
+			//appropriate sound
 			message = "Winner: " + winnerName;
 			longMessage = false;
 			if(currentGameMode == gameMode.SINGLE){
 				if(winnerName == bottomRHSBase.getBaseName()){
-					playWinSound();
+					gameComponent.getwinJingleSound().playSound();
 				} else {
-					playLoseSound();
+					gameComponent.getloseJingleSound().playSound();
 				}
 			} else if (currentGameMode == gameMode.MULTI){
 				//Play appropriate sound when in 2 player mode
 				if(winnerName == bottomRHSBase.getBaseName() || winnerName == bottomLHSBase.getBaseName()){
-					playWinSound();
+					gameComponent.getwinJingleSound().playSound();
 				} else {
-					playLoseSound();
+					gameComponent.getloseJingleSound().playSound();
 				}
 			}
 		}
@@ -417,7 +428,6 @@ public class GamePlay {
 			view.canvasGC().setTextAlign(TextAlignment.CENTER);
 			view.canvasGC().fillText("PAUSED", 1024/2, (768/2)-50);
 			view.canvasGC().strokeText("PAUSED", 1024/2, (768/2)-50);
-
 		}
 		
 		if(view.confirmationShown()){
@@ -446,7 +456,7 @@ public class GamePlay {
 				view.canvasGC().setFill(Color.WHITE);
 				view.canvasGC().setStroke(Color.BLACK);
 				view.canvasGC().setLineWidth(2);
-				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 19);
+				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
 				view.canvasGC().setFont(theSubFont);
 				view.canvasGC().setTextAlign(TextAlignment.CENTER);
 				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+100);
@@ -454,20 +464,22 @@ public class GamePlay {
 			}
 			else{
 				view.canvasGC().setFill(Color.WHITE);
+				view.canvasGC().setStroke(Color.BLACK);
 				view.canvasGC().setLineWidth(2);
-				view.canvasGC().setTextAlign(TextAlignment.CENTER);
-				Font theFont = Font.font("Arial", FontWeight.BOLD, 30);
+				Font theFont = Font.font("Arial", FontWeight.BOLD, 43);
 				view.canvasGC().setFont(theFont);
+				view.canvasGC().setTextAlign(TextAlignment.CENTER);
 				view.canvasGC().fillText(message, 1024/2, 768/2);
+				view.canvasGC().strokeText(message, 1024/2, 768/2);
+
 				
 				view.canvasGC().setFill(Color.WHITE);
 				view.canvasGC().setStroke(Color.BLACK);
 				view.canvasGC().setLineWidth(2);
-				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 19);
+				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
 				view.canvasGC().setFont(theSubFont);
 				view.canvasGC().setTextAlign(TextAlignment.CENTER);
 				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+80);
-
 			}
 		}
 	}
@@ -568,7 +580,7 @@ public class GamePlay {
 					}
 				}
 				
-				
+				//GHOST
 				double gradientGhost = (gameComponent.getGhostBall().getYVelocity()) / (gameComponent.getGhostBall().getXVelocity());
 				double CGhostBall = gameComponent.getGhostBall().GetyPosition() - (gradientGhost * gameComponent.getGhostBall().GetxPosition());
 					
@@ -805,25 +817,25 @@ public class GamePlay {
 		if (!topLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopLHSbat())) {
 				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				playPaddleDeflectSound();
+				gameComponent.getpaddleDeflectSound().playSound();
 			}
 		}
 		if (!bottomLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomLHSbat())) {
 				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				playPaddleDeflectSound();
+				gameComponent.getpaddleDeflectSound().playSound();			
 			}	
 		}
 		if (!topRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopRHSbat())) {
 				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				playPaddleDeflectSound();
+				gameComponent.getpaddleDeflectSound().playSound();			
 			}
 		}
 		if (!bottomRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomRHSbat())) {
 				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				playPaddleDeflectSound();
+				gameComponent.getpaddleDeflectSound().playSound();
 			}	
 		}
 	}
@@ -832,14 +844,14 @@ public class GamePlay {
 		if (!topLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(topLHSBase)) {
 				topLHSBase.setIsDead(true);
-				playBaseHitSound();
+				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Blue");
 			}
 		}
 		if (!topRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(topRHSBase)) {
 				topRHSBase.setIsDead(true);
-				playBaseHitSound();
+				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Green");
 			}
 		}
@@ -847,7 +859,7 @@ public class GamePlay {
 		if (!bottomRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(bottomRHSBase)) {
 				bottomRHSBase.setIsDead(true);
-				playBaseHitSound();
+				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Red");
 			}
 		}
@@ -855,7 +867,7 @@ public class GamePlay {
 		if (!bottomLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(bottomLHSBase)) {
 				bottomLHSBase.setIsDead(true);
-				playBaseHitSound();
+				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Yellow");
 			}
 		}
@@ -869,12 +881,14 @@ public class GamePlay {
 		Iterator<Brick> bottomRHSBrickList = this.gameBrick.getBottomRHSBrick().accessBrickArray().iterator();
 
 		while (topRHSBrickList.hasNext()) {
+			//Check all bricks of each base for collision
 			Brick brick = topRHSBrickList.next();
+			//if the ball intersects with a brick (in this case TRHS brick), deflect the ball, remove the brick from the array and play sound
 			if (gameComponent.getBall().objectsIntersect(brick)) {
 				deflect.deflectTheBall(gameComponent.getBall(), brick.getArrangement());
 				topRHSBrickList.remove();
 				this.gameBrick.getTopRHSBrick().removeBrick();
-				playWallHitSound();
+				gameComponent.getwallHitSound().playSound();
 				System.out.println("1 Brick destroyed, " + this.gameBrick.getTopRHSBrick().getNumberOfBrick() + " left: (TopRHS)");
 			}
 		}
@@ -884,9 +898,8 @@ public class GamePlay {
 				deflect.deflectTheBall(gameComponent.getBall(), brick.getArrangement());
 				topLHSBrickList.remove();
 				this.gameBrick.getTopLHSBrick().removeBrick();
-				playWallHitSound();
+				gameComponent.getwallHitSound().playSound();
 				System.out.println("1 Brick destroyed, " + this.gameBrick.getTopLHSBrick().getNumberOfBrick() + " left: (TopLHS)");
-
 			}
 		}
 		while (bottomLHSbrickList.hasNext()) {
@@ -895,9 +908,8 @@ public class GamePlay {
 				deflect.deflectTheBall(gameComponent.getBall(), brick.getArrangement());
 				bottomLHSbrickList.remove();
 				this.gameBrick.getBottomLHSBrick().removeBrick();
-				playWallHitSound();
+				gameComponent.getwallHitSound().playSound();
 				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomLHSBrick().getNumberOfBrick() + " left: (BottomLHS)");
-
 			}
 		}
 		while (bottomRHSBrickList.hasNext()) {
@@ -906,47 +918,15 @@ public class GamePlay {
 				deflect.deflectTheBall(gameComponent.getBall(), brick.getArrangement());
 				bottomRHSBrickList.remove();
 				this.gameBrick.getBottomRHSBrick().removeBrick();
-				playWallHitSound();
+				gameComponent.getwallHitSound().playSound();
 				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomRHSBrick().getNumberOfBrick() + " left: (BottomRHS)");
-
 			}
 		}
+		//Prevent
 		deflect.setTempDir(99, 99);
-	}
-
-	public boolean isFinished() {
-		return false;
 	}
 
 	public void setTimeRemainingToTwo() {
 		timer120sec.setTime(2);
-	}
-
-	private void playPaddleDeflectSound() {
-		gameComponent.getpaddleDeflectSound().playSound();
-	}
-
-	private void playWallHitSound() {
-		gameComponent.getwallHitSound().playSound();
-	}
-
-	private void playBaseHitSound() {
-		gameComponent.getbaseHitSound().playSound();
-	}
-	
-	private void playCountdownVoice() {
-		gameComponent.getcountdownVoice().playSound();
-	}
-	
-	private void playCountdownSound() {
-		gameComponent.getcountdownSound().playSound();
-	}
-	
-	private void playWinSound() {
-		gameComponent.getwinJingleSound().playSound();
-	}
-	
-	private void playLoseSound() {
-		gameComponent.getloseJingleSound().playSound();
 	}
 }
