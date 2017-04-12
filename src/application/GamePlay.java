@@ -18,7 +18,7 @@ import javafx.util.Duration;
 public class GamePlay {
 	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
-	private boolean showGhostBall = false;
+	private boolean showGhostBall = true;
 	private boolean forceDeadkey = true;
 
 	// Instantiate game objects
@@ -211,7 +211,7 @@ public class GamePlay {
 			}
 			else if(bottomLHSBase.isDead() && bottomRHSBase.isDead()){
 				longMessage = true;
-				message = "Blue and Green Win";
+				message = "Winner: AI";
 				System.out.println("AIs Win");
 				gameComponent.getloseJingleSound().playSound();
 				stopTheGame();
@@ -371,18 +371,23 @@ public class GamePlay {
 		// If the player is still alive, render the base and bat, otherwise do not render.
 		
 		//BAT
-		if (!topLHSBase.isDead()) {
-			gameComponent.gettopLHSbat().render(view.canvasGC());
-		}
-		if (!bottomLHSBase.isDead()) {
-			gameComponent.getbottomLHSbat().render(view.canvasGC());
-		}
-		if (!topRHSBase.isDead()) {
-			gameComponent.gettopRHSbat().render(view.canvasGC());
-		}
-		if (!bottomRHSBase.isDead()) {
-			gameComponent.getbottomRHSbat().render(view.canvasGC());
-		}
+		gameComponent.gettopLHSbat().render(view.canvasGC());
+		gameComponent.getbottomLHSbat().render(view.canvasGC());
+		gameComponent.gettopRHSbat().render(view.canvasGC());
+		gameComponent.getbottomRHSbat().render(view.canvasGC());
+
+//		if (!topLHSBase.isDead()) {
+//			gameComponent.gettopLHSbat().render(view.canvasGC());
+//		}
+//		if (!bottomLHSBase.isDead()) {
+//			gameComponent.getbottomLHSbat().render(view.canvasGC());
+//		}
+//		if (!topRHSBase.isDead()) {
+//			gameComponent.gettopRHSbat().render(view.canvasGC());
+//		}
+//		if (!bottomRHSBase.isDead()) {
+//			gameComponent.getbottomRHSbat().render(view.canvasGC());
+//		}
 		
 		//BASE
 		if (!topLHSBase.isDead()) {
@@ -516,10 +521,11 @@ public class GamePlay {
 
 		// Check user input and move the paddle accordingly
 		// Positioning has been adjusted (+/- 32) to take into account the reference point of the bat (topleft corner)
-		if (!topLHSBase.isDead()) {
+		//if (!topLHSBase.isDead()) {
+			int increment = 7;
+
 			if(!gameComponent.gettopLHSbat().isAIBat()){
 				//If not AI Bat, let the keyboard controls the bat
-				int increment = 7;
 				if (input.contains("Q")) {
 					if ( (gameComponent.gettopLHSbat().GetxPosition() == (WINDOW_H/3 )) && (gameComponent.gettopLHSbat().GetyPosition() >= 0) && (gameComponent.gettopLHSbat().GetyPosition() <= WINDOW_H/3) ) {		//vertical down
 						gameComponent.gettopLHSbat().SetyPosition((int) (gameComponent.gettopLHSbat().GetyPosition() + increment));				
@@ -604,11 +610,10 @@ public class GamePlay {
 				}
 				
 			}
-		}
+		//}
 		
-		if (!bottomLHSBase.isDead()) {
+		//if (!bottomLHSBase.isDead()) {
 			if(!gameComponent.getbottomLHSbat().isAIBat()){
-				int increment = 7;
 				if (input.contains("A")) {
 					if ( (gameComponent.getbottomLHSbat().GetxPosition() == (WINDOW_H/3)) && (gameComponent.getbottomLHSbat().GetyPosition() <= 768) && (gameComponent.getbottomLHSbat().GetyPosition() >= 768 - WINDOW_H/3 - 32) ) {	//vertical movement up
 						gameComponent.getbottomLHSbat().SetyPosition((int) (gameComponent.getbottomLHSbat().GetyPosition() - increment));	
@@ -669,11 +674,10 @@ public class GamePlay {
 					}
 				}	
 			}
-		}
+		//}
 		
-		if (!topRHSBase.isDead()) {
+		//if (!topRHSBase.isDead()) {
 			if(!gameComponent.gettopRHSbat().isAIBat()){
-				int increment = 7;
 				if (input.contains("NUMPAD7")) {
 					if ( (gameComponent.gettopRHSbat().GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (gameComponent.gettopRHSbat().GetyPosition() >= 0) && (gameComponent.gettopRHSbat().GetyPosition() <= WINDOW_H/3) ) {		//vertical up
 						gameComponent.gettopRHSbat().SetyPosition((int) (gameComponent.gettopRHSbat().GetyPosition() - increment));		
@@ -757,11 +761,10 @@ public class GamePlay {
 					}
 				}
 			}
-		}
+	//	}
 		
-		if (!bottomRHSBase.isDead()) {		
+	//	if (!bottomRHSBase.isDead()) {		
 			//This base will always be player's controlled
-			int increment = 7;
 			if (input.contains("LEFT")) {
 				if ( (gameComponent.getbottomRHSbat().GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (gameComponent.getbottomRHSbat().GetyPosition() >= 768 - WINDOW_H/3 - 32 ) && (gameComponent.getbottomRHSbat().GetyPosition() <= 768 - 32) ) {		//vertical down
 					gameComponent.getbottomRHSbat().SetyPosition((int) (gameComponent.getbottomRHSbat().GetyPosition() + increment));		
@@ -794,7 +797,7 @@ public class GamePlay {
 					gameComponent.getbottomRHSbat().SetyPosition((int) (768 - WINDOW_H/3 - 32));
 				} 
 			}
-		}
+	//	}
 		
 		// TODO: DEBUG ONLY, remove when deliver
 		if (inGameBallSpeedAdjust) {
@@ -814,36 +817,50 @@ public class GamePlay {
 
 	public void paddleCollisionCheck() {
 
-		if (!topLHSBase.isDead()) {
+		//if (!topLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopLHSbat())) {
-				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				gameComponent.getpaddleDeflectSound().playSound();
+				changeBallVelocity();
 			}
-		}
-		if (!bottomLHSBase.isDead()) {
+		//}
+		//if (!bottomLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomLHSbat())) {
-				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				gameComponent.getpaddleDeflectSound().playSound();			
+				changeBallVelocity();			
 			}	
-		}
-		if (!topRHSBase.isDead()) {
+		//}
+		//if (!topRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopRHSbat())) {
-				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				gameComponent.getpaddleDeflectSound().playSound();			
+				changeBallVelocity();			
 			}
-		}
-		if (!bottomRHSBase.isDead()) {
+		//}
+		//if (!bottomRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomRHSbat())) {
-				gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
-				gameComponent.getpaddleDeflectSound().playSound();
+				changeBallVelocity();
 			}	
+		//}
+	}
+	
+	public void changeBallVelocity(){
+		gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
+		if(gameComponent.getBall().getXVelocity() > 0){
+			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() + 0.03));
 		}
+		else{
+			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() - 0.03));
+		}
+		if(gameComponent.getBall().getYVelocity() > 0){
+			gameComponent.getBall().setYVelocity((float)(gameComponent.getBall().getYVelocity() + 0.03));
+		}
+		else{
+			gameComponent.getBall().setYVelocity((float)(gameComponent.getBall().getYVelocity() - 0.03));
+		}
+		gameComponent.getpaddleDeflectSound().playSound();
 	}
 
 	public void baseCollisionCheck() {
 		if (!topLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(topLHSBase)) {
 				topLHSBase.setIsDead(true);
+				gameComponent.gettopLHSbat().setAIBat(true);
 				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Blue");
 			}
@@ -851,6 +868,7 @@ public class GamePlay {
 		if (!topRHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(topRHSBase)) {
 				topRHSBase.setIsDead(true);
+				gameComponent.gettopRHSbat().setAIBat(true);
 				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Green");
 			}
@@ -867,6 +885,9 @@ public class GamePlay {
 		if (!bottomLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(bottomLHSBase)) {
 				bottomLHSBase.setIsDead(true);
+				if(currentGameMode == gameMode.SINGLE){
+					gameComponent.getbottomLHSbat().setAIBat(true);
+				}
 				gameComponent.getbaseHitSound().playSound();
 				System.out.println("Yellow");
 			}

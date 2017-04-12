@@ -53,19 +53,19 @@ public class GameView {
 
 		//Setup planet shapes to each corner - will represent the 'warlords'
 		Arc planetTL = new Arc(0, 0, 100, 100, 270, 90); // planets
-		planetTL.setFill(Color.BLUE);
+		planetTL.setFill(Color.DEEPSKYBLUE);
 		planetTL.setType(ArcType.ROUND);
 
 		Arc planetTR = new Arc(1024, 0, 100, 100, 180, 90);
-		planetTR.setFill(Color.GREEN);
+		planetTR.setFill(Color.MEDIUMAQUAMARINE);
 		planetTR.setType(ArcType.ROUND);
 
 		Arc planetBL = new Arc(0, 768, 100, 100, 0, 90);
-		planetBL.setFill(Color.YELLOW);
+		planetBL.setFill(Color.PALEGOLDENROD);
 		planetBL.setType(ArcType.ROUND);
 
 		Arc planetBR = new Arc(1024, 768, 100, 100, 90, 90);
-		planetBR.setFill(Color.RED);
+		planetBR.setFill(Color.CRIMSON);
 		planetBR.setType(ArcType.ROUND);
 
 		//Add planets to the scene
