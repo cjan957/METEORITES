@@ -70,6 +70,9 @@ public class GamePlay {
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
 	
+	/*
+	 *  GAMEPLAY CONST
+	 */
 	public GamePlay(int gameModeNum, Stage gameStage){
 			view = new GameView();
 			gameWindow = gameStage;
@@ -82,6 +85,10 @@ public class GamePlay {
 			startGame();
 	}
 	
+	
+	/*
+	 * --------------------------------------TIMER RELEVANT METHODS--------------------------------------
+	 */
 	public void startThreeSecondsTimer(){
 		//Initilse timer objects
 		timer3sec = new Timer(3, true);
@@ -97,6 +104,51 @@ public class GamePlay {
 		renderKeyFrame.play();
 	}
 	
+	public void startMasterTimer() {
+		// counting by one second, 120 times (2 mins)
+		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
+			if (!view.isPause() && playing) {
+				timer120sec.countDown();
+				checkActualTimeRemaining();
+			}
+		}));
+		renderTimer.setCycleCount(Timeline.INDEFINITE);
+		renderTimer.play();
+	}
+	
+	public void startCountDowntimeUp() {
+		timer3sec.setTimeOut(true);
+		startTheGame();
+		
+		//Notify the view that the 3s counter has finished
+		view.setCountDown3IsDone();
+		
+		//Hide the 3s timer and show 120s timers on the screen.
+		timer3sec.setVisibility(false);
+		timer120sec.setVisibility(true);
+	}
+
+	public void checkActualTimeRemaining() {
+		//If the game has finished (timer <= 0), check for winner. Otherwise,
+		//the game is still going so check if there's any in-game winner.
+		if (timer120sec.getTime() <= 0) {
+			timeOutFindWinner();
+		} else {
+			//Display powerup when the initialised time for each powerup has reached  
+			if(timer120sec.getTime() == powerupTime_Time){
+				this.gameComponent.getPowerupTime().setVisibility(true);
+			}
+			else if(timer120sec.getTime() == powerupTime_Frozen){
+				this.gameComponent.getPowerupFrozen().setVisibility(true);
+			}
+			timeLeftFindWinner();
+		}
+	}
+	
+	
+	/*
+	 * --------------------------------------GAME PLAY METHODS--------------------------------------
+	 */
 	public void startGame() {		
 		// Setup gameView
 		view.setupGameView(gameWindow);
@@ -143,23 +195,36 @@ public class GamePlay {
 		gameLoop.play();
 	}
 	
+	
+	/*
+	 * --------------------------------------GAME INITIALISERS --------------------------------------
+	 */
+	
 	public void gameInit() {	
 		//Create game components in gameComponent class, what type of objects
 		//will be created depends on the game mode
 		gameComponent = new ComponentManager(currentGameMode);
 		
-		//Base Maker
+		//Setup the base
 		baseInit();	
+		
+		//Construct Bricks
 		gameBrick = new BrickBuilder();
 		deflect = new Deflect();
 	}
 
 	public void baseInit() {
+		// Base name, Image, xPos, yPos, width and height of base
 		topLHSBase = new Base("Blue", "planet1_64.png", 0, 0, 64, 64);
 		topRHSBase = new Base("Green", "planet2_64.png", WINDOW_W - 64, 0, 64, 64);
 		bottomLHSBase = new Base("Yellow", "planet3_64.png", 0, WINDOW_H - 64, 64, 64);
 		bottomRHSBase = new Base("Red", "planet4_64.png", WINDOW_W - 64, WINDOW_H - 64, 64, 64);
 	}
+	
+	
+	/*
+	 * --------------------------------------GAME CONTROLS--------------------------------------
+	 */
 
 	public void stopTheGame(){
 		playing = false;
@@ -170,36 +235,14 @@ public class GamePlay {
 		playing = true;
 	}
 	
-	public void startCountDowntimeUp() {
-		timer3sec.setTimeOut(true);
-		startTheGame();
-		
-		//Notify the view that the 3s counter has finished
-		view.setCountDown3IsDone();
-		
-		//Hide and show relevant timers on the screen.
-		timer3sec.setVisibility(false);
-		timer120sec.setVisibility(true);
-	}
-
-	public void checkActualTimeRemaining() {
-		//If the game has finished (timer = 0), check for winner. Otherwise,
-		//the game is still going so check if there's any in-game winner.
-		if (timer120sec.getTime() <= 0) {
-			timeOutFindWinner();
-		} else {
-			if(timer120sec.getTime() == powerupTime_Time){
-				this.gameComponent.getPowerupTime().setVisibility(true);
-			}
-			else if(timer120sec.getTime() == powerupTime_Frozen){
-				this.gameComponent.getPowerupFrozen().setVisibility(true);
-			}
-			timeLeftFindWinner();
-		}
-	}
-
+	
+	/*
+	 * --------------------------------------FIND WINNERS IN GAME--------------------------------------
+	 */
+	
 	public void timeLeftFindWinner() {
 		if(currentGameMode == gameMode.MULTI){
+			//Check whether there's only 1 player left in the game
 			if (!topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && bottomRHSBase.isDead()) {
 				topLHSBase.setIsWinner(true);
 				message = "Winner: "+topLHSBase.getBaseName();	
@@ -237,7 +280,6 @@ public class GamePlay {
 			}
 		}
 		else{ //Must be single player mode
-			
 			//when all other players are dead, and you are the only one left: You win
 			if (topLHSBase.isDead() && topRHSBase.isDead() && bottomLHSBase.isDead() && !bottomRHSBase.isDead()){
 				bottomRHSBase.isWinner();
@@ -255,12 +297,16 @@ public class GamePlay {
 		}
 	}
 
+	/*
+	 * --------------------------------------FIND WINNER (GAMEOVER)--------------------------------------
+	 */
+	
 	public void timeOutFindWinner() {
 
 		ArrayList<Integer> scoreList = new ArrayList<Integer>();
 		ArrayList<Base> baseList = new ArrayList<Base>();
 
-		//Store players and their scores into arrays if they are not dead
+		//Store players and their scores (number of bricks left) into arrays if they are not dead
 		if(!this.topLHSBase.isDead()){
 			scoreList.add(this.gameBrick.getTopLHSBrick().getNumberOfBrick());
 			baseList.add(this.topLHSBase);
@@ -307,8 +353,8 @@ public class GamePlay {
 		String winnerName = baseList.get(0).getBaseName();
 		//System.out.println("Winner: " + baseList.get(0).getBaseName());
 		
-		//Now find whether other players have the same number of bricks as the winner.
-		//(Find if the game is tie.)
+		//Now find whether other players have the same number of bricks left as the winner.
+		//(Determine whether the game is a draw.)
 		for(int i = 1; i < arraySize; i++){
 			if(scoreList.get(i) == scoreList.get(0)){
 				numberOfTies++;
@@ -360,18 +406,10 @@ public class GamePlay {
 		stopTheGame();
 	}
 
-	public void startMasterTimer() {
-		// counting by one second, 120 times (2 mins)
-		Timeline renderTimer = new Timeline(new KeyFrame(Duration.seconds(1), timeout -> {
-			if (!view.isPause() && playing) {
-				timer120sec.countDown();
-				checkActualTimeRemaining();
-			}
-		}));
-		renderTimer.setCycleCount(Timeline.INDEFINITE);
-		renderTimer.play();
-	}
 
+/*
+ * --------------------------------------RENDERING--------------------------------------
+ */
 	
 	public void render(){
 		view.canvasGC().clearRect(0, 0, 1024, 768);
@@ -398,19 +436,6 @@ public class GamePlay {
 		gameComponent.getbottomLHSbat().render(view.canvasGC());
 		gameComponent.gettopRHSbat().render(view.canvasGC());
 		gameComponent.getbottomRHSbat().render(view.canvasGC());
-
-//		if (!topLHSBase.isDead()) {
-//			gameComponent.gettopLHSbat().render(view.canvasGC());
-//		}
-//		if (!bottomLHSBase.isDead()) {
-//			gameComponent.getbottomLHSbat().render(view.canvasGC());
-//		}
-//		if (!topRHSBase.isDead()) {
-//			gameComponent.gettopRHSbat().render(view.canvasGC());
-//		}
-//		if (!bottomRHSBase.isDead()) {
-//			gameComponent.getbottomRHSbat().render(view.canvasGC());
-//		}
 		
 		//BASE
 		// If the player is still alive, render the base , otherwise do not render.
@@ -513,6 +538,11 @@ public class GamePlay {
 		}
 	}
 	
+	
+/*
+ * --------------------------------------POWERUPS--------------------------------------
+ */
+	
 	public void powerupFrozenCollisionCheck(){
 		if (gameComponent.getBall().objectsIntersectBallAndPowerup(gameComponent.getPowerupFrozen())) {
 				freezeThePaddle = true;
@@ -534,6 +564,10 @@ public class GamePlay {
 			freezeThePaddle = false;
 		}
 	}
+	
+	/*
+	 * --------------------------------------RUN A GAME FRAME--------------------------------------
+	 */
 
 	// Tick, run the game by 1 frame
 	public void tick() {
@@ -813,6 +847,10 @@ public class GamePlay {
 			this.setTimeRemainingToTwo();
 		}
 	}
+	
+	/*
+	 * --------------------------------------COLLISIONS--------------------------------------
+	 */
 
 	public void paddleCollisionCheck() {
 
@@ -948,7 +986,8 @@ public class GamePlay {
 				System.out.println("1 Brick destroyed, " + this.gameBrick.getBottomRHSBrick().getNumberOfBrick() + " left: (BottomRHS)");
 			}
 		}
-		//Prevent
+		
+		//Reset ball previous velocity after all Brick List has been checked. 
 		deflect.setTempDir(99, 99);
 	}
 

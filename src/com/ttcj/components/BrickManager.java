@@ -22,6 +22,4 @@ public class BrickManager {
 	public int getNumberOfBrick(){
 		return numberOfBrick;
 	}
-	
-	//add getter for number of bricks
 }

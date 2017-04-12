@@ -135,7 +135,6 @@ public class GameView {
 		});
 
 		//Issue a draw call on the canvas
-		
 		window.setScene(gamePlayScene);
 	}
 
