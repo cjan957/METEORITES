@@ -18,8 +18,12 @@ import javafx.util.Duration;
 public class GamePlay {
 	// QUICK DEBUGGING OPTIONS
 	private boolean inGameBallSpeedAdjust = true;
-	private boolean showGhostBall = true;
-	private boolean forceDeadkey = true;
+	private boolean showGhostBall = false;
+	private boolean forceDeadkey = false;
+	
+	// Defining constants
+	private static final int WINDOW_W = 1024;
+	private static final int WINDOW_H = 768;
 
 	// Instantiate game objects
 	private Timer timer3sec;
@@ -46,16 +50,12 @@ public class GamePlay {
 	}
 	public gameMode currentGameMode;
 
-	//message controller
+	//messages controller
 	private boolean longMessage;
 	private String message;
 	
 	// This array list will store user input (key pressed).
 	private ArrayList<String> input = new ArrayList<String>();
-
-	// Defining constants
-	private static final int WINDOW_W = 1024;
-	private static final int WINDOW_H = 768;
 	
 	public GamePlay(int gameModeNum, Stage gameStage){
 			view = new GameView();
@@ -569,7 +569,7 @@ public class GamePlay {
 				//If the ball is heading toward the AI Horizontal area
 				if ( ((batMaxY-C)/gradient) > 0 && ((batMaxY-C)/gradient) < batMaxX){
 					if(((gameComponent.getBall().getYVelocity() < 0) && (gameComponent.getBall().getXVelocity() < 0))){
-						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-C)/gradient) + 32);
+						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-C)/gradient) - 32);
 					}
 					else if((gameComponent.getBall().getYVelocity() < 0) && (gameComponent.getBall().getXVelocity() > 0)){
 						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-C)/gradient) - 32);
@@ -593,7 +593,7 @@ public class GamePlay {
 				//If the ball is heading toward the AI Horizontal area
 				if ( ((batMaxY-CGhostBall)/gradientGhost) > 0 && ((batMaxY-CGhostBall)/gradientGhost) < batMaxX){
 					if(((gameComponent.getGhostBall().getYVelocity() < 0) && (gameComponent.getGhostBall().getXVelocity() < 0))){
-						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-CGhostBall)/gradientGhost) + 32);
+						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-CGhostBall)/gradientGhost) - 32);
 					}
 					else if((gameComponent.getGhostBall().getYVelocity() < 0) && (gameComponent.getGhostBall().getXVelocity() > 0)){
 						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-CGhostBall)/gradientGhost) - 32);
@@ -648,7 +648,7 @@ public class GamePlay {
 				}
 			}
 			else{
-				//If this is an AI controlled bat: (This bat does't track ghost Ball's path)
+				//If this is an AI controlled bat: (This bat doesn't track ghost Ball's path)
 				double batMaxX = 256;
 				double batMinY = (WINDOW_H - (WINDOW_H/3) - 32);
 				double gradient = (gameComponent.getBall().getYVelocity()) / (gameComponent.getBall().getXVelocity());
@@ -660,7 +660,7 @@ public class GamePlay {
 						gameComponent.getbottomLHSbat().makeAIMoveX(((batMinY-C)/gradient) - 32);
 					}
 					else if((gameComponent.getBall().getYVelocity() > 0) && (gameComponent.getBall().getXVelocity() > 0)){
-						gameComponent.getbottomLHSbat().makeAIMoveX(((batMinY-C)/gradient) + 32);
+						gameComponent.getbottomLHSbat().makeAIMoveX(((batMinY-C)/gradient) - 32);
 					}
 				}
 				
@@ -670,7 +670,7 @@ public class GamePlay {
 						gameComponent.getbottomLHSbat().makeAIMoveY(((gradient * batMaxX) + C) - 32);
 					}
 					else if((gameComponent.getBall().getYVelocity() < 0) && (gameComponent.getBall().getXVelocity() < 0)){ // 
-						gameComponent.getbottomLHSbat().makeAIMoveY(((gradient * batMaxX) + C) + 32);
+						gameComponent.getbottomLHSbat().makeAIMoveY(((gradient * batMaxX) + C) - 32);
 					}
 				}	
 			}
@@ -842,16 +842,17 @@ public class GamePlay {
 	public void changeBallVelocity(){
 		gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
 		if(gameComponent.getBall().getXVelocity() > 0){
-			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() + 0.03));
+			//Constant increase of 0.009
+			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() + 0.009));
 		}
 		else{
-			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() - 0.03));
+			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() - 0.009));
 		}
 		if(gameComponent.getBall().getYVelocity() > 0){
-			gameComponent.getBall().setYVelocity((float)(gameComponent.getBall().getYVelocity() + 0.03));
+			gameComponent.getBall().setYVelocity((float)(gameComponent.getBall().getYVelocity() + 0.009));
 		}
 		else{
-			gameComponent.getBall().setYVelocity((float)(gameComponent.getBall().getYVelocity() - 0.03));
+			gameComponent.getBall().setYVelocity((float)(gameComponent.getBall().getYVelocity() - 0.009));
 		}
 		gameComponent.getpaddleDeflectSound().playSound();
 	}
