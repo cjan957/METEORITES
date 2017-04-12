@@ -1,15 +1,12 @@
 /*
  * View Class 
-*	Handles all user interactions and graphics
+*	Handles all user interactions and graphics for main game play window
 */
 
-package application;
+package com.ttcj.view;
 
 import java.util.ArrayList;
 
-import com.ttcj.view.ViewManager;
-
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,9 +16,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class View {

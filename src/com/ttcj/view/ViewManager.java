@@ -6,21 +6,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import application.GamePlay;
-import application.GamePlaySingle;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 public class ViewManager {
-
-	//private Scene mainMenu;
-	private Scene mainMenuScene;
-	
 	public void MainMenu(Stage gameStage){
 		
 		Pane root = new Pane();

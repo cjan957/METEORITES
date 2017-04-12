@@ -1,4 +1,4 @@
-package application;
+package com.ttcj.components;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -16,7 +16,6 @@ public class Timer {
 		showTimerOnScreen = visibility;
 	}
 
-	
 	public void setVisibility(boolean value){
 		showTimerOnScreen = value;
 	}
