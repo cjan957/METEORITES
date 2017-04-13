@@ -4,10 +4,10 @@
 
 * This README is best viewed online to take advantage of the markdown formatting
 
-* This README includes instructions on how to set-up and get the prototype 
+* This README includes instructions on how to set-up and get the final 
 	version of METEORITES running.
 	 
-* Version: Alpha
+* Version: Final
 
 ## 2.0 How do I get set up? ##
 
@@ -26,7 +26,7 @@
 ### 2.3 Setting up METEORITES in Eclipse ###
 * Go to: https://bitbucket.org/cs302group27/uoa-cs302-2017-group27/downloads/?tab=tags
 * Note: You must have access to this repository :)
-* Download the commit tagged as "PROJECT-A-PROTOTYPE" and extract the folder to your choice of location
+* Download the commit tagged as "PHASE-1-DELIVERABLES" and extract the folder to your choice of location
 * Open Eclipse
 * Go to: File > Import > General > Existing Projects into Workspace > Next
 * Select root directory > Browse for the extracted project folder from your chosen location
@@ -35,16 +35,17 @@
 ## 3.0 How do I play? ##
 
 * Follow the section "Setting up METEORITES in Eclipse" before coming to this section
+* Navigate to warlords > src > application > Game.java
+* Run as Java Application.
 
-* For this version, we only have two players on the two left hand corners of the playing area. AI is in the process of being implemented, so it is not included in this version.
+* Select an option by hovering over the option using your mouse and left-click.
 
-* A very crude bat-ball collision mechanism is in place, it is still very buggy. 
+* Single Player
+* Control your bat with the [LEFT] and [RIGHT] arrow keys.
 
-### 3.1 To run the game ####
-* In the 'Project Explorer' open warlords > src > application > Game.java
-* Press Run  
+* Two Player
 * Player 1 (Bottom-left) can control their bat with the [A] and [D] keys.
-* Player 2 (Top-left) can control their bat with the [LEFT] and [RIGHT] arrow keys.
+* Player 2 (Bottom-right) can control their bat with the [LEFT] and [RIGHT] arrow keys.
 
 ## 4.0 How do I run JUnit tests? ##
 
@@ -72,17 +73,7 @@
 * Chanokpol Janveerawat
 * cjan957@aucklanduni.ac.nz
 
-## 6.0 MVC Diagram ##
 
-* The MVC diagram is found in the root directory, warlords > mvc_prototype.pdf
-* The Player Class is not yet implemented in the Model Section. 
+## 6.0 Credits ##
 
-
-## 7.0 Credits ##
-
-* In-game background image - Free to use
-* http://more-sky.com/WDF-326448.html
-
-* Asteroid Sprite - Used under CC License
-* Credit to Author: 'phaelax'
-* http://opengameart.org/content/asteroids
+* Credits and Acknowledgements can be found in the Final Report.
