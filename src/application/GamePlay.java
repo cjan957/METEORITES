@@ -68,7 +68,7 @@ public class GamePlay {
 	 * -------------------------------------- GAMEPLAY CONST--------------------------------------
 	 */
 	public GamePlay(int gameModeNum, Stage gameStage){
-			view = new GameView();
+			view = new GameView(); //create the gameView 
 			gameWindow = gameStage;
 			if(gameModeNum == 0){ //game mode 0 = single
 				currentGameMode = gameMode.SINGLE;
@@ -136,6 +136,20 @@ public class GamePlay {
 			}
 			timeLeftFindWinner();
 		}
+	}
+	
+	//Set the time remaining determined by the powerup
+	public void setTimeRemaining(int time){
+		if(timer120sec.getTime() < 12){
+			timer120sec.setTime(1);
+		}
+		else{
+			timer120sec.setTime(timer120sec.getTime() + time);
+		}
+	}
+	
+	public void setTimeRemainingToTwo() {
+		timer120sec.setTime(2);
 	}
 	
 	/*
@@ -450,9 +464,8 @@ public class GamePlay {
 			gameComponent.getGhostBall().render(view.canvasGC());
 		}
 
+		//Brick 
 		for (Brick brick : this.gameBrick.getTopLHSBrick().accessBrickArray()) {
-			// view.canvasGC().fillRect(brick.GetxPosition(),
-			// brick.GetyPosition(), brick.GetWidth(), brick.GetHeight());
 			brick.render(view.canvasGC());
 		}
 		for (Brick brick : this.gameBrick.getBottomLHSBrick().accessBrickArray()) {
@@ -466,23 +479,15 @@ public class GamePlay {
 		}
 		
 		if(view.isPause()){
-			view.canvasGC().setFill(Color.YELLOW);
-			view.canvasGC().setStroke(Color.RED);
-			view.canvasGC().setLineWidth(2);
+			//Render pause message on the screen
 			Font theFont = Font.font("Arial", FontWeight.BOLD, 50);
-			view.canvasGC().setFont(theFont);
-			view.canvasGC().setTextAlign(TextAlignment.CENTER);
-			view.canvasGC().fillText("PAUSED", 1024/2, (768/2)-50);
-			view.canvasGC().strokeText("PAUSED", 1024/2, (768/2)-50);
+			renderSpecificText(Color.YELLOW,Color.RED,2,theFont,TextAlignment.CENTER,"PAUSED",1024/2,(768/2)-50);
 		}
 		
 		if(view.confirmationShown()){
-			view.canvasGC().setFill(Color.YELLOW);
-			view.canvasGC().setLineWidth(2);
+			//Render instruction
 			Font theFont = Font.font("Arial", FontWeight.BOLD, 30);
-			view.canvasGC().setFont(theFont);
-			view.canvasGC().setTextAlign(TextAlignment.CENTER);
-			view.canvasGC().fillText("Press Y to Exit. ESC to Resume", 1024/2, (768/2)+10);
+			renderSpecificText(Color.YELLOW,Color.YELLOW,1,theFont,TextAlignment.CENTER,"Press Y to Exit. ESC to Resume", 1024/2,(768/2)+10);
 		}
 		
 		//Display a message on the screen after the game has finished. 
@@ -490,43 +495,29 @@ public class GamePlay {
 		if(!playing){
 			//If the message is not too long, display it with a big font
 			if(!longMessage){
-				view.canvasGC().setFill(Color.WHITE);
-				view.canvasGC().setStroke(Color.BLACK);
-				view.canvasGC().setLineWidth(2);
 				Font theFont = Font.font("Arial", FontWeight.BOLD, 72);
-				view.canvasGC().setFont(theFont);
-				view.canvasGC().setTextAlign(TextAlignment.CENTER);
-				view.canvasGC().fillText(message, 1024/2, 768/2);
-				view.canvasGC().strokeText(message, 1024/2, 768/2);
-				
-				view.canvasGC().setFill(Color.WHITE);
-				view.canvasGC().setStroke(Color.BLACK);
-				view.canvasGC().setLineWidth(2);
 				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
-				view.canvasGC().setFont(theSubFont);
-				view.canvasGC().setTextAlign(TextAlignment.CENTER);
-				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+100);
-				
+				renderSpecificText(Color.WHITE,Color.BLACK,2,theFont,TextAlignment.CENTER,message,1024/2,768/2);
+				renderSpecificText(Color.WHITE,Color.WHITE,1,theSubFont,TextAlignment.CENTER,"Press ESC to return to the main menu", 1024/2, (768/2)+100);			
 			}
 			else{
-				view.canvasGC().setFill(Color.WHITE);
-				view.canvasGC().setStroke(Color.BLACK);
-				view.canvasGC().setLineWidth(2);
 				Font theFont = Font.font("Arial", FontWeight.BOLD, 43);
-				view.canvasGC().setFont(theFont);
-				view.canvasGC().setTextAlign(TextAlignment.CENTER);
-				view.canvasGC().fillText(message, 1024/2, 768/2);
-				view.canvasGC().strokeText(message, 1024/2, 768/2);
-		
-				view.canvasGC().setFill(Color.WHITE);
-				view.canvasGC().setStroke(Color.BLACK);
-				view.canvasGC().setLineWidth(2);
 				Font theSubFont = Font.font("Arial", FontWeight.BOLD, 20);
-				view.canvasGC().setFont(theSubFont);
-				view.canvasGC().setTextAlign(TextAlignment.CENTER);
-				view.canvasGC().fillText("Press ESC to return to the main menu", 1024/2, (768/2)+80);
+				renderSpecificText(Color.WHITE,Color.BLACK,2,theFont,TextAlignment.CENTER,message,1024/2,768/2);
+				renderSpecificText(Color.WHITE,Color.WHITE,1,theSubFont,TextAlignment.CENTER,"Press ESC to return to the main menu",1024/2,(768/2)+80);
 			}
 		}
+	}
+	
+	public void renderSpecificText(Color color, Color strokeColor, int lineWidth, Font theFont, TextAlignment align, String message, int posX, int posY){
+		//Render text
+		view.canvasGC().setFill(color);
+		view.canvasGC().setStroke(strokeColor);
+		view.canvasGC().setLineWidth(lineWidth);
+		view.canvasGC().setFont(theFont);
+		view.canvasGC().setTextAlign(align);
+		view.canvasGC().fillText(message, posX, posY);
+		view.canvasGC().strokeText(message, posX, posY);
 	}
 	
 	
@@ -534,16 +525,17 @@ public class GamePlay {
  * --------------------------------------POWERUPS--------------------------------------
  */
 	
+	//Check if the ball collides with the Frozen powerup on the screen
 	public void powerupFrozenCollisionCheck(){
 		if (gameComponent.getBall().objectsIntersectBallAndPowerup(gameComponent.getPowerupFrozen())) {
 				freezeThePaddle = true;
 				gameComponent.getPowerupFrozen().setVisibility(false);
-				startPowerup = timer120sec.getTime();
+				startPowerup = timer120sec.getTime(); //get the time the powerup was collected
 		}
 	}
 	
+	//Check if the ball collides with the time powerup
 	public void powerupTimeCollisionCheck(){
-		//Check if the ball collides with the powerup onscreen
 		if(gameComponent.getBall().objectsIntersectBallAndPowerup(gameComponent.getPowerupTime())){
 			setTimeRemaining(-10);
 			gameComponent.getPowerupTime().setVisibility(false);
@@ -551,6 +543,7 @@ public class GamePlay {
 	}
 	
 	public void frozenBatUnfreeze(){
+		//Check if it has already been 5 seconds since the frozen power up was collected
 		if(timer120sec.getTime() <= (startPowerup - 5)){
 			freezeThePaddle = false;
 		}
@@ -580,7 +573,7 @@ public class GamePlay {
 			powerupTimeCollisionCheck();
 		}
 		
-		//TODO: Add debugging option
+		//TODO: Debugging option
 		if(forceDeadkey){
 			if(input.contains("Z")){
 				topLHSBase.setIsDead(true);
@@ -600,13 +593,10 @@ public class GamePlay {
 			}
 		}
 
-		// Check user input and move the paddle accordingly
-		// Positioning has been adjusted (+/- 32) to take into account the reference point of the bat (topleft corner)
-		//if (!topLHSBase.isDead()) {
-			//int increment = 7;
 		if(!freezeThePaddle){
 			//This bat will always be AI controlled
 			if(gameComponent.gettopLHSbat().isAIBat()){
+				//Using a line equation y = mx + c, determine whether the ball is traveling toward the AI base
 				double batMaxX = 256;
 				double batMaxY = (WINDOW_H / 3);
 				double gradient = (gameComponent.getBall().getYVelocity()) / (gameComponent.getBall().getXVelocity());
@@ -619,6 +609,7 @@ public class GamePlay {
 				//If the ball is heading toward the AI Horizontal area
 				if ( ((batMaxY-CGhostBall)/gradientGhost) > 0 && ((batMaxY-CGhostBall)/gradientGhost) < batMaxX){
 					if(((gameComponent.getGhostBall().getYVelocity() < 0) && (gameComponent.getGhostBall().getXVelocity() < 0))){
+						//If it does, move the AI paddle to protect its base.
 						gameComponent.gettopLHSbat().makeAIMoveX(((batMaxY-CGhostBall)/gradientGhost) - 32);
 					}
 					else if((gameComponent.getGhostBall().getYVelocity() < 0) && (gameComponent.getGhostBall().getXVelocity() > 0)){
@@ -646,19 +637,18 @@ public class GamePlay {
 					}
 				}
 				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
-
 				else if((((gradient * batMaxX) + C ) < batMaxY ) && (((gradient * batMaxX) +  C) > 0)){ 
-					if(((gameComponent.getBall().getYVelocity() < 0) && (gameComponent.getBall().getXVelocity() < 0))){ // ball direction is top left, apply calibration
+					if(((gameComponent.getBall().getYVelocity() < 0) && (gameComponent.getBall().getXVelocity() < 0))){ 
+						// ball direction is top left, apply calibration
 						gameComponent.gettopLHSbat().makeAIMoveY(((gradient * batMaxX) + C) + 32);
 					}
-					else if((gameComponent.getBall().getYVelocity() > 0) && (gameComponent.getBall().getXVelocity() > 0)){ // ball direction is bottom left, apply calibration
+					else if((gameComponent.getBall().getYVelocity() > 0) && (gameComponent.getBall().getXVelocity() > 0)){ 
+						// ball direction is bottom left, apply calibration
 						gameComponent.gettopLHSbat().makeAIMoveY(((gradient * batMaxX) + C) - 32);
 					}
 				}			
 			}
-		//}
-		
-		//if (!bottomLHSBase.isDead()) {
+			
 			if(!gameComponent.getbottomLHSbat().isAIBat()){
 				if (input.contains("A")) {
 					if ( (gameComponent.getbottomLHSbat().GetxPosition() == (WINDOW_H/3)) && (gameComponent.getbottomLHSbat().GetyPosition() <= 768) && (gameComponent.getbottomLHSbat().GetyPosition() >= 768 - WINDOW_H/3 - 32) ) {	//vertical movement up
@@ -720,10 +710,9 @@ public class GamePlay {
 					}
 				}	
 			}
-		//}
 		
-		//if (!topRHSBase.isDead()) {
 			if(!gameComponent.gettopRHSbat().isAIBat()){
+				//Manual control can be added if needed, room for future improvement.
 			}
 			//If this paddle is AI controlled!
 			else{
@@ -756,8 +745,7 @@ public class GamePlay {
 						gameComponent.gettopRHSbat().makeAIMoveX(((batMaxY-ghostC)/ghostGradient) +32);
 					}
 				}
-				
-				
+					
 				//determine whether the ball will travel to the AI area (y = mx+c) y path of AI valid between 0 to 255
 				//736 is the AI x Position when it can only move vertically		
 				if((((gradient * batMinX) + C ) < batMaxY ) && (((gradient * batMinX) +  C) > 0)){ 
@@ -777,10 +765,7 @@ public class GamePlay {
 						gameComponent.gettopRHSbat().makeAIMoveX(((batMaxY-C)/gradient) +32);
 					}
 				}		
-			}
-	//	}
-		
-	//	if (!bottomRHSBase.isDead()) {		
+			}		
 			//This base will always be player's controlled
 			if (input.contains("LEFT")) {
 				if ( (gameComponent.getbottomRHSbat().GetxPosition() == (1024 - WINDOW_H/3 - 32)) && (gameComponent.getbottomRHSbat().GetyPosition() >= 768 - WINDOW_H/3 - 32 ) && (gameComponent.getbottomRHSbat().GetyPosition() <= 768 - 32) ) {		//vertical down
@@ -817,7 +802,7 @@ public class GamePlay {
 	//	}
 		}
 		
-		// TODO: DEBUG ONLY, remove when deliver
+		// TODO: DEBUG ONLY
 		if (inGameBallSpeedAdjust) {
 			if (input.contains("DOWN")) { // slow down
 				gameComponent.getBall().setXVelocity(((float) (gameComponent.getBall().getXVelocity() / 1.1)));
@@ -838,6 +823,7 @@ public class GamePlay {
 	 */
 
 	public void paddleCollisionCheck() {
+		//If the ball collides with any of the bat, change its velocity.
 			if (gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopLHSbat()) ||
 					gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.getbottomLHSbat()) ||
 					gameComponent.getBall().objectsIntersectBallAndPaddle(gameComponent.gettopRHSbat()) ||
@@ -847,6 +833,7 @@ public class GamePlay {
 	}
 	
 	public void changeBallVelocity(){
+		//Increases ball speed by incrementing/decrementing its x and y velocity 
 		gameComponent.getBall().setXVelocity(-gameComponent.getBall().getXVelocity());
 		if(gameComponent.getBall().getXVelocity() > 0){
 			gameComponent.getBall().setXVelocity((float)(gameComponent.getBall().getXVelocity() + speedIncrementOverTime));
@@ -864,10 +851,12 @@ public class GamePlay {
 	}
 
 	public void baseCollisionCheck() {
+		//If the base is already dead, don't bother checking for base collision again
 		if (!topLHSBase.isDead()) {
 			if (gameComponent.getBall().objectsIntersectBallAndBase(topLHSBase)) {
 				topLHSBase.setIsDead(true);
 				gameComponent.gettopLHSbat().setAIBat(true);
+				//Play hit sound
 				gameComponent.getbaseHitSound().playSound();
 			}
 		}
@@ -898,7 +887,8 @@ public class GamePlay {
 	}
 
 	public void wallCollisionCheck() {
-
+		
+		//Create iterators which will be used to work with the actual array  
 		Iterator<Brick> topLHSBrickList = this.gameBrick.getTopLHSBrick().accessBrickArray().iterator();
 		Iterator<Brick> bottomLHSbrickList = this.gameBrick.getBottomLHSBrick().accessBrickArray().iterator();
 		Iterator<Brick> topRHSBrickList = this.gameBrick.getTopRHSBrick().accessBrickArray().iterator();
@@ -909,6 +899,8 @@ public class GamePlay {
 			Brick brick = topRHSBrickList.next();
 			//if the ball intersects with a brick (in this case TRHS brick), deflect the ball, remove the brick from the array and play sound
 			if (gameComponent.getBall().objectsIntersect(brick)) {
+				//Depending on the brick type, the ball will deflect differently. 
+				//This is why brick.getArrangement argument is needed
 				deflect.deflectTheBall(gameComponent.getBall(), brick.getArrangement());
 				topRHSBrickList.remove();
 				this.gameBrick.getTopRHSBrick().removeBrick();
@@ -948,17 +940,5 @@ public class GamePlay {
 		deflect.setTempDir(99, 99);
 	}
 
-	
-	public void setTimeRemaining(int time){
-		if(timer120sec.getTime() < 12){
-			timer120sec.setTime(1);
-		}
-		else{
-			timer120sec.setTime(timer120sec.getTime() + time);
-		}
-	}
-	
-	public void setTimeRemainingToTwo() {
-		timer120sec.setTime(2);
-	}
+
 }
